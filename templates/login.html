@@ -1,42 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<style>
-    a {
-    color: rgb(129, 173, 43);
-    font-size: 100%;
-    font-weight: 80;
-    margin: 10px;
-    }
-    h1 {
-        color: rgb(10, 62, 10);
-        font-size: 300%;
-        font-weight: 400;
-        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    }
-    input {
-        font-size: 100%;
-        font-family: 'Times New Roman', Times, serif;
-        font-weight: 200;
-    }
-    h3 {
-        color: rgb(19, 58, 19);
-        font-size: 120%;
-        font-weight: 200;
-        font-family:'Times New Roman', Times, serif;
-    }
-</style>
+    <style>
+        body {
+            background-color: #0C1421;
+        }
+
+        h1 {
+            font-family: 'Big Shoulders Display', cursive;
+            font-weight: 800;
+            color: #CCC9DC;
+        }
+
+        h3 {
+            font-family: 'Big Shoulders Display', cursive;
+            font-weight: 400;
+            color: #CCC9DC;
+            font-size: 30px;
+        }
+
+        #centering-div {
+            display: flex;
+            justify-content: center;
+            text-align: center;
+        }
+
+        a:visited {
+            color: #CCC9DC;
+        }
+
+        #backtohomelogin {
+            color: #CCC9DC;
+            text-decoration: none;
+            padding-left: 10px;
+
+            -webkit-transition: color 0.1s ease-out;
+            -moz-transition: color 0.05s ease-out;
+            -o-transition: color 0.05s ease-out;
+            transition: color 0.05s ease-out;
+        }
+
+        #backtohomelogin:hover {
+            color: #7e7e82;
+        }
+
+        #signup-link {
+            color: #EE8434;
+        }
+
+        #signup-link:hover {
+            color: #d75d00;
+        }
+
+        #main_container {
+            position: absolute;
+            top: 20%;
+            height: 400px;
+            width: 600px;
+            background-color: #1B2A41;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 10px;
+
+            border-style: inset;
+            border-bottom-style: groove;
+            border-right-style: groove;
+            border-color: #050a11;
+            border-width: 3px;
+        }
+
+        #form {
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        #login-title {
+            padding-top: 20px;
+            font-size: 40px;
+        }
+
+        input {
+            background-color: #324A5F;
+            border-radius: 10px;
+            color: #CCC9DC;
+            height: 40px;
+            width: 90%;
+            outline: none;
+
+            border-style: inset;
+            border-top-style: none;
+            border-left-style: none;
+            border-bottom-style: groove;
+            border-right-style: groove;
+            border-color: #0C1421;
+            border-top-color: #324A5F;
+            border-left-color: #324A5F;
+
+            font-family: 'Big Shoulders Display', cursive;
+            font-weight: 400;
+            font-size: 22px;
+
+            padding-left: 10px;
+
+            -webkit-transition: background-color 0.05s ease-out;
+            -moz-transition: background-color 0.05s ease-out;
+            -o-transition: background-color 0.05s ease-out;
+            transition: background-color 0.05s ease-out;
+        }
+
+        input:hover {
+            background-color: #384f64;
+        }
+
+        input::placeholder {
+            color: #CCC9DC, 50%;
+            font-family: 'Big Shoulders Display', cursive;
+            font-weight: 400;
+            font-size: 22px;
+        }
+
+        input:focus {
+            border-bottom-style: groove;
+            border-right-style: groove;
+            border-color: #0C1421;
+            background-color: #273d51;
+
+            -webkit-transition: background-color 0.05s ease-out;
+            -moz-transition: background-color 0.05s ease-out;
+            -o-transition: background-color 0.05s ease-out;
+            transition: background-color 0.05s ease-out;
+        }
+
+        button {
+            color: #0C1421;
+            background-color: #EE8434;
+            width: 150px;
+            height: 50px;
+            border-style: hidden;
+            border-radius: 10px;
+
+            font-family: 'Big Shoulders Display', cursive;
+            font-weight: 600;
+            font-size: 24px;
+            
+            -webkit-transition: background-color 0.05s ease-out;
+            -moz-transition: background-color 0.05s ease-out;
+            -o-transition: background-color 0.05s ease-out;
+            transition: background-color 0.05s ease-out;
+        }
+
+        button:hover {
+            cursor: pointer;
+            color: #EE8434;
+            background-color: #0C1421;
+        }
+    </style>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" href="templates/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
     <title>Log In</title>
 </head>
+
 <body>
-    <a href="index.html">Back to Home</a>
-    <h1>Log In</h1>
-    <input placeholder="Username">
-    <input placeholder ="Password">
-    <button>Log In</button>
-    <h3>Don't have an account? <a href="signup.html">Sign up</a></h3>
+    <h1><a id="backtohomelogin" href="index.html">⇦ Back to Home</a></h1>
+    <div id="centering-div">
+        <div id="main_container">
+            <h1 id="login-title">Login to your account</h1>
+            <div id="form">
+                <input placeholder="Enter username" type="text">
+                <input placeholder="Enter password" type="password">
+                <button>Log In</button>
+            </div>
+            <h3>Don't have an account? <a id="signup-link" href="signup.html">Sign up</a></h3>
+        </div>
+    </div>
 </body>
 </html>
