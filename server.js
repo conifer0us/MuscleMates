@@ -43,20 +43,4 @@ server.get("/signup.html", (req, res) => {
 auth.dbready.then(() => {
     server.listen(port);
     console.log("Server Started on Port "+port);
-    test();
 })
-
-async function test() {
-    await auth.insertUserPassword("connor", "cnferg04@gmail.com", "pass123").then((userinserted) => {
-        console.log("User Inserted: " + userinserted)
-    });
-    await auth.isLoginCorrect("connor", "pass123").then((validloginbool) => {
-        console.log("connor and pass123: " + validloginbool);
-    });
-    await auth.isLoginCorrect("cnferg04@gmail.com", "pass123").then((validloginbool) => {
-        console.log("cnferg04@gmail.com and pass123: " + validloginbool);
-    });
-    await auth.isLoginCorrect("connorasdf", "pass123").then((validloginbool) => {
-        console.log("connorasdf and pass123: " + validloginbool);
-    });
-}

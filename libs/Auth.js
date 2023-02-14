@@ -21,7 +21,7 @@ class Auth {
                 // Also Creates a Cookies table for storing User Cookies
                 this.db.exec(
                     `CREATE TABLE IF NOT EXISTS users (username text, useremail text, passwordhash text);
-                        CREATE TABLE IF NOT EXISTS cookies (username text references users(username) on delete set null, cookieval int) `,
+                        CREATE TABLE IF NOT EXISTS cookies (username text references users(username) on delete set null, cookieval text) `,
                     (err) => {
                         if (err) {
                             console.log("Error Creating Tables in Auth Database");
@@ -46,48 +46,39 @@ class Auth {
                 if (err) {
                     reject(err);
                 }
-                if (rows.length != 0) {
+                else if (rows.length != 0) {
                     resolve(false);
                 }
-                // Prepares An Insertion Statement for the Users DB and Executes it with Argument Data
-                const stmt = this.db.prepare(`INSERT INTO users (username, useremail, passwordhash) values (?,?,?)`);
-                stmt.run(username, email, this.getDataHash(password));
-                stmt.finalize();
-                resolve(true);
+                else {
+                    // Prepares An Insertion Statement for the Users DB and Executes it with Argument Data
+                    const stmt = this.db.prepare(`INSERT INTO users (username, useremail, passwordhash) values (?,?,?)`);
+                    stmt.run(username, email, this.getDataHash(password));
+                    stmt.finalize();
+                    resolve(true);
+                }
             });
         });
     }
 
     // Checks if a Login Attemtp is Authorized From Username (or Email) and Password
     isLoginCorrect(username, password) {
+        const passhash = this.getDataHash(password) 
         // Returns an Asynchronous Promise Object that Will Resolve True when 
         return new Promise((resolve, reject) => {
             // Check if Username and Password Hash Combination Exists in DB; Returns true if so
-            this.db.all(`SELECT username FROM users WHERE username = ? AND passwordhash = ?`
-            , [username, this.getDataHash(password)]  
+            this.db.all(`SELECT username FROM users WHERE (username = ? AND passwordhash = ?) OR (useremail = ? AND passwordhash = ?)`
+            , [username, passhash, username, passhash]  
             , (err, rows) => {
                 if (err) {
                     reject(err);
                 }
-                if (rows != 0) {
-                    resolve(true);
-                } 
-            }); 
-            
-            // Checks if Email and Password Combination exists in the DB; returns true if so
-            this.db.all(`SELECT useremail FROM users WHERE useremail = ? AND passwordhash = ?`
-            , [username, this.getDataHash(password)]
-            , (err, rows) => {
-                if (err) {
-                    reject(err);
-                }
-                if (rows.length != 0) {
+                else if (rows != 0) {
                     resolve(true);
                 } else {
                     // If Neither Combination Exists in the DB, return False
                     resolve(false);
                 }
-            });
+            }); 
         }); 
     }
 
@@ -95,8 +86,56 @@ class Auth {
     getDataHash(textdata) {
         return this.crypto.createHash('sha256').update(textdata).digest('hex');
     }
+
+    // Inserts a New Random Cookie Value into the Cookies Table for a Certain User
+    // Returns a Promise Object that evaluates to the cookievalue if a cookie was properly set; resolves to an empty string otherwise
+    addCookieToUser(userid) {
+        return new Promise((resolve, reject) => {
+            this.db.all(`SELECT username FROM users WHERE username = ? OR useremail = ?`
+            , [userid, userid]
+            , (err, rows) => {
+                if (err) {
+                    reject(err);
+                }
+                else if (rows.length == 0) {
+                    resolve("");
+                }
+                else {
+                    const uname = rows[0].username;
+                    const cookie = this.getCookieVal();
+                    // Prepares An Insertion Statement for the Cookies DB with cookie value and username
+                    const stmt = this.db.prepare(`INSERT INTO cookies (username, cookieval) values (?,?)`);
+                    stmt.run(uname, cookie);
+                    stmt.finalize();
+                    resolve(cookie);
+                }
+            });
+        });
+    }
+
+    // Checks if a Cookie Value is Valid
+    // Returns a Promise Object that Evaluates to the Username whose cookie it is if the cookie is valid; resolves to an empty string if cookie is invalid
+    checkCookie(cookieval) {
+        return new Promise((resolve, reject) => {
+            this.db.all(`SELECT username FROM cookies WHERE cookieval = ?`
+            , [cookieval]
+            , (err, rows) => {
+                if (err) {
+                    reject(err);
+                } else if (rows.length == 0) {
+                    resolve("");
+                } else {
+                    resolve(rows[0].username);
+                }
+            });
+        });
+    } 
+
+    // Gets a new Cookie Value (64 random characters)
+    getCookieVal() {
+        return this.crypto.randomBytes(256).toString('hex');
+    }
 }
 
 // Exports the class so that it can be used by other files
-
 module.exports = Auth;
