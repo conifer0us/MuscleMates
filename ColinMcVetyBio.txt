@@ -1,0 +1,1 @@
+My name is Colin McVety, and I am a first-year computer science student at Drexel University. I have some experience in Java, C++, Python, JavaScript, and HTML. I am looking to learn more about building data systems and web pages.
