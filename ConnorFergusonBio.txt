@@ -1,0 +1,1 @@
+My name is Connor Ferguson, and I am a freshman computer science major at Drexel University. I am relatively experienced in Python, Java, C#, Javascript, and HTML as well as networking. I would like to use these skills in the future to be a full-stack developer with a focus on backend and networking technologies.
