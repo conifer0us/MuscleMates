@@ -5,6 +5,7 @@ const path = require('path');
 
 // Import Server Libraries
 const authlib = require("./libs/Auth.js");
+const proflib = require("./libs/ProfileInfo.js")
 
 // Defines Configuration Options
 
@@ -15,6 +16,7 @@ const authdbfile = "auth.db";
 // Defines Global Constant Library Objects
 const server = express();
 const auth = new authlib(authdbfile);
+const prof = new proflib(authdbfile);
 
 // Send Index File for Homepage Requests
 server.get("/", (req, res) => {
