@@ -1,6 +1,8 @@
 // Class for Handling Authentication with Username and Password and Cookies
 
 class Auth {
+    AUTH_COOKIE_NAME = "AUTH";
+
     constructor(dbfile) {
         // Import sqlite3 for Working with SQLite db files
         this.sqlite3 = require("sqlite3");
@@ -113,10 +115,22 @@ class Auth {
         });
     }
 
-    // Checks if a Cookie Value is Valid
+    // Checks A Request Object for A Valid Auth Cookie
     // Returns a Promise Object that Evaluates to the Username whose cookie it is if the cookie is valid; resolves to an empty string if cookie is invalid
-    checkCookie(cookieval) {
+    checkReqCookie(request) {
         return new Promise((resolve, reject) => {
+            if (!request.cookies || !(this.AUTH_COOKIE_NAME in request.cookies)) {
+                resolve("");
+            }
+
+            const cookieval = request.cookies[this.AUTH_COOKIE_NAME];
+
+            // If no cookieval is supplied, resolve with an empty string
+            if (!cookieval) {
+                resolve("");
+            }
+
+            // Checks Database for Cookie Otherwise
             this.db.all(`SELECT username FROM cookies WHERE cookieval = ?`
             , [cookieval]
             , (err, rows) => {

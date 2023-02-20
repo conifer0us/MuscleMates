@@ -177,11 +177,11 @@
     <div id="centering-div">
         <div id="main_container">
             <h1 id="login-title">Login to your account</h1>
-            <div id="form">
-                <input placeholder="Enter username" type="text">
-                <input placeholder="Enter password" type="password">
-                <button>Log In</button>
-            </div>
+            <form id="form" action="/login.html" method="POST">
+                <input placeholder="Enter username" type="text" name="username">
+                <input placeholder="Enter password" type="password" name="password">
+                <button type="submit">Log In</button>
+            </form>
             <h3>Don't have an account? <a id="signup-link" href="signup.html">Sign up</a></h3>
         </div>
     </div>
