@@ -178,13 +178,13 @@
     <div id="centering-div">
         <div id="main-container">
             <h1  id="signup-title">Create a new account</h1>
-            <div id="form">
-                <input placeholder="E-mail address" type="text">
-                <input placeholder="Username" type="text">
-                <input placeholder ="Password" type="password">
-                <input placeholder="Confirm password" type="password">
+            <form id="form" action="signup.html" method="POST">
+                <input placeholder="E-mail address" type="text" name="email">
+                <input placeholder="Username" type="text" name="username">
+                <input placeholder ="Password" type="password" name="password">
+                <input placeholder="Confirm password" type="password" name="repeatpassword">
                 <button>Sign up</button>
-            </div>
+            </form>
             <h3>Already have an account? <a id="signin-link" href="login.html">Log in</a></h3>
         </div>
     </div>
