@@ -19,8 +19,7 @@ const server = express();
 server.use(cookieParser());
 const auth = new authlib(authdbfile);
 
-// Defines Global Cookie Config Options
-const AUTH_COOKIE_NAME = "AUTH";
+const prof = new proflib(authdbfile)
 
 // Send Index File for Homepage Requests
 server.get("/", (req, res) => {
@@ -143,6 +142,7 @@ server.post("/signup.html", formdecoder, (req, res) => {
 
 // Waits until Auth DB is ready before starting server
 auth.dbready.then(() => {
-    server.listen(port);
-    console.log("Server Started on Port "+port);
+    prof.dbready.then(() => {
+        server.listen(port);
+    });
 });
