@@ -45,11 +45,11 @@ class ProfileInfo{
                     reject(err);
                 }
                 else if (rows.length != 0){
-                        console.log(username + ' exists')
+                        //console.log(username + ' exists')
                         resolve(true);
                     }
                 else{
-                    console.log(username + ' doesnt exist')
+                    //console.log(username + ' doesnt exist')
                     resolve(false);
                 }
             });
