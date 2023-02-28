@@ -1,6 +1,7 @@
 // Import NPM Libraries
 const express = require('express');
 const path = require('path');
+const filesystem = require('fs');
 const reqparser = require('body-parser')
 const formdecoder = reqparser.urlencoded({extended:false});
 const cookieParser = require('cookie-parser');
@@ -11,6 +12,8 @@ const proflib = require("./libs/ProfileInfo");
 
 // Defines Configuration Options
 const templatepath = __dirname + "/templates";
+const stylepath = __dirname + "/styles";
+const scriptpath = __dirname + "/scripts"
 const port = 80;
 const authdbfile = "auth.db";
 
@@ -18,7 +21,6 @@ const authdbfile = "auth.db";
 const server = express();
 server.use(cookieParser());
 const auth = new authlib(authdbfile);
-
 const prof = new proflib(authdbfile)
 
 // Send Index File for Homepage Requests
@@ -27,9 +29,50 @@ server.get("/", (req, res) => {
     res.sendFile(path.join(templatepath, "index.html"));
 });
 
+// Send Index File for Direct Index Requests
 server.get("/index.html", (req, res) => {
     res.status(200);
     res.sendFile(path.join(templatepath, "index.html"));
+});
+
+// Returns CSS files from Style Path
+server.get("/style(s)?/:stylename", (req, res) => {
+    const stylename = req.params["stylename"];
+    if (!stylename) {
+        res.status(404);
+        res.send(); 
+    } else {
+        const filepath = path.join(stylepath, stylename);
+        filesystem.access(filepath, (err) => {
+            if (err) {
+                res.status(404);
+                res.send();
+            } else {
+                res.status(200);
+                res.sendFile(filepath);
+            }
+        });
+    }
+});
+
+// Returns JS files from Script // Returns CSS files from Style Path
+server.get("/script(s)?/:scriptname", (req, res) => {
+    const scriptname = req.params["scriptname"];
+    if (!scriptname) {
+        res.status(404);
+        res.send(); 
+    } else {
+        const filepath = path.join(scriptpath, scriptname);
+        filesystem.access(filepath, (err) => {
+            if (err) {
+                res.status(404);
+                res.send();
+            } else {
+                res.status(200);
+                res.sendFile(filepath);
+            }
+        });
+    }
 });
 
 // Send Login File for Login Requests
@@ -48,6 +91,7 @@ server.get("/login.html", (req, res) => {
     });
 });
 
+// Processes Login Post Requests
 server.post("/login.html", formdecoder, (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
@@ -60,15 +104,16 @@ server.post("/login.html", formdecoder, (req, res) => {
     }
 
     auth.isLoginCorrect(username, password).then((validlogin) => {
-        // Returns 200 Request if Server Accepts Login and Sets a New Cookie for the User 
+        // Returns Redirect with 200 Status if Server Accepts Login and Sets a New Cookie for the User 
         if (validlogin) {
             auth.addCookieToUser(username).then((cookieval) => {
                 res.cookie(auth.AUTH_COOKIE_NAME, cookieval);
+                res.status(200);
                 res.redirect("/home");
             });
         }
         
-        // Returns a 401 Request if Server Denies Login
+        // Returns a 401 Response if Server Denies Login
         else {
             res.status(401);
             res.send();
@@ -76,6 +121,7 @@ server.post("/login.html", formdecoder, (req, res) => {
     });
 });
 
+// Returns User Homepage If User Logged In; Otherwise Redirect to Login
 server.get("/home", (req, res) => {
     auth.checkReqCookie(req).then((cookieuser) => {
         // If the Cookie User is Set to Valid Value, Render Home Page for User and Return Page Data
@@ -104,6 +150,7 @@ server.get("/signup.html", (req, res) => {
     });
 });
 
+// Processes Signup Post Requests
 server.post("/signup.html", formdecoder, (req, res) => {
     const email = req.body.email;
     const uname = req.body.username;
@@ -124,10 +171,12 @@ server.post("/signup.html", formdecoder, (req, res) => {
         return;
     }
 
+    // Inserts User Into Auth DB if Account Successfully Created
     else {
         auth.insertUserPassword(uname, email, password).then((useradded) => {
-            // If User is Successfully Added, Redirect to Login Page
+            // If User is Successfully Added, Redirect to Login Page with 200 Status
             if (useradded) {
+                res.status(200);
                 res.redirect("/login.html");
             } 
             
@@ -140,7 +189,7 @@ server.post("/signup.html", formdecoder, (req, res) => {
     }
 });
 
-// Waits until Auth DB is ready before starting server
+// Waits until DB is ready with Proper Libraries Configured before starting server
 auth.dbready.then(() => {
     prof.dbready.then(() => {
         server.listen(port);
