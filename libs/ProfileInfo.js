@@ -14,8 +14,6 @@ class ProfileInfo{
                 if (err) {
                     console.log("Error Creating Profile Info Database.");
                     reject(err);
-                } else {
-                    console.log("Profile Info opened in file " + dbfile);
                 }
 
                 this.db.exec(
@@ -25,7 +23,6 @@ class ProfileInfo{
                             console.log("Error Creating Tables in Profile Info Database");
                             reject(err);
                         } else {
-                            console.log("Profile tables set up");
                             resolve(true);
                         }
                     }
@@ -143,7 +140,7 @@ class ProfileInfo{
                     reject(err);
                 }
                 else if (rows.length <= 0){
-                    resolve("")
+                    resolve("");
                 }
                 else{
                     resolve(rows[0].bio)
@@ -152,7 +149,25 @@ class ProfileInfo{
         })
     }
 
-
+    // Returns A Promise that Resolves to Dictionary Representation of Profile Information
+    getProfInfo(username){
+        return new Promise((resolve, reject) => {
+            this.profileExists(username).then((profexistsbool) => {
+                if (!profexistsbool) {
+                    resolve({});
+                }
+                else {
+                    this.getName(username).then((name)=>{
+                        this.getAge(username).then((age) => {
+                            this.getBio(username).then((bio) => {
+                                resolve({"name": name, "age": age, "bio": bio});
+                            }); 
+                        });
+                    });
+                }
+            });
+        });
+    }
 }
 
 module.exports = ProfileInfo;

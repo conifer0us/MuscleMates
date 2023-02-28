@@ -21,7 +21,11 @@ const authdbfile = "auth.db";
 const server = express();
 server.use(cookieParser());
 const auth = new authlib(authdbfile);
-const prof = new proflib(authdbfile)
+const prof = new proflib(authdbfile);
+
+// Brings In Externally Defined Routes at Certain Base Folders
+const apiroutes = require("./api.js");
+server.use("/api", apiroutes);
 
 // Send Index File for Homepage Requests
 server.get("/", (req, res) => {
@@ -191,7 +195,10 @@ server.post("/signup.html", formdecoder, (req, res) => {
 
 // Waits until DB is ready with Proper Libraries Configured before starting server
 auth.dbready.then(() => {
+    console.log("Auth DB Opened with Proper Tables.")
     prof.dbready.then(() => {
+        console.log("Profile DB Opened with Proper Tables");
+        prof.insertProfile("block", "Block Boy", "13", "I like to break");
         server.listen(port);
     });
 });
