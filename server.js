@@ -131,7 +131,7 @@ server.get("/home", (req, res) => {
         // If the Cookie User is Set to Valid Value, Render Home Page for User and Return Page Data
         if (cookieuser) {
             res.status(200);
-            res.send("Welcome to your homepage, " + cookieuser + "!");
+            res.sendFile(path.join(templatepath, "homepage.html"));
         } 
         
         // Redirects the User Back to the Login Page if Cookie Not Valid
@@ -193,6 +193,58 @@ server.post("/signup.html", formdecoder, (req, res) => {
     }
 });
 
+// Send Recommendations File for Recommendations Requests
+server.get("/recommendations", (req, res) => {
+    auth.checkReqCookie(req).then((cookieuser) => {
+        if (cookieuser) {
+            res.status(200);
+            res.sendFile(path.join(templatepath, "recommendations.html"));
+        }
+        else {
+            res.redirect("/login.html");
+        }
+    });
+});
+
+// Send Friends File for Friends Requests
+server.get("/friends", (req, res) => {
+    auth.checkReqCookie(req).then((cookieuser) => {
+        if (cookieuser) {
+            res.status(200);
+            res.sendFile(path.join(templatepath, "friends.html"));
+        }
+        else {
+            res.redirect("/login.html");
+        }
+    });
+});
+
+// Send Matchrequests File for Matchrequests Requests
+server.get("/matchrequests", (req, res) => {
+    auth.checkReqCookie(req).then((cookieuser) => {
+        if (cookieuser) {
+            res.status(200);
+            res.sendFile(path.join(templatepath, "matchrequests.html"));
+        }
+        else {
+            res.redirect("/login.html");
+        }
+    });
+});
+
+// Send Profile File for Profile Requests
+server.get("/profile", (req, res) => {
+    auth.checkReqCookie(req).then((cookieuser) => {
+        if (cookieuser) {
+            res.status(200);
+            res.sendFile(path.join(templatepath, "profile.html"));
+        }
+        else {
+            res.redirect("/login.html");
+        }
+    });
+});
+
 // Waits until DB is ready with Proper Libraries Configured before starting server
 auth.dbready.then(() => {
     console.log("Auth DB Opened with Proper Tables.")
@@ -202,3 +254,4 @@ auth.dbready.then(() => {
         server.listen(port);
     });
 });
+

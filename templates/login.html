@@ -1,170 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
-        body {
-            background-color: #0C1421;
-        }
-
-        h1 {
-            font-family: 'Big Shoulders Display', cursive;
-            font-weight: 800;
-            color: #CCC9DC;
-        }
-
-        h3 {
-            font-family: 'Big Shoulders Display', cursive;
-            font-weight: 400;
-            color: #CCC9DC;
-            font-size: 30px;
-        }
-
-        #centering-div {
-            display: flex;
-            justify-content: center;
-            text-align: center;
-        }
-
-        a:visited {
-            color: #CCC9DC;
-        }
-
-        #backtohomelogin {
-            color: #CCC9DC;
-            text-decoration: none;
-            padding-left: 10px;
-
-            -webkit-transition: color 0.1s ease-out;
-            -moz-transition: color 0.05s ease-out;
-            -o-transition: color 0.05s ease-out;
-            transition: color 0.05s ease-out;
-        }
-
-        #backtohomelogin:hover {
-            color: #7e7e82;
-        }
-
-        #signup-link {
-            color: #EE8434;
-        }
-
-        #signup-link:hover {
-            color: #d75d00;
-        }
-
-        #main_container {
-            position: absolute;
-            top: 20%;
-            height: 400px;
-            width: 600px;
-            background-color: #1B2A41;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            border-radius: 10px;
-
-            border-style: inset;
-            border-bottom-style: groove;
-            border-right-style: groove;
-            border-color: #050a11;
-            border-width: 3px;
-        }
-
-        form {
-            width: 90%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        #login-title {
-            padding-top: 20px;
-            font-size: 40px;
-        }
-
-        input {
-            background-color: #324A5F;
-            border-radius: 10px;
-            color: #CCC9DC;
-            height: 40px;
-            width: 90%;
-            outline: none;
-
-            border-style: inset;
-            border-top-style: none;
-            border-left-style: none;
-            border-bottom-style: groove;
-            border-right-style: groove;
-            border-color: #0C1421;
-            border-top-color: #324A5F;
-            border-left-color: #324A5F;
-
-            font-family: 'Big Shoulders Display', cursive;
-            font-weight: 400;
-            font-size: 22px;
-
-            padding-left: 10px;
-
-            -webkit-transition: background-color 0.05s ease-out;
-            -moz-transition: background-color 0.05s ease-out;
-            -o-transition: background-color 0.05s ease-out;
-            transition: background-color 0.05s ease-out;
-        }
-
-        input:hover {
-            background-color: #384f64;
-        }
-
-        input::placeholder {
-            color: #CCC9DC, 50%;
-            font-family: 'Big Shoulders Display', cursive;
-            font-weight: 400;
-            font-size: 22px;
-        }
-
-        input:focus {
-            border-bottom-style: groove;
-            border-right-style: groove;
-            border-color: #0C1421;
-            background-color: #273d51;
-
-            -webkit-transition: background-color 0.05s ease-out;
-            -moz-transition: background-color 0.05s ease-out;
-            -o-transition: background-color 0.05s ease-out;
-            transition: background-color 0.05s ease-out;
-        }
-
-        button {
-            color: #0C1421;
-            background-color: #EE8434;
-            width: 150px;
-            height: 50px;
-            border-style: hidden;
-            border-radius: 10px;
-
-            font-family: 'Big Shoulders Display', cursive;
-            font-weight: 600;
-            font-size: 24px;
-            
-            -webkit-transition: background-color 0.05s ease-out;
-            -moz-transition: background-color 0.05s ease-out;
-            -o-transition: background-color 0.05s ease-out;
-            transition: background-color 0.05s ease-out;
-        }
-
-        button:hover {
-            cursor: pointer;
-            color: #EE8434;
-            background-color: #0C1421;
-        }
-    </style>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" type="text/css" href="templates/styles.css">
+    <link rel="stylesheet" type="text/css" href="styles/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -175,16 +16,16 @@
 </head>
 
 <body>
-    <h1><a id="backtohomelogin" href="index.html">⇦ Back to Home</a></h1>
-    <div id="centering-div">
-        <div id="main_container">
-            <h1 id="login-title">Login to your account</h1>
-            <form id="loginform" onsubmit="event.preventDefault(); SubmitLoginForm();">
-                <input placeholder="Enter username" type="text" name="username">
-                <input placeholder="Enter password" type="password" name="password">
-                <button type="submit">Log In</button>
+    <h1><a class="backtohomelogin smooth-text" href="index.html">⇦ Back to Home</a></h1>
+    <div class="centering-div">
+        <div id="main-container-login">
+            <h1 class="login-signup-title smooth-text">Login to your account</h1>
+            <form id="loginform" class="login-signup-form" onsubmit="event.preventDefault(); SubmitLoginForm();">
+                <input placeholder="Enter username" type="text" name="username" class="smooth-background">
+                <input placeholder="Enter password" type="password" name="password" class="smooth-background">
+                <button type="submit" class="smooth-background">Log in</button>
             </form>
-            <h3>Don't have an account? <a id="signup-link" href="signup.html">Sign up</a></h3>
+            <h3>Don't have an account? <a class="orange-link smooth-text" href="signup.html">Sign up</a></h3>
         </div>
     </div>
 </body>
