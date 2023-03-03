@@ -193,16 +193,6 @@ server.post("/signup.html", formdecoder, (req, res) => {
     }
 });
 
-// Waits until DB is ready with Proper Libraries Configured before starting server
-auth.dbready.then(() => {
-    console.log("Auth DB Opened with Proper Tables.")
-    prof.dbready.then(() => {
-        console.log("Profile DB Opened with Proper Tables");
-        prof.insertProfile("block", "Block Boy", "13", "I like to break");
-        server.listen(port);
-    });
-});
-
 // Send Recommendations File for Recommendations Requests
 server.get("/recommendations", (req, res) => {
     auth.checkReqCookie(req).then((cookieuser) => {
@@ -254,3 +244,14 @@ server.get("/profile", (req, res) => {
         }
     });
 });
+
+// Waits until DB is ready with Proper Libraries Configured before starting server
+auth.dbready.then(() => {
+    console.log("Auth DB Opened with Proper Tables.")
+    prof.dbready.then(() => {
+        console.log("Profile DB Opened with Proper Tables");
+        prof.insertProfile("block", "Block Boy", "13", "I like to break");
+        server.listen(port);
+    });
+});
+
