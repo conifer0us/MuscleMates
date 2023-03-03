@@ -1,3 +1,8 @@
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 body {
     background-color: #0C1421;
 }
@@ -5,4 +10,252 @@ body {
 h1 {
     font-family: 'Big Shoulders Display', cursive;
     font-weight: 800;
+    color: #CCC9DC;
+}
+
+h2 {
+    font-family: 'Big Shoulders Display', cursive;
+    font-weight: 600;
+    color: #CCC9DC;
+    font-size: 40px;
+}
+
+h3 {
+    font-family: 'Big Shoulders Display', cursive;
+    font-weight: 400;
+    color: #CCC9DC;
+    font-size: 30px;
+}
+
+p {
+    font-family: 'Big Shoulders Display', cursive;
+    font-weight: 300;
+    color: #CCC9DC;
+    font-size: 24px;
+}
+
+input {
+    background-color: #324A5F;
+    border-radius: 10px;
+    color: #CCC9DC;
+    height: 40px;
+    width: 90%;
+    outline: none;
+
+    border-style: inset;
+    border-top-style: none;
+    border-left-style: none;
+    border-bottom-style: groove;
+    border-right-style: groove;
+    border-color: #0C1421;
+    border-top-color: #324A5F;
+    border-left-color: #324A5F;
+
+    font-family: 'Big Shoulders Display', cursive;
+    font-weight: 400;
+    font-size: 22px;
+
+    padding-left: 10px;
+}
+
+input:hover {
+    background-color: #384f64;
+}
+
+input::placeholder {
+    color: #CCC9DC, 50%;
+    font-family: 'Big Shoulders Display', cursive;
+    font-weight: 400;
+    font-size: 22px;
+}
+
+input:focus {
+    border-bottom-style: groove;
+    border-right-style: groove;
+    border-color: #0C1421;
+    background-color: #273d51;
+
+    -webkit-transition: background-color 0.1s ease-out;
+    -moz-transition: background-color 0.1s ease-out;
+    -o-transition: background-color 0.1s ease-out;
+    transition: background-color 0.1s ease-out;
+}
+
+button {
+    color: #0C1421;
+    background-color: #EE8434;
+    width: 150px;
+    height: 50px;
+    border-style: hidden;
+    border-radius: 10px;
+
+    font-family: 'Big Shoulders Display', cursive;
+    font-weight: 600;
+    font-size: 24px;
+}
+
+button:hover {
+    cursor: pointer;
+    color: #EE8434;
+    background-color: #0C1421;
+}
+
+.centering-div {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.backtohomelogin {
+    color: #CCC9DC;
+    text-decoration: none;
+    padding-left: 10px;
+}
+
+.backtohomelogin:hover {
+    color: #7e7e82;
+}
+
+.orange-link {
+    color: #EE8434;
+}
+
+.orange-link:hover {
+    color: #d75d00;
+}
+
+.white-link {
+    color: #CCC9DC;
+}
+
+.white-link:visited {
+    color: #CCC9DC;
+}
+
+#main-container-login {
+    position: absolute;
+    top: 20%;
+    height: 400px;
+    width: 600px;
+    background-color: #1B2A41;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+
+    border-style: inset;
+    border-bottom-style: groove;
+    border-right-style: groove;
+    border-color: #050a11;
+    border-width: 3px;
+}
+
+#main-container-signup {
+    position: absolute;
+    top: 15%;
+    height: 525px;
+    width: 600px;
+    background-color: #1B2A41;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+
+    border-style: inset;
+    border-bottom-style: groove;
+    border-right-style: groove;
+    border-color: #050a11;
+    border-width: 3px;
+}
+
+.login-signup-form {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.login-signup-title {
+    padding-top: 20px;
+    font-size: 40px;
+}
+
+.smooth-background {
+    -webkit-transition: background-color 0.1s ease-out;
+    -moz-transition: background-color 0.1s ease-out;
+    -o-transition: background-color 0.1s ease-out;
+    transition: background-color 0.1s ease-out;
+}
+
+.smooth-text {
+    -webkit-transition: color 0.1s ease-out;
+    -moz-transition: color 0.1s ease-out;
+    -o-transition: color 0.1s ease-out;
+    transition: color 0.1s ease-out;
+}
+
+.nav-bar {
+    position: absolute;
+    top: 0%;
+    left: 0px;
+    width: 100%;
+    height: 60px;
+    padding: 5px;
+    background-color: #324A5F;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    border-bottom-style: groove;
+    border-right-style: groove;
+    border-color: #050a11;
+    border-width: 5px;
+}
+
+.links-to-pages {
+    position: relative;
+    height: 100%;
+    width: 85%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 80px;
+}
+
+.nav-bar-item {
+    font-family: 'Big Shoulders Display', cursive;
+    font-weight: 600;
+    color: #CCC9DC;
+    font-size: 30px;
+    text-decoration: none;
+}
+
+.nav-bar-item:hover {
+    color: #7e7e82;
+}
+
+.body-of-page {
+    position: absolute;
+    left: 3.5%;
+    top: 70px;
+    height: 90%;
+    width: 90%;
+}
+
+#homepage-title {
+    font-family: 'Big Shoulders Display', cursive;
+    font-weight: 800;
+    color: #CCC9DC;
+    font-size: 60px;
+}
+
+#home-title {
+    font-family: 'Big Shoulders Display', cursive;
+    font-weight: 800;
+    color: #CCC9DC;
+    font-size: 120px;
 }
