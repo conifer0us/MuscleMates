@@ -8,7 +8,8 @@ const cookieParser = require('cookie-parser');
 
 // Import Server Libraries
 const authlib = require("./libs/Auth.js");
-const proflib = require("./libs/ProfileInfo"); 
+const proflib = require("./libs/ProfileInfo");
+const reqlib = require("./libs/MatchRequests");
 
 // Defines Configuration Options
 const templatepath = __dirname + "/templates";
@@ -22,6 +23,7 @@ const server = express();
 server.use(cookieParser());
 const auth = new authlib(authdbfile);
 const prof = new proflib(authdbfile);
+const matchreq = new reqlib(authdbfile);
 
 // Brings In Externally Defined Routes at Certain Base Folders
 const apiroutes = require("./api.js");
@@ -250,8 +252,11 @@ auth.dbready.then(() => {
     console.log("Auth DB Opened with Proper Tables.")
     prof.dbready.then(() => {
         console.log("Profile DB Opened with Proper Tables");
-        prof.insertProfile("block", "Block Boy", "13", "I like to break");
-        server.listen(port);
+        prof.insertProfile("block", "Block Boy", "13", "I like to break", "Blocky Rocky Boxing");
+        matchreq.dbready.then(() => {
+            console.log("MatchRequests DB Opened with Proper Tables.")
+            server.listen(port);
+        });
     });
 });
 
