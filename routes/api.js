@@ -4,13 +4,14 @@
 // Import Necessary Libraries
 const server = require("express");
 const router = server.Router();
-const proflib = require("./libs/ProfileInfo.js");
+const proflib = require("../libs/ProfileInfo.js");
 
-// Configuration constants
-const dbname = "auth.db";
+// Configuration Object From Config JSON and Global Constants
+const configjson = require("../config.json");
+const dbfile = configjson["dbfile"];
 
 // Create Global Objects
-const prof = new proflib(dbname);
+const prof = new proflib(dbfile);
 
 // Sends Basic API Welcome Message with 200 Status Code For Simple /api request
 router.get("/", (req, res) => {

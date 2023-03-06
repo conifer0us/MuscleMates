@@ -15,9 +15,7 @@ class Auth {
                 if (err) {
                     console.log("Error Creating Auth Database.");
                     reject(err);
-                } else {
-                    console.log("Auth opened in file " + dbfile);
-                }
+                } 
 
                 // Creates a Users table for storing username, email, and password hash
                 // Also Creates a Cookies table for storing User Cookies
@@ -29,7 +27,6 @@ class Auth {
                             console.log("Error Creating Tables in Auth Database");
                             reject(err);
                         } else {
-                            console.log("User and Cookie tables set up.");
                             resolve(true);
                         }
                     }

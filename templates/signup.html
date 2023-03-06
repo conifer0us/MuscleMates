@@ -10,6 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
+    <script src="/scripts/formsubmission.js"></script>
+
     <title>Sign Up</title>
 </head>
 
@@ -18,7 +20,7 @@
     <div class="centering-div">
         <div id="main-container-signup">
             <h1  class="login-signup-title">Create a new account</h1>
-            <form class="login-signup-form" action="signup.html" method="POST">
+            <form class="login-signup-form" id="signupform" onsubmit="event.preventDefault();SubmitSignupForm();">
                 <input placeholder="E-mail address" type="text" name="email" class="smooth-background">
                 <input placeholder="Username" type="text" name="username" class="smooth-background">
                 <input placeholder ="Password" type="password" name="password" class="smooth-background">
