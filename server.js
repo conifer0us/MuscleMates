@@ -256,6 +256,17 @@ auth.dbready.then(() => {
         matchreq.dbready.then(() => {
             console.log("MatchRequests DB Opened with Proper Tables.")
             server.listen(port);
+            
+            matchreq.submitRequest('Chris', 'Matt').then(() => {
+                matchreq.submitRequest('Matt', 'Chris').then(() => {
+                        matchreq.submitRequest('Chris', 'Kim').then(() => {
+                            matchreq.deleteRequest('Chris', 'Kim').then(() => {
+                                console.log();
+                            });
+                        });
+                });
+            });
+
         });
     });
 });
