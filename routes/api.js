@@ -38,7 +38,6 @@ router.get("/profile/:username", (req, res) => {
         if (Object.keys(profinfo).length) {
             res.status(200);
             res.json(profinfo);
-            res.send();
         } 
         
         // Otherwise, Send Empty Response with Status 404
