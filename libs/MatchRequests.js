@@ -35,8 +35,8 @@ class MatchRequests{
     //Returns a promise that resolves to true if the match exists in the database or false if otherwise
     matchExists(username1, username2){
         return new Promise((resolve, reject) => {
-            this.db.all(`SELECT sender, receiver FROM matchRequests WHERE sender = ? OR sender = ?`
-            , [username1, username2]
+            this.db.all(`SELECT sender, receiver FROM matchRequests WHERE sender = ? OR receiver = ?`
+            , [username1, username1]
             , (err, rows) => {
                 if (err) {
                     reject(err);
@@ -119,6 +119,8 @@ class MatchRequests{
         });
     }
 
+    // Deletes a Match Request From the Table
+    // Always Resolves to True
     deleteRequest(sender, receiver){
         return new Promise((resolve, reject) => {
             this.db.all(`DELETE FROM matchRequests WHERE sender = ? AND receiver = ?`
@@ -133,6 +135,5 @@ class MatchRequests{
             });
         });
     }
-
 }
 module.exports = MatchRequests;
