@@ -9,7 +9,13 @@ const authlib = require("../libs/Auth.js");
 
 // Configuration Object From Config JSON and Global Constants
 const configjson = require("../config.json");
-const dbfile = configjson["dbfile"];
+const arguments = process.argv;
+let dbfile = "";
+if (arguments[2] == "test") {
+    dbfile = configjson["testdb"];
+} else {
+    dbfile = configjson["dbfile"];
+}
 
 // Defines Global Objects
 const prof = new proflib(dbfile);
