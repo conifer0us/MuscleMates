@@ -1,5 +1,6 @@
 # Temporary Server Files
 auth.db
+main.db
 
 # Logs
 logs
