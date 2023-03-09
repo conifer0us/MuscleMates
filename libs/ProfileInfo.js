@@ -140,27 +140,6 @@ class ProfileInfo{
         })
     }
 
-    // Returns A Promise that Resolves to Dictionary Representation of Profile Information
-    getProfInfo(username){
-        return new Promise((resolve, reject) => {
-            this.profileExists(username).then((profexistsbool) => {
-                if (!profexistsbool) {
-                    resolve({});
-                }
-                else {
-                    this.getName(username).then((name)=>{
-                        this.getAge(username).then((age) => {
-                            this.getBio(username).then((bio) => {
-                                resolve({"name": name, "age": age, "bio": bio});
-                            }); 
-                        });
-                    });
-                }
-            });
-        });
-    }
-
-
     //retrieves gym from the database for a given username
     //returns a promise object that resolves to the gym if it is found or an empty string if it isn't
     getGym(username){
@@ -179,6 +158,53 @@ class ProfileInfo{
                 }
             });
         })
+    }
+
+    // Returns A Promise that Resolves to Dictionary Representation of Profile Information
+    getProfInfo(username){
+        return new Promise((resolve, reject) => {
+            this.profileExists(username).then((profexistsbool) => {
+                if (!profexistsbool) {
+                    resolve({});
+                }
+                else {
+                    this.getName(username).then((name)=>{
+                        this.getAge(username).then((age) => {
+                            this.getBio(username).then((bio) => {
+                                this.getGym(username).then((gym) => {
+                                    resolve({"name": name, "age": age, "bio": bio, "gym": gym});
+                                }); 
+                            }); 
+                        });
+                    });
+                }
+            });
+        });
+    }
+
+    // Returns a Promise Object that Resolves to a List of Users who have Created a Profile
+    // If the exclude list is set, it will remove all usernames in the list from the returned set
+    getAllUsers(exclude = []) {
+        return new Promise((resolve, reject) => {
+            this.db.all(`SELECT username FROM profiles`
+            , []
+            , (err, rows) => {
+                if (err) {
+                    reject(err);
+                }
+                else{
+                    var userlist = [];
+                    for (let i = 0; i < rows.length; i++){
+                        // Add User From this Row to User List if it is not in the excluded set
+                        let uname = rows[i].username;
+                        if (!exclude.includes(uname)) {
+                            userlist.push(uname);
+                        }
+                    }
+                    resolve(userlist);
+                }
+            });
+        });
     }
 }
 
