@@ -6,10 +6,25 @@ const reqparser = require('body-parser')
 const formdecoder = reqparser.urlencoded({extended:false});
 const cookieParser = require('cookie-parser');
 
+// Defines Operation Mode and Sets Mode Based on Command Line Arguments
+const MODES = {
+    test: 0,
+    prod: 1
+}
+
+// Gets Program Command Line Arguments and Sets Mode Based on Arguments
+const arguments = process.argv;
+let mode = MODES.prod;
+if (arguments[2] == "test") {
+    console.log("Starting Server in Testing Mode.")
+    mode = MODES.test;
+}
+
 // Import Server Libraries
 const authlib = require("./libs/Auth.js");
-const proflib = require("./libs/ProfileInfo");
-const reqlib = require("./libs/MatchRequests");
+const proflib = require("./libs/ProfileInfo.js");
+const reqlib = require("./libs/MatchRequests.js");
+const friendlib = require("./libs/Friends.js");
 
 // Loads Configuration Options From config.json
 let configjson = require("./config.json");
@@ -17,7 +32,14 @@ const templatepath = path.join(__dirname, configjson["templatepath"]);
 const stylepath = path.join(__dirname, configjson["stylepath"]);
 const scriptpath = path.join(__dirname, configjson["scriptpath"]);
 const port = configjson["port"];
-const DBFILE = configjson["dbfile"];
+
+// Defines DBFILE to be the main db if mode is production and a test db if mode is test
+let DBFILE = "";
+if (mode == MODES.prod) {
+    DBFILE = configjson["dbfile"];
+} else if (mode == MODES.test) {
+    DBFILE = configjson["testdb"];
+}
 
 // Defines Global Constant Library Objects
 const server = express();
@@ -25,6 +47,7 @@ server.use(cookieParser());
 const auth = new authlib(DBFILE);
 const prof = new proflib(DBFILE);
 const matchreq = new reqlib(DBFILE);
+const friends = new friendlib(DBFILE);
 
 // Brings In Externally Defined Routes at Certain Base Folders
 const apiroutes = require("./routes/api.js");
@@ -252,14 +275,39 @@ server.get("/profile", (req, res) => {
     });
 });
 
-// Waits until DB is ready with Proper Libraries Configured before starting server
-auth.dbready.then(() => {
-    console.log("Auth DB Opened with Proper Tables.")
-    prof.dbready.then(() => {
-        console.log("Profile DB Opened with Proper Tables");
-        matchreq.dbready.then(() => {
-            console.log("MatchRequests DB Opened with Proper Tables.")
-            server.listen(port);
-        });
-    });
-});
+// Main Function that Runs when Program Starts. This Function is responsible for creating library instances and Starting the Server
+async function main() {
+    // Waits until DB is ready with Proper Libraries Configured before starting server
+    await auth.dbready;
+    console.log("Auth DB Opened with Proper Tables.");
+    await prof.dbready;
+    console.log("Profile DB Opened with Proper Tables");
+    await matchreq.dbready;
+    console.log("MatchRequests DB Opened with Proper Tables.");
+    await friends.dbready;
+    console.log("Friends DB Created with Proper Tables");
+
+    // Runs Test Function if "test" option specified on Command Line after server.js
+    if (mode == MODES.test) {
+        test();
+    }
+
+    // Starts Server on Port Specified
+    server.listen(port);
+}
+
+// Test Function that configures the database with some predefined data for demonstration purposes
+async function test() {
+    auth.insertUserPassword("block", "block@block.com", "chain");
+    prof.insertProfile("block", "Block Boy", "18", "I like breaking", "Block Boxing and More");
+
+    auth.insertUserPassword("john123", "john@gmail.com", "john123");
+    prof.insertProfile("john123", "John Smith", "20", "I'm just a regular John.", "Block Boxing and More");
+
+    auth.insertUserPassword("martha5", "martha@outlook.com", "marthaiscool");
+    prof.insertProfile("martha5", "Martha Jones", "40", "I like rock climbing and biking.", "Block Boxing and More");
+    console.log("Test Function Executed Successfully");
+}
+
+// Starts Main Function
+main();
