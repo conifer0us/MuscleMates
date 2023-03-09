@@ -8,7 +8,8 @@ const cookieParser = require('cookie-parser');
 
 // Import Server Libraries
 const authlib = require("./libs/Auth.js");
-const proflib = require("./libs/ProfileInfo"); 
+const proflib = require("./libs/ProfileInfo");
+const reqlib = require("./libs/MatchRequests");
 
 // Loads Configuration Options From config.json
 let configjson = require("./config.json");
@@ -21,8 +22,9 @@ const DBFILE = configjson["dbfile"];
 // Defines Global Constant Library Objects
 const server = express();
 server.use(cookieParser());
-const auth = new authlib(DBFILE);
-const prof = new proflib(DBFILE);
+const auth = new authlib(authdbfile);
+const prof = new proflib(authdbfile);
+const matchreq = new reqlib(authdbfile);
 
 // Brings In Externally Defined Routes at Certain Base Folders
 const apiroutes = require("./routes/api.js");
@@ -255,7 +257,21 @@ auth.dbready.then(() => {
     console.log("Auth DB Opened with Proper Tables.")
     prof.dbready.then(() => {
         console.log("Profile DB Opened with Proper Tables");
-        prof.insertProfile("block", "Block Boy", "13", "I like to break");
-        server.listen(port);
+        prof.insertProfile("block", "Block Boy", "13", "I like to break", "Blocky Rocky Boxing");
+        matchreq.dbready.then(() => {
+            console.log("MatchRequests DB Opened with Proper Tables.")
+            server.listen(port);
+            
+            matchreq.submitRequest('Chris', 'Matt').then(() => {
+                matchreq.submitRequest('Matt', 'Chris').then(() => {
+                        matchreq.submitRequest('Chris', 'Kim').then(() => {
+                            matchreq.deleteRequest('Chris', 'Kim').then(() => {
+                                console.log();
+                            });
+                        });
+                });
+            });
+
+        });
     });
 });
