@@ -10,9 +10,8 @@ function getFormDataByID(formid) {
 // Sends An HTTP Post Request to the supplied URL with the formdata in the form specified by formid
 // Redirects to Proper Page if Send 301 Status Code (Successful Login)
 // Shows Alert with errorstr if login denied
-function sendFormData(formid, url, errorstr) {
+function sendFormData(formdata, url, errorstr) {
     // Turn Form Data into a URLSearchParams Object to Allow Normal Attribute Reference in Node
-    let formdata = getFormDataByID(formid);
     submitparams = new URLSearchParams();
     for (const [formkey, formval] of formdata.entries()) {
         submitparams.append(formkey, formval);
@@ -30,15 +29,57 @@ function sendFormData(formid, url, errorstr) {
         } 
         
         // If Error in Login, Alert User with Supplied Error String
-        else if (this.readyState == 4 && this.status == 401) {
-            alert(errorstr);
+        else if (this.readyState == 4 && (this.status < 500 && this.status > 399)) {
+            ShowError(errorstr);
         }
     }
     xhr.send(submitparams);
 }
 
+// Shows an Error if Something Goes Wrong in Form Submission
+function ShowError(errorstr) {
+    alert(errorstr);
+}
+
 // Form Submission Function for Login Page
 // Calls SendFormData for id "loginform", post page "/login.html", and error string "Login Failed"
 function SubmitLoginForm() {
-    sendFormData("loginform", "/login.html", "Login Failed");
+    sendFormData(getFormDataByID("loginform"), "/login.html", "Login Failed");
 }
+
+// Form Submission Function for Signup Page
+function SubmitSignupForm() {
+    const SignupFormData = getFormDataByID("signupform");
+    
+    // Get Individual Elements of Form to Validate
+    const emaildata = SignupFormData.get("email");
+    const uname = SignupFormData.get("username");
+    const password = SignupFormData.get("password")
+    const repeatpassword = SignupFormData.get("repeatpassword")
+
+    // 
+    if (!emaildata || !uname || !password || !repeatpassword) {
+        ShowError("Not All Field Values Set");
+    } 
+    
+    // Validates Email with Regex
+    else if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emaildata))) {
+        ShowError("Invalid Email Address");
+    }
+
+    // Checks if Password and Repeat Password are not the Same
+    else if (password != repeatpassword) {
+        ShowError("Passwords Do Not Match")
+    }
+
+    // Checks if Password is Fewer than 8 Characters
+    else if (password.length < 8) {
+        ShowError("Password Must be More than 8 Characters")
+    }
+
+    // Send Signup Request to Server if Conditions Met
+    else {
+        sendFormData(SignupFormData, "/signup.html", "Username or Email Already Exists")
+    }
+}
+

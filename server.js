@@ -11,12 +11,13 @@ const authlib = require("./libs/Auth.js");
 const proflib = require("./libs/ProfileInfo");
 const reqlib = require("./libs/MatchRequests");
 
-// Defines Configuration Options
-const templatepath = __dirname + "/templates";
-const stylepath = __dirname + "/styles";
-const scriptpath = __dirname + "/scripts"
-const port = 80;
-const authdbfile = "auth.db";
+// Loads Configuration Options From config.json
+let configjson = require("./config.json");
+const templatepath = path.join(__dirname, configjson["templatepath"]);
+const stylepath = path.join(__dirname, configjson["stylepath"]);
+const scriptpath = path.join(__dirname, configjson["scriptpath"]);
+const port = configjson["port"];
+const DBFILE = configjson["dbfile"];
 
 // Defines Global Constant Library Objects
 const server = express();
@@ -26,8 +27,12 @@ const prof = new proflib(authdbfile);
 const matchreq = new reqlib(authdbfile);
 
 // Brings In Externally Defined Routes at Certain Base Folders
-const apiroutes = require("./api.js");
+const apiroutes = require("./routes/api.js");
 server.use("/api", apiroutes);
+
+// Brings in Externally Defined Routes for Posting Information to the Server
+const postroutes = require("./routes/submit.js")
+server.use("/submit", postroutes)
 
 // Send Index File for Homepage Requests
 server.get("/", (req, res) => {
@@ -270,4 +275,3 @@ auth.dbready.then(() => {
         });
     });
 });
-
