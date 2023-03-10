@@ -108,12 +108,24 @@ router.get("/matchrecs", (req, res) => {
                     res.status(400);
                     res.send();
                 } else {
+                    exclude = [uname];
+
                     // Gets the Friend List From the User to Exclude them From Match Recommendations
                     friends.friendList(uname).then((friendlist) => {
-                        friendlist.push(uname);
-                        prof.getAllUsers(friendlist).then((reclist) => {
-                            res.status(200);
-                            res.json({"matchrecs": reclist});
+                        exclude = exclude.concat(friendlist);
+
+                        // Gets Current Received Requests to Exclude them From Match Recommendations
+                        matchrequests.requestsReceived(uname).then((receivedreqs) => {
+                            exclude = exclude.concat(receivedreqs);
+
+                            // Gets Current Received Requests to Exclude them From Match Recommendations
+                            matchrequests.requestsSent(uname).then((sentreqs) => {
+                                exclude = exclude.concat(sentreqs);
+                                prof.getAllUsers(exclude).then((reclist) => {
+                                    res.status(200);
+                                    res.json({"matchrecs": reclist});
+                                });
+                            });
                         });
                     });
                 }

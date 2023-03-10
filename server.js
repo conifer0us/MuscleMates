@@ -307,8 +307,6 @@ async function test() {
     auth.insertUserPassword("martha5", "martha@outlook.com", "marthaiscool");
     prof.insertProfile("martha5", "Martha Jones", "40", "I like rock climbing and biking.", "Block Boxing and More");
 
-    friends.addFriends("john123", "block");
-
     console.log("Test Function Executed Successfully");
 }
 

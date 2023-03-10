@@ -14,8 +14,9 @@ if (pagetitle == "Match Requests") {
     getMatchesSentUsernames()
 }
 
-function sendMatchRequest(onsuccess) {
-    fetch("SENDMATCHREQUESTURL")
+function sendMatchRequest(onsuccess, username) {
+    console.log("Sending request for ", username);
+    fetch("/submit/sendreq/"+username, {method:"POST"})
     .then((response) => {
         if (response.status == 200) {
             alert("Request sent")
@@ -27,8 +28,8 @@ function sendMatchRequest(onsuccess) {
     })
 }
 
-function acceptMatchRequest(onsuccess) {
-    fetch("ACCEPTMATCHREQUESTURL")
+function acceptMatchRequest(onsuccess, username) {
+    fetch("/submit/acceptreq/" + username, {method: "POST"})
     .then((response) => {
         if (response.status == 200) {
             alert("Match request accepted, you are now friends!")
@@ -40,11 +41,12 @@ function acceptMatchRequest(onsuccess) {
     })
 }
 
-function cancelSentMatchRequest(onsuccess) {
-    fetch("CANCELSENTMATCHREQUESTURL")
+function cancelSentMatchRequest(onsuccess, username) {
+    fetch("/submit/cancelreq/" + username, {method:"POST"})
     .then((response) => {
         if (response.status == 200) {
             alert("Sent match request successfully cancelled")
+            onsuccess();
         }
         else {
             alert("Something went wrong")
@@ -148,12 +150,14 @@ function addNewRecsDiv(name, username, age, bio, gym, sent) {
     const recommendation_container = document.createElement("div")
     recommendation_container.classList.add("recommendation-container")
 
+    recommendation_container.setAttribute("username", username)
+
     recommendation = document.createElement("div")
 
     if (pagetitle == "Recommendations") {
         recommendation.classList.add("recommendation")
         recommendation.addEventListener("click", () => {
-            sendMatchRequest(()=>{recommendation_container.remove()});
+            sendMatchRequest(()=>{recommendation_container.remove()}, username);
         })
     }
 
@@ -164,14 +168,14 @@ function addNewRecsDiv(name, username, age, bio, gym, sent) {
     if (pagetitle == "Match Requests"  && sent == false) {
         recommendation.classList.add("accept-request")
         recommendation.addEventListener("click", () => {
-            acceptMatchRequest(()=>{recommendation_container.remove()});
+            acceptMatchRequest(()=>{recommendation_container.remove()}, username);
         })
     }
 
     if (pagetitle == "Match Requests"  && sent == true) {
         recommendation.classList.add("cancel-request")
         recommendation.addEventListener("click", () => {
-            cancelSentMatchRequest(()=>{recommendation_container.remove()});
+            cancelSentMatchRequest(()=>{recommendation_container.remove()}, username);
         })
     }
     
