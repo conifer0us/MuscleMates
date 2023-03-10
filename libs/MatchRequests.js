@@ -31,25 +31,22 @@ class MatchRequests{
 
 
     //Tests if a match between 2 users already exists in the database
-    //It does not matter which user is the sender and which one is the receiver of the request
     //Returns a promise that resolves to true if the match exists in the database or false if otherwise
-    matchExists(username1, username2){
+    matchExists(sender, receiver){
         return new Promise((resolve, reject) => {
-            this.db.all(`SELECT sender, receiver FROM matchRequests WHERE sender = ? OR receiver = ?`
-            , [username1, username1]
+            this.db.all(`SELECT sender, receiver FROM matchRequests WHERE sender = ? AND receiver = ?`
+            , [sender, receiver]
             , (err, rows) => {
                 if (err) {
                     reject(err);
                 }
                 else{
-                    var matchInSelection = false;
-                    for (let i = 0; i < rows.length; i++){
-                        //test if combination already exists in the DB
-                        if ((rows[i].sender == username1 && rows[i].receiver == username2) || (rows[i].sender == username2 && rows[i].receiver == username1)){
-                            matchInSelection = true;
-                        }
+                    if (rows.length > 0) {
+                        resolve(true);
                     }
-                    resolve(matchInSelection);
+                    else {
+                        resolve(false);
+                    }
                 }
             });
         });
