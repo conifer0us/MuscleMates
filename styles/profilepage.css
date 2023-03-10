@@ -1,0 +1,278 @@
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body{
+    background-color: #0C1421;
+}
+
+h1 {
+    position: absolute;
+    width: 128px;
+    height: 42px;
+    left: 61px;
+    top: 65px;
+
+    font-family: 'Big Shoulders Display';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 43px;
+    text-align: center;
+
+    color: #CCC9DC;
+}
+
+h2 {
+    position: absolute;
+    width: 77px;
+    height: 33px;
+    left: 387px;
+    top: 617px;
+
+    font-family: 'Big Shoulders Display';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 26px;
+    display: flex;
+    align-items: center;
+
+    color: #7E7E82;
+}
+
+h3 {
+    position: absolute;
+    width: 127px;
+    height: 38px;
+    left: 387px;
+    top: 660px;
+
+    font-family: 'Big Shoulders Display';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+    display: flex;
+    align-items: center;
+
+    color: #BFBFC0;
+}
+
+h4 {
+    position: absolute;
+    width: 35px;
+    height: 19px;
+    left: 811px;
+    top: 783px;
+
+    font-family: 'Big Shoulders Display';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+    display: flex;
+    align-items: center;
+
+    color: #BFBFC0;
+}
+
+.under-link {
+    color:rgb(126, 126, 130);
+}
+
+.link:hover {
+    color: rgb(107, 107, 110);
+}
+
+
+.decorativerectangle {
+    position: absolute;
+    width: 1000px;
+    height: 160px;
+    left: 300px;
+    top: 65px;
+
+    background: radial-gradient(50% 50% at 50% 50%, rgba(248, 107, 0, 0) 54.11%, rgba(101, 51, 13, 0.2) 100%), #FD984B;
+    background-blend-mode: overlay, normal;
+    border-radius: 60px 0px;
+}
+
+.user input[type='text'] {
+    position: absolute;
+    width: 850px;
+    height: 38px;
+
+    font-family: 'Big Shoulders Display';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+    display: flex;
+    align-items: center;
+    color:white;
+    
+    background-color: #324A5F;
+}
+
+.user input::placeholder {
+    font-family: 'Big Shoulders Display';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 26px;
+    display: flex;
+    align-items: center;
+
+    color: #7E7E82;
+}
+
+.bio input[type="text"] {
+    position: absolute;
+    width: 454px;
+    height: 91px;
+    left: 602px;
+    top: 617px;
+
+    border-style: inset;
+    border-top-style: none;
+    border-left-style: none;
+    border-bottom-style: groove;
+    border-right-style: groove;
+
+    font-family: 'Big Shoulders Display';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+    display: flex;
+    align-items: center;
+    color: black;
+
+    padding-left: 10px;
+
+    background-color: #DDDDE7;
+}
+
+button {
+    position: absolute;
+    width: 70px;
+    height: 40px;
+    left: 1230px;
+    top: 245px;
+    border-style: hidden;
+    border-radius: 10px;
+
+    background-color: #EE8434;
+
+    font-family: 'Big Shoulders Display';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 29px;
+
+    display: flex;
+    align-items: center;
+
+    color: #000000;
+}
+
+button:hover {
+    cursor: pointer;
+    color: #EE8434;
+    background-color: #0C1421;
+}
+
+.rectanglemain {
+    position: absolute;
+    width: 1000px;
+    height: 580px;
+    left: 300px;
+    top: 373px;
+
+    background: #1B2A41;
+    border-radius: 40px;
+}
+
+
+.rectanglebio {
+    position: absolute;
+    width: 850px;
+    height: 125px;
+    left: 379px;
+    top: 605px;
+
+    background: #324A5F;
+}
+
+.rectanglephoto {
+    position: absolute;
+    width: 850px;
+    height: 150px;
+    left: 379px;
+    top: 750px;
+
+    background: #324A5F;
+}
+
+.circle {
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    left: 602px;
+    top: 767px;
+    border-radius: 100%;
+
+    background: #DDDDE7;
+}
+
+.maincircle {
+    position: absolute;
+    width: 162px;
+    height: 160px;
+    left: 333px;
+    top: 181px;
+    border-radius: 100%;
+
+    background-color: #DDDDE7;
+}
+
+.settings-div {
+    position: relative;
+    width: 140px;
+    height: 180px;
+    top: 86px;
+    left: 55px;
+    background-color: rgb(27, 42, 65);
+
+    font-family: 'Big Shoulders Display';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 29px;
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #7E7E82;
+}
+
+.settings:hover {
+    color: rgb(27, 42, 65);
+}
+
+.smooth-background {
+    -webkit-transition: background-color 0.1s ease-out;
+    -moz-transition: background-color 0.1s ease-out;
+    -o-transition: background-color 0.1s ease-out;
+    transition: background-color 0.1s ease-out;
+}
+
+.smooth-text {
+    -webkit-transition: color 0.1s ease-out;
+    -moz-transition: color 0.1s ease-out;
+    -o-transition: color 0.1s ease-out;
+    transition: color 0.1s ease-out;
+}
