@@ -246,6 +246,14 @@ button:hover {
     width: 90%;
 }
 
+#body-of-page-recs {
+    position: absolute;
+    left: 3.5%;
+    top: 70px;
+    height: 90%;
+    width: 90%;
+}
+
 #homepage-title {
     font-family: 'Big Shoulders Display', cursive;
     font-weight: 800;
@@ -258,4 +266,201 @@ button:hover {
     font-weight: 800;
     color: #CCC9DC;
     font-size: 120px;
+}
+
+.recommendation-container {
+    border-radius: 10px;
+    border-bottom-style: groove;
+    border-right-style: groove;
+    border-color: #050a11;
+    border-width: 8px;
+}
+
+.recommendation {
+    height: 150px;
+    width: 100%;
+    background-color: #EE8434;
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+}
+
+.recommendation:hover {
+    background-color: #d75d00;
+    cursor: pointer;
+}
+
+.friend {
+    height: 150px;
+    width: 100%;
+    background-color: #324A5F;
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+}
+
+.rec-info-container {
+    height: 100%;
+    width: 95%;
+    background-color: #324A5F;
+    border-radius: 10px;
+    padding-left: 20px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 30px;
+}
+
+.rec-profile-pic {
+    height: 80px;
+    width: 80px;
+    background-color: #27B6AD;
+    border-radius: 100%;
+}
+
+.rec-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.rec-info-parameters {
+    height: 50px;
+    
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    gap: 100px;
+}
+
+.rec-info-parameters-names {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+.rec-info-parameters-fullname-text {
+    font-family: 'Big Shoulders Display', cursive;
+    font-weight: 600;
+    color: #CCC9DC;
+    font-size: 28px;
+}
+
+.rec-info-parameters-username-text {
+    font-family: 'Big Shoulders Display', cursive;
+    font-weight: 400;
+    color: rgb(204,201,220,50%);
+    font-size: 20px;
+}
+
+.rec-info-parameters-days {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.rec-info-parameters-seven-days {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+
+.rec-info-parameters-seven-days-day {
+    font-family: 'Big Shoulders Display', cursive;
+    font-weight: 600;
+    color: rgb(204,201,220,50%);
+    font-size: 28px;
+}
+
+.rec-info-parameters-gym {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.rec-info-parameters-gym-text {
+    font-family: 'Big Shoulders Display', cursive;
+    font-weight: 400;
+    color: rgb(204,201,220,50%);
+    font-size: 28px;
+}
+
+.rec-info-parameters-age {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.rec-info-parameters-age-text  {
+    font-family: 'Big Shoulders Display', cursive;
+    font-weight: 400;
+    color: rgb(204,201,220,50%);
+    font-size: 28px;
+}
+
+.rec-info-parameters-title {
+    font-family: 'Big Shoulders Display', cursive;
+    font-weight: 600;
+    color: #CCC9DC;
+    font-size: 28px;
+}
+
+.arrow-send {
+    position: relative;
+    left: 10px;
+}
+
+.rec-info-bio-text {
+    font-family: 'Big Shoulders Display', cursive;
+    font-weight: 400;
+    color: #CCC9DC;
+    font-size: 20px;
+}
+
+.accept-request {
+    height: 150px;
+    width: 100%;
+    background-color: #1d8848;
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+}
+
+.accept-request:hover {
+    background-color: #106d35;
+    cursor: pointer;
+}
+
+.cancel-request {
+    height: 150px;
+    width: 100%;
+    background-color: #c41414;
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+}
+
+.cancel-request:hover {
+    background-color: #a50f0f;
+    cursor: pointer;
+}
+
+.material-symbols-outlined {
+    color: #0C1421;
+
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 700,
+    'GRAD' 200,
+    'opsz' 48
 }
