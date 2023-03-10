@@ -17,7 +17,7 @@ class ProfileInfo{
                 }
 
                 this.db.exec(
-                    `CREATE TABLE IF NOT EXISTS profiles (username text references users(username) on delete set null, name text, age text, bio text);`,
+                    `CREATE TABLE IF NOT EXISTS profiles (username text references users(username) on delete set null, name text, age text, bio text, gym text);`,
                     (err) => {
                         if (err) {
                             console.log("Error Creating Tables in Profile Info Database");
@@ -54,37 +54,28 @@ class ProfileInfo{
     }
 
 
-    //inserts a user profile including username, name, age, and bio
+    //inserts a user profile including username, name, age, bio, and gym
     //tests if there is already a profile with the given username in the database
-    //if the username exists already, the function updates the name, age, and bio for this profile
+    //if the username exists already, the function updates the name, age, bio, and gym for this profile
     //if the username doesn't exist already, the function inserts a new profile with the username and other info
-    insertProfile(username, newName, newAge, newBio){
+    insertProfile(username, newName, newAge, newBio, newGym){
         return new Promise( (resolve, reject) => {
-            this.db.all(`SELECT username FROM profiles WHERE username = ?`
-            , [username]
-            , (err) => {
-                if (err) {
-                    reject(err);
+            this.profileExists(username).then((aBool) => {
+                if (aBool) {
+                    //console.log('profile already exists, updating')
+                    const stmt = this.db.prepare(`UPDATE profiles SET name = ?, age = ?, bio = ?, gym = ? WHERE username = ?`);
+                    stmt.run(newName, newAge, newBio, newGym, username);
+                    stmt.finalize();
+                    resolve(true);
                 }
-                else{
-                    this.profileExists(username).then((aBool) => {
-                        if (aBool){
-                            //console.log('profile already exists, updating')
-                            const stmt = this.db.prepare(`UPDATE profiles SET name = ?, age = ?, bio = ? WHERE username = ?`);
-                            stmt.run(newName, newAge, newBio, username);
-                            stmt.finalize();
-                            resolve(true);
-                        }
-                        else{
-                            const stmt = this.db.prepare(`INSERT INTO profiles (username, name, age, bio) VALUES (?,?,?,?)`);
-                            //console.log('profile doesnt exist, inserting')
-                            stmt.run(username, newName, newAge, newBio);
-                            stmt.finalize();
-                            resolve(true);
-                        }
-                    });
+                else {
+                    const stmt = this.db.prepare(`INSERT INTO profiles (username, name, age, bio, gym) VALUES (?,?,?,?,?)`);
+                    //console.log('profile doesnt exist, inserting')
+                    stmt.run(username, newName, newAge, newBio, newGym);
+                    stmt.finalize();
+                    resolve(true);
                 }
-            });            
+            });
         });
     }
 
@@ -149,6 +140,26 @@ class ProfileInfo{
         })
     }
 
+    //retrieves gym from the database for a given username
+    //returns a promise object that resolves to the gym if it is found or an empty string if it isn't
+    getGym(username){
+        return new Promise( (resolve, reject) => {
+            this.db.all(`SELECT gym FROM profiles WHERE username = ?`
+            , [username]
+            , (err, rows) => {
+                if (err){
+                    reject(err);
+                }
+                else if (rows.length <= 0){
+                    resolve("")
+                }
+                else{
+                    resolve(rows[0].gym)
+                }
+            });
+        })
+    }
+
     // Returns A Promise that Resolves to Dictionary Representation of Profile Information
     getProfInfo(username){
         return new Promise((resolve, reject) => {
@@ -160,10 +171,37 @@ class ProfileInfo{
                     this.getName(username).then((name)=>{
                         this.getAge(username).then((age) => {
                             this.getBio(username).then((bio) => {
-                                resolve({"name": name, "age": age, "bio": bio});
+                                this.getGym(username).then((gym) => {
+                                    resolve({"name": name, "age": age, "bio": bio, "gym": gym});
+                                }); 
                             }); 
                         });
                     });
+                }
+            });
+        });
+    }
+
+    // Returns a Promise Object that Resolves to a List of Users who have Created a Profile
+    // If the exclude list is set, it will remove all usernames in the list from the returned set
+    getAllUsers(exclude = []) {
+        return new Promise((resolve, reject) => {
+            this.db.all(`SELECT username FROM profiles`
+            , []
+            , (err, rows) => {
+                if (err) {
+                    reject(err);
+                }
+                else{
+                    var userlist = [];
+                    for (let i = 0; i < rows.length; i++){
+                        // Add User From this Row to User List if it is not in the excluded set
+                        let uname = rows[i].username;
+                        if (!exclude.includes(uname)) {
+                            userlist.push(uname);
+                        }
+                    }
+                    resolve(userlist);
                 }
             });
         });
