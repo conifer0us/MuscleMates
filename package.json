@@ -5,11 +5,13 @@
     "sqlite3": "^5.1.4"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "tsc && node ./build/server.js",
+    "lint": "eslint . --ext .ts",
+    "test": "tsc && node ./build/server.js test"
   },
   "name": "ci-project",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "build/server.js",
   "repository": {
     "type": "git",
     "url": "git@gitlab.cci.drexel.edu:fds23/63/team-16/ci-102-project-team-16.git"
@@ -17,5 +19,15 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.3",
+    "@types/express": "^4.17.17",
+    "@types/node": "^18.15.9",
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "@typescript-eslint/parser": "^5.56.0",
+    "eslint": "^8.36.0",
+    "prisma": "^4.11.0",
+    "typescript": "^5.0.2"
+  }
 }

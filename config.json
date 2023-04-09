@@ -1,5 +1,4 @@
 {
-    "testdb": "test.db",
     "dbfile": "main.db",
     "port": 80,
     "templatepath": "templates",

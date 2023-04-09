@@ -1,23 +1,22 @@
 //Class for handling public user info displayed on profile
+import { Database } from "sqlite3";
 
-//import Auth from "./Auth";
+export class ProfileInfo{
+    dbready : Promise<boolean>
+    db : Database
 
-class ProfileInfo{
-    constructor(dbfile) {
-        // Import sqlite3 for Working with SQLite db files
-        this.sqlite3 = require("sqlite3");
-
+    constructor(dbfile : string) {
          // Sets the dbready attribute to an Asynchronous Promise that Will Resolve with True when DB is created with Proper Tables
          this.dbready = new Promise((resolve, reject) => {               
             // Creates ProfileInfo DB if it doesn't exist with table for public user info
-            this.db = new this.sqlite3.Database(dbfile, (err) => {
+            this.db = new Database(dbfile, (err) => {
                 if (err) {
                     console.log("Error Creating Profile Info Database.");
                     reject(err);
                 }
 
                 this.db.exec(
-                    `CREATE TABLE IF NOT EXISTS profiles (username text references users(username) on delete set null, name text, age text, bio text, gym text);`,
+                    `CREATE TABLE IF NOT EXISTS profiles (profileID INTEGER PRIMARY KEY AUTOINCREMENT, username text references users(username) on delete set null, name text, age text, bio text, gym text);`,
                     (err) => {
                         if (err) {
                             console.log("Error Creating Tables in Profile Info Database");
@@ -33,7 +32,7 @@ class ProfileInfo{
     
     //Determines if a profile with a given username already exists in the database
     //Returns a promise that resolves to true if the profile exists and false if it doesn't
-    profileExists(username){
+    profileExists(username : string) : Promise<boolean> {
         return new Promise( (resolve, reject) => {
             this.db.all(`SELECT username FROM profiles WHERE username = ?`
             , [username]
@@ -58,7 +57,7 @@ class ProfileInfo{
     //tests if there is already a profile with the given username in the database
     //if the username exists already, the function updates the name, age, bio, and gym for this profile
     //if the username doesn't exist already, the function inserts a new profile with the username and other info
-    insertProfile(username, newName, newAge, newBio, newGym){
+    insertProfile(username : string, newName : string, newAge : string, newBio : string, newGym : string) : Promise<boolean> {
         return new Promise( (resolve, reject) => {
             this.profileExists(username).then((aBool) => {
                 if (aBool) {
@@ -82,9 +81,9 @@ class ProfileInfo{
 
     //retrieves name from the database for a given username
     //returns a promise object that resolves to the name if it is found or an empty string if it isn't
-    getName(username){
+    getName(username : string) : Promise<string> {
         return new Promise( (resolve, reject) => {
-            this.db.all(`SELECT name FROM profiles WHERE username = ?`
+            this.db.all<{name:string}>(`SELECT name FROM profiles WHERE username = ?`
             , [username]
             , (err, rows) => {
                 if (err){
@@ -102,9 +101,9 @@ class ProfileInfo{
 
     //retrieves age from the database for a given username
     //returns a promise object that resolves to the age if it is found or an empty string if it isn't
-    getAge(username){
+    getAge(username : string) : Promise<string> {
         return new Promise( (resolve, reject) => {
-            this.db.all(`SELECT age FROM profiles WHERE username = ?`
+            this.db.all<{age:string}>(`SELECT age FROM profiles WHERE username = ?`
             , [username]
             , (err, rows) => {
                 if (err){
@@ -122,9 +121,9 @@ class ProfileInfo{
 
     //retrieves bio from the database for a given username
     //returns a promise object that resolves to the bio if it is found or an empty string if it isn't
-    getBio(username){
+    getBio(username : string) : Promise<string> {
         return new Promise( (resolve, reject) => {
-            this.db.all(`SELECT bio FROM profiles WHERE username = ?`
+            this.db.all<{bio:string}>(`SELECT bio FROM profiles WHERE username = ?`
             , [username]
             , (err, rows) => {
                 if (err){
@@ -142,9 +141,9 @@ class ProfileInfo{
 
     //retrieves gym from the database for a given username
     //returns a promise object that resolves to the gym if it is found or an empty string if it isn't
-    getGym(username){
+    getGym(username : string) : Promise<string> {
         return new Promise( (resolve, reject) => {
-            this.db.all(`SELECT gym FROM profiles WHERE username = ?`
+            this.db.all<{gym: string}>(`SELECT gym FROM profiles WHERE username = ?`
             , [username]
             , (err, rows) => {
                 if (err){
@@ -161,7 +160,7 @@ class ProfileInfo{
     }
 
     // Returns A Promise that Resolves to Dictionary Representation of Profile Information
-    getProfInfo(username){
+    getProfInfo(username : string) : Promise<{}> {
         return new Promise((resolve, reject) => {
             this.profileExists(username).then((profexistsbool) => {
                 if (!profexistsbool) {
@@ -184,9 +183,9 @@ class ProfileInfo{
 
     // Returns a Promise Object that Resolves to a List of Users who have Created a Profile
     // If the exclude list is set, it will remove all usernames in the list from the returned set
-    getAllUsers(exclude = []) {
+    getAllUsers(exclude : string[] = []) : Promise<string[]> {
         return new Promise((resolve, reject) => {
-            this.db.all(`SELECT username FROM profiles`
+            this.db.all<{username: string}>(`SELECT username FROM profiles`
             , []
             , (err, rows) => {
                 if (err) {
@@ -207,5 +206,3 @@ class ProfileInfo{
         });
     }
 }
-
-module.exports = ProfileInfo;
