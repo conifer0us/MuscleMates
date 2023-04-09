@@ -1,17 +1,19 @@
 // Class for Handling Authentication with Username and Password and Cookies
+import { Database } from "sqlite3";
+import * as crypto from 'crypto';
+import {Request} from 'express';
 
-class Auth {
+export class Auth {
     AUTH_COOKIE_NAME = "AUTH";
+    dbready : Promise<boolean>;
+    db : Database;
 
-    constructor(dbfile) {
-        // Import sqlite3 for Working with SQLite db files
-        this.sqlite3 = require("sqlite3");
-        this.crypto = require("crypto");
+    constructor(dbfile : string) {
 
         // Sets the dbready attribute to an Asynchronous Promise that Will Resolve with True when DB is created with Proper Tables
         this.dbready = new Promise((resolve, reject) => {
             // Creates Auth DB if it doesn't exist with table for usernames and passwords as well as cookies
-            this.db = new this.sqlite3.Database(dbfile, (err) => {
+            this.db = new Database(dbfile, (err) => {
                 if (err) {
                     console.log("Error Creating Auth Database.");
                     reject(err);
@@ -20,8 +22,8 @@ class Auth {
                 // Creates a Users table for storing username, email, and password hash
                 // Also Creates a Cookies table for storing User Cookies
                 this.db.exec(
-                    `CREATE TABLE IF NOT EXISTS users (username text, useremail text, passwordhash text);
-                        CREATE TABLE IF NOT EXISTS cookies (username text references users(username) on delete set null, cookieval text) `,
+                    `CREATE TABLE IF NOT EXISTS users (userID INTEGER PRIMARY KEY AUTOINCREMENT, username text, useremail text, passwordhash text);
+                        CREATE TABLE IF NOT EXISTS cookies (cookieID INTEGER PRIMARY KEY AUTOINCREMENT, username text references users(username) on delete set null, cookieval text) `,
                     (err) => {
                         if (err) {
                             console.log("Error Creating Tables in Auth Database");
@@ -37,7 +39,7 @@ class Auth {
 
     // Places a username, email, and hashed (obfuscated) password into the Auth DB
     // Returns a Promise Object that resolves to False if the Username or Email Already Exists; Resolves to True if User Inserted Without Problem
-    insertUserPassword(username, email, password) {
+    insertUserPassword(username : string, email : string, password : string) : Promise<boolean> {
         return new Promise( (resolve, reject) => {
             this.db.all(`SELECT username FROM users WHERE username = ? OR useremail = ?`
             , [username, email]
@@ -60,7 +62,7 @@ class Auth {
     }
 
     // Checks if a Login Attemtp is Authorized From Username (or Email) and Password
-    isLoginCorrect(username, password) {
+    isLoginCorrect(username : string, password : string) : Promise<boolean> {
         const passhash = this.getDataHash(password) 
         // Returns an Asynchronous Promise Object that Will Resolve True when 
         return new Promise((resolve, reject) => {
@@ -71,7 +73,7 @@ class Auth {
                 if (err) {
                     reject(err);
                 }
-                else if (rows != 0) {
+                else if (rows.length != 0) {
                     resolve(true);
                 } else {
                     // If Neither Combination Exists in the DB, return False
@@ -82,15 +84,15 @@ class Auth {
     }
 
     // Gets the Hashed (Obfuscated) Version of Text Data
-    getDataHash(textdata) {
-        return this.crypto.createHash('sha256').update(textdata).digest('hex');
+    getDataHash(textdata : string) : string {
+        return crypto.createHash('sha256').update(textdata).digest('hex');
     }
 
     // Inserts a New Random Cookie Value into the Cookies Table for a Certain User
     // Returns a Promise Object that evaluates to the cookievalue if a cookie was properly set; resolves to an empty string otherwise
-    addCookieToUser(userid) {
+    addCookieToUser(userid : string) : Promise<string> {
         return new Promise((resolve, reject) => {
-            this.db.all(`SELECT username FROM users WHERE username = ? OR useremail = ?`
+            this.db.all<{username: string}>(`SELECT username FROM users WHERE username = ? OR useremail = ?`
             , [userid, userid]
             , (err, rows) => {
                 if (err) {
@@ -114,7 +116,7 @@ class Auth {
 
     // Checks A Request Object for A Valid Auth Cookie
     // Returns a Promise Object that Evaluates to the Username whose cookie it is if the cookie is valid; resolves to an empty string if cookie is invalid
-    checkReqCookie(request) {
+    checkReqCookie(request : Request ) : Promise<string> {
         return new Promise((resolve, reject) => {
             if (!request.cookies || !(this.AUTH_COOKIE_NAME in request.cookies)) {
                 resolve("");
@@ -128,7 +130,7 @@ class Auth {
             }
 
             // Checks Database for Cookie Otherwise
-            this.db.all(`SELECT username FROM cookies WHERE cookieval = ?`
+            this.db.all<{username : string}>(`SELECT username FROM cookies WHERE cookieval = ?`
             , [cookieval]
             , (err, rows) => {
                 if (err) {
@@ -143,10 +145,7 @@ class Auth {
     } 
 
     // Gets a new Cookie Value (64 random characters)
-    getCookieVal() {
-        return this.crypto.randomBytes(256).toString('hex');
+    getCookieVal() : string {
+        return crypto.randomBytes(256).toString('hex');
     }
 }
-
-// Exports the class so that it can be used by other files
-module.exports = Auth;

@@ -2,28 +2,27 @@
 // Routes Referenced in this File Must Follow /api in order to be reached from server.js
 
 // Import Necessary Libraries
-const server = require("express");
-const router = server.Router();
-const proflib = require("../libs/ProfileInfo.js");
-const authlib = require("../libs/Auth.js");
-const friendlib = require("../libs/Friends.js");
-const reqlib = require("../libs/MatchRequests.js");
+import { Router, Request, Response } from 'express';
+const router = Router()
+import path from 'path';
+import { Auth } from "../libs/Auth";
+import { Friends } from "../libs/Friends";
+import { MatchRequests } from '../libs/MatchRequests';
+import { ProfileInfo } from '../libs/ProfileInfo';
+
+// Configure Directory for Build Step
+__dirname = __dirname + "\\.."
 
 // Configuration Object From Config JSON and Global Constants
-const configjson = require("../config.json");
-const arguments = process.argv;
-let dbfile = "";
-if (arguments[2] == "test") {
-    dbfile = configjson["testdb"];
-} else {
-    dbfile = configjson["dbfile"];
-}
+const configjson = require(path.join(__dirname, "../config.json"));
+const args : string[] = process.argv;
+const dbfile : string = configjson["dbfile"];
 
 // Create Global Objects
-const prof = new proflib(dbfile);
-const auth = new authlib(dbfile);
-const friends = new friendlib(dbfile);
-const matchrequests = new reqlib(dbfile);
+const prof = new ProfileInfo(dbfile);
+const auth = new Auth(dbfile);
+const friends = new Friends(dbfile);
+const matchrequests = new MatchRequests(dbfile);
 
 // Sends Basic API Welcome Message with 200 Status Code For Simple /api request
 router.get("/", (req, res) => {
@@ -108,7 +107,7 @@ router.get("/matchrecs", (req, res) => {
                     res.status(400);
                     res.send();
                 } else {
-                    exclude = [uname];
+                    let exclude = [uname];
 
                     // Gets the Friend List From the User to Exclude them From Match Recommendations
                     friends.friendList(uname).then((friendlist) => {

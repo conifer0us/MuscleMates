@@ -1,10 +1,15 @@
 // Import NPM Libraries
-const express = require('express');
-const path = require('path');
-const filesystem = require('fs');
-const reqparser = require('body-parser')
-const formdecoder = reqparser.urlencoded({extended:false});
-const cookieParser = require('cookie-parser');
+import express, { Express, Request, Response } from 'express';
+import path from 'path';
+import fs from 'fs';
+import bodyparser from 'body-parser';
+const formdecoder = bodyparser.urlencoded({extended:false});
+import cookieParser from 'cookie-parser'
+import { Auth } from "./libs/Auth";
+import { Friends } from "./libs/Friends";
+import { MatchRequests } from './libs/MatchRequests';
+import { ProfileInfo } from './libs/ProfileInfo';
+import { config, exit } from 'process';
 
 // Defines Operation Mode and Sets Mode Based on Command Line Arguments
 const MODES = {
@@ -13,41 +18,34 @@ const MODES = {
 }
 
 // Gets Program Command Line Arguments and Sets Mode Based on Arguments
-const arguments = process.argv;
-let mode = MODES.prod;
-if (arguments[2] == "test") {
+const args : string[] = process.argv;
+let mode : number = MODES.prod;
+if (args[2] == "test") {
     console.log("Starting Server in Testing Mode.")
     mode = MODES.test;
+} else if (args[2]) {
+    console.log("Unknown Mode. Stopping.");
+    exit();
 }
 
-// Import Server Libraries
-const authlib = require("./libs/Auth.js");
-const proflib = require("./libs/ProfileInfo.js");
-const reqlib = require("./libs/MatchRequests.js");
-const friendlib = require("./libs/Friends.js");
+// Adjust Directory to Escape Build
+__dirname = __dirname + "\\.."
 
 // Loads Configuration Options From config.json
-let configjson = require("./config.json");
+let configjson : JSON = require(path.join(__dirname, "config.json"));
 const templatepath = path.join(__dirname, configjson["templatepath"]);
 const stylepath = path.join(__dirname, configjson["stylepath"]);
 const scriptpath = path.join(__dirname, configjson["scriptpath"]);
 const port = configjson["port"];
-
-// Defines DBFILE to be the main db if mode is production and a test db if mode is test
-let DBFILE = "";
-if (mode == MODES.prod) {
-    DBFILE = configjson["dbfile"];
-} else if (mode == MODES.test) {
-    DBFILE = configjson["testdb"];
-}
+const DBFILE : string = configjson["dbfile"];
 
 // Defines Global Constant Library Objects
-const server = express();
+const server : Express = express();
 server.use(cookieParser());
-const auth = new authlib(DBFILE);
-const prof = new proflib(DBFILE);
-const matchreq = new reqlib(DBFILE);
-const friends = new friendlib(DBFILE);
+const auth = new Auth(DBFILE);
+const prof = new ProfileInfo(DBFILE);
+const matchreq = new MatchRequests(DBFILE);
+const friends = new Friends(DBFILE);
 
 // Brings In Externally Defined Routes at Certain Base Folders
 const apiroutes = require("./routes/api.js");
@@ -77,7 +75,7 @@ server.get("/style(s)?/:stylename", (req, res) => {
         res.send(); 
     } else {
         const filepath = path.join(stylepath, stylename);
-        filesystem.access(filepath, (err) => {
+        fs.access(filepath, (err) => {
             if (err) {
                 res.status(404);
                 res.send();
@@ -97,7 +95,7 @@ server.get("/script(s)?/:scriptname", (req, res) => {
         res.send(); 
     } else {
         const filepath = path.join(scriptpath, scriptname);
-        filesystem.access(filepath, (err) => {
+        fs.access(filepath, (err) => {
             if (err) {
                 res.status(404);
                 res.send();

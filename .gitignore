@@ -1,3 +1,9 @@
+# Ignore Environment Configuration File
+.env
+
+# Ignore Build Directory for Transpiled JS
+/build 
+
 # Temporary Server Files
 auth.db
 main.db

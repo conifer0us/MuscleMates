@@ -2,28 +2,27 @@
 // Routes Referenced in this File Must Follow /post in order to be reached from server.js
 
 // Import Necessary Libraries
-const server = require("express");
-const router = server.Router();
-const proflib = require("../libs/ProfileInfo.js");
-const authlib = require("../libs/Auth.js");
-const matchlib = require("../libs/MatchRequests.js");
-const friendlib = require("../libs/Friends.js");
+import { Router, Request, Response } from 'express';
+import path from 'path';
+const router = Router();
+import { Auth } from "../libs/Auth";
+import { Friends } from "../libs/Friends";
+import { MatchRequests } from '../libs/MatchRequests';
+import { ProfileInfo } from '../libs/ProfileInfo';
+
+// Configure Directory for Build Step
+__dirname = __dirname + "\\.."
 
 // Configuration Object From Config JSON and Global Constants
-const configjson = require("../config.json");
-const arguments = process.argv;
-let dbfile = "";
-if (arguments[2] == "test") {
-    dbfile = configjson["testdb"];
-} else {
-    dbfile = configjson["dbfile"];
-}
+const configjson = require(path.join(__dirname, "../config.json"));
+const args = process.argv;
+const dbfile : string = configjson["dbfile"];
 
 // Defines Global Objects
-const prof = new proflib(dbfile);
-const auth = new authlib(dbfile);
-const matchreqs = new matchlib(dbfile);
-const friends = new friendlib(dbfile);
+const prof = new ProfileInfo(dbfile);
+const auth = new Auth(dbfile);
+const matchreqs = new MatchRequests(dbfile);
+const friends = new Friends(dbfile);
 
 // Allow Users to Submit Profile Information
 // Should Include Form Data with name, age, bio, gym form data set
@@ -35,7 +34,7 @@ router.post("/profile", (req, res) => {
             res.send();
         } else {
             // If name, age, bio, or gym not set, status 400 and send response
-            if (!req.body.name || !req.body.age || !req.body.bio || !req.bio.gym) {
+            if (!req.body.name || !req.body.age || !req.body.bio || !req.body.gym) {
                 res.status(400);
                 res.send();
             } 
