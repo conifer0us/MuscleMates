@@ -3,6 +3,19 @@ html, body {
     overflow-x: hidden;
 }
 
+#app {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0%;
+    left: 0%;
+}
+
+.tab {
+    position: relative;
+    padding-left: 3%;
+}
+
 body {
     background-color: #0C1421;
 }
@@ -126,6 +139,7 @@ button:hover {
 
 .white-link {
     color: #CCC9DC;
+    text-decoration: none;
 }
 
 .white-link:visited {
@@ -196,13 +210,17 @@ button:hover {
     transition: color 0.1s ease-out;
 }
 
-.nav-bar {
-    position: absolute;
+.nav-bar-container {
+    position: relative;
     top: 0%;
-    left: 0px;
+    left: 0%;
+}
+
+.nav-bar {
+    position: relative;
     width: 100%;
-    height: 60px;
-    padding: 5px;
+    height: 100%;
+    border-left: 0px;
     background-color: #324A5F;
 
     display: flex;
@@ -210,10 +228,9 @@ button:hover {
     justify-content: center;
     align-items: center;
 
-    border-bottom-style: groove;
-    border-right-style: groove;
+    border-bottom-style: outset;
     border-color: #050a11;
-    border-width: 5px;
+    border-width: 10px;
 }
 
 .links-to-pages {

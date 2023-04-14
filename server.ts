@@ -36,6 +36,7 @@ let configjson : JSON = require(path.join(__dirname, "config.json"));
 const templatepath = path.join(__dirname, configjson["templatepath"]);
 const stylepath = path.join(__dirname, configjson["stylepath"]);
 const scriptpath = path.join(__dirname, configjson["scriptpath"]);
+const jsxpath = path.join(__dirname, configjson["jsxpath"])
 const port = configjson["port"];
 const DBFILE : string = configjson["dbfile"];
 
@@ -58,7 +59,8 @@ server.use("/submit", postroutes)
 // Send Index File for Homepage Requests
 server.get("/", (req, res) => {
     res.status(200);
-    res.sendFile(path.join(templatepath, "index.html"));
+    //res.sendFile(path.join(templatepath, "index.html"));
+    res.sendFile(path.join(templatepath, "homepagereact.html"));
 });
 
 // Send Index File for Direct Index Requests
@@ -106,6 +108,27 @@ server.get("/script(s)?/:scriptname", (req, res) => {
         });
     }
 });
+
+// Returns JSX files from jsx
+server.get("/jsx/:scriptname", (req, res) => {
+    const scriptname = req.params["scriptname"];
+    if (!scriptname) {
+        res.status(404);
+        res.send(); 
+    } else {
+        const filepath = path.join(jsxpath, scriptname);
+        fs.access(filepath, (err) => {
+            if (err) {
+                res.status(404);
+                res.send();
+            } else {
+                res.status(200);
+                res.sendFile(filepath);
+            }
+        });
+    }
+});
+
 
 // Send Login File for Login Requests
 server.get("/login.html", (req, res) => {
