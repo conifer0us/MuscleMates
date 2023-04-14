@@ -3,5 +3,6 @@
     "port": 80,
     "templatepath": "templates",
     "stylepath": "styles",
-    "scriptpath": "scripts"
+    "scriptpath": "scripts",
+    "jsxpath": "build/jsx"
 }
