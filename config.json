@@ -4,5 +4,5 @@
     "templatepath": "templates",
     "stylepath": "styles",
     "scriptpath": "scripts",
-    "jsxpath": "build/jsx"
+    "imagepath": "images"
 }
