@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "animejs": "^3.2.1",
     "babel-cli": "^6.26.0",
     "babel-preset-react-app": "^3.1.2",
     "cookie-parser": "^1.4.6",
@@ -10,7 +11,7 @@
     "sqlite3": "^5.1.4"
   },
   "scripts": {
-    "start": "tsc && babel scripts --out-dir build/jsx && browserify build/jsx/App.js > build/jsx/bundle.js && node ./build/server.js",
+    "start": "tsc && babel scripts --out-dir build/jsx && browserify build/jsx/App.js > build/jsx/bundle.js && sass styles/test.sass styles/test.css && node ./build/server.js",
     "lint": "eslint . --ext .ts",
     "test": "tsc && babel scripts --out-dir build/jsx && node ./build/server.js test"
   },
