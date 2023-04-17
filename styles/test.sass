@@ -1,0 +1,347 @@
+@use "sass:color"
+    
+$lilac: #CCC9DC
+$light-navy-blue: #324A5F
+$medium-blue: #1B2A41
+$dark-blue: #0C1421
+$shadow-black: #050a11
+$contrast-orange: #EE8434
+
+$font-stack: 'Big Shoulders Display', cursive
+
+@mixin topleft
+    position: absolute
+    width: 100%
+    height: 100%
+    top: 0%
+    left: 0%
+
+@mixin stdfont($weight: 400, $size: 20px, $color: $lilac)
+    font: $weight $size $font-stack
+    color: $color
+
+@mixin transition($background-color: $lilac, $time: 0.1s, $ease: ease-out)
+    -webkit-transition: $background-color $time $ease
+    -moz-transition: $background-color $time $ease
+    -o-transition: $background-color $time $ease
+    transition: $background-color $time $ease
+
+@mixin flex($direction: row, $justify: center, $align: center)
+    display: flex
+    flex-direction: $direction
+    justify-content: $justify
+    align-items: $align
+
+#app
+    @include topleft
+
+.tab
+    position: relative
+    padding-left: 3%
+    
+html, body
+    max-width: 100%
+    overflow-x: hidden
+
+body
+    background-color: $dark-blue
+
+h1
+    @include stdfont(800, 48px)
+
+h2
+    @include stdfont(600, 40px)
+
+h3
+    @include stdfont(400, 30px)
+
+p
+    @include stdfont(300, 24px)
+
+input
+    background-color: $light-navy-blue
+    @include transition(background-color)
+    @include stdfont(400, 22px)
+    height: 40px
+    width: 90%
+    padding-left: 10px
+
+    outline: none
+    border-radius: 10px
+    border-style: none outset outset none
+    border-color: $dark-blue
+
+    &:hover
+        background-color: color.scale($light-navy-blue, $lightness: 10%)
+    
+    &::placeholder
+        @include stdfont(400, 22px, ($lilac, 50%))
+    
+    &:focus
+        background-color: color.scale($light-navy-blue, $lightness: -10%)
+        @include transition(background-color)
+
+button
+    @include stdfont(600, 24px)
+    color: $dark-blue
+    background-color: $contrast-orange
+    width: 150px
+    height: 50px
+    border-style: hidden
+    border-radius: 10px
+
+    &:hover
+        cursor: pointer
+        color: $contrast-orange
+        background-color: $dark-blue
+
+.centering-div
+    @include flex()
+
+.backtohomelogin
+    color: $lilac
+    text-decoration: none
+    padding-left: 10px
+
+    &:hover
+        color: color.scale($lilac, $lightness: -15%)
+
+.orange-link
+    color: $contrast-orange
+
+    &:hover
+        color: color.scale($contrast-orange, $lightness: -15%)
+
+.white-link
+    color: $lilac
+    text-decoration: none
+
+    &:visited
+        color: $lilac
+
+#main-container-login
+    position: absolute
+    top: 20%
+    height: 400px
+    width: 600px
+    background-color: $medium-blue
+
+    @include flex(column, flex-start, center)
+    border-radius: 10px
+
+    border-style: inset outset outset inset
+    border-color: $shadow-black
+    border-width: 3px
+
+#main-container-signup
+    position: absolute
+    top: 15%
+    height: 525px
+    width: 600px
+    background-color: $medium-blue
+
+    display: flex
+    flex-direction: column
+    align-items: center
+    border-radius: 10px
+
+    border-style: inset outset outset inset
+    border-color: $shadow-black
+    border-width: 3px
+
+.login-signup-form
+    width: 90%
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    gap: 15px
+
+.login-signup-title
+    padding-top: 20px
+    font-size: 40px
+
+.smooth-background
+    @include transition(background-color)
+
+.smooth-text
+    @include transition(color)
+
+.nav-bar-container
+    position: relative
+
+.nav-bar
+    position: relative
+    width: 100%
+    height: 100%
+    border-left: 0px
+    background-color: $medium-blue
+
+    @include flex()
+
+    border-bottom-style: outset
+    border-color: $shadow-black
+    border-width: 10px
+
+.links-to-pages
+    position: relative
+    height: 100%
+    width: 85%
+    @include flex(row, flex-end, center)
+    gap: 80px
+
+.nav-bar-item
+    @include stdfont(600, 30px)
+    text-decoration: none
+
+    &:hover
+        color: color.scale($lilac, $lightness: -15%)
+
+.body-of-page
+    position: absolute
+    left: 3.5%
+    top: 70px
+    height: 90%
+    width: 90%
+
+#body-of-page-recs
+    position: absolute
+    left: 3.5%
+    top: 70px
+    height: 90%
+    width: 90%
+
+#homepage-title
+    @include stdfont(800, 60px)
+
+#home-title
+    @include stdfont(800, 120px)
+
+.recommendation-container
+    border-radius: 10px
+    border-bottom-style: outset
+    border-right-style: outset
+    border-color: $shadow-black
+    border-width: 8px
+
+.recommendation
+    height: 150px
+    width: 100%
+    background-color: $contrast-orange
+    border-radius: 10px
+
+    display: flex
+    align-items: center
+
+    &:hover
+        cursor: pointer
+        background-color: color.scale($contrast-orange, $lightness: -15%)
+
+.friend
+    height: 150px
+    width: 100%
+    background-color: $light-navy-blue
+    border-radius: 10px
+
+    display: flex
+    align-items: center
+
+.rec-info-container
+    height: 100%
+    width: 95%
+    background-color: $light-navy-blue
+    border-radius: 10px
+    padding-left: 20px
+    @include flex(row, flex-start, center)
+    gap: 30px
+
+.rec-profile-pic
+    height: 80px
+    width: 80px
+    background-color: #27B6AD
+    border-radius: 100%
+
+.rec-info
+    @include flex(column, flex-start, flex-start)
+
+.rec-info-parameters
+    height: 50px
+    @include flex(row, flex-start, center)
+    gap: 100px
+
+.rec-info-parameters-names
+    @include flex(row, flex-start, center)
+    gap: 10px
+
+.rec-info-parameters-fullname-text
+    @include stdfont(600, 28px)
+
+.rec-info-parameters-username-text
+    @include stdfont(400, 20px)
+
+.rec-info-parameters-days
+    @include flex(row, flex-start, baseline)
+    gap: 10px
+
+.rec-info-parameters-seven-days
+    display: flex
+    flex-direction: row
+    gap: 8px
+
+.rec-info-parameters-seven-days-day
+    @include stdfont(600, 28px)
+
+.rec-info-parameters-gym
+    @include flex(row, flex-start, center)
+    gap: 10px
+
+.rec-info-parameters-gym-text
+    @include stdfont(400, 28px)
+
+.rec-info-parameters-age
+    @include flex(row, flex-start, center)
+    gap: 10px
+
+.rec-info-parameters-age-text
+    @include stdfont(400, 28px)
+
+.rec-info-parameters-title
+    @include stdfont(600, 28px)
+
+.arrow-send
+    position: relative
+    left: 10px
+
+.rec-info-bio-text
+    @include stdfont(400, 20px)
+
+.accept-request
+    height: 150px
+    width: 100%
+    background-color: #1d8848
+    border-radius: 10px
+
+    display: flex
+    align-items: center
+
+    &:hover
+        background-color: #106d35
+        cursor: pointer
+
+.cancel-request
+    height: 150px
+    width: 100%
+    background-color: #c41414
+    border-radius: 10px
+
+    display: flex
+    align-items: center
+
+    &:hover
+        background-color: #a50f0f
+        cursor: pointer
+
+.material-symbols-outlined
+    color: $dark-blue
+
+    font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 200, 'opsz' 48

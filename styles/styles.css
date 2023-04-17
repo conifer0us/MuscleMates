@@ -58,8 +58,8 @@ input {
     border-style: inset;
     border-top-style: none;
     border-left-style: none;
-    border-bottom-style: groove;
-    border-right-style: groove;
+    border-bottom-style: outset;
+    border-right-style: outset;
     border-color: #0C1421;
     border-top-color: #324A5F;
     border-left-color: #324A5F;
