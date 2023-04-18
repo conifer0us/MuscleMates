@@ -7,40 +7,51 @@ datasource db {
   url      = "file:../main.db"
 }
 
-model cookies {
-  cookieID  Int     @id @default(autoincrement())
-  username  String?
-  cookieval String?
-  users     users?  @relation(fields: [username], references: [username], onUpdate: NoAction)
+//model Cookie {
+//  id  Int     @id @default(autoincrement())
+// username  String @unique
+//  cookieval String?
+//  user      User   @relation("userCookies", fields: [username], references: [username])
+//}
+
+model FriendPair {
+  id Int    @id @default(autoincrement())
+  friend1   User? @relation("friend1", fields: [name1], references: [username], onUpdate: NoAction)
+  name1 String?
+  friend2      User? @relation("friend2", fields: [name2], references: [username], onUpdate: NoAction)
+  name2 String?
 }
 
-model friends {
-  connectionID Int     @id @default(autoincrement())
-  friend1      String?
-  friend2      String?
+
+model MatchRequest {
+  id Int    @id @default(autoincrement())
+  sender    User? @relation("sender", fields: [senderName], references: [username], onUpdate: NoAction)    //(fields: [senderID], references[id], onUpdate: NoAction)
+  senderName  String?
+  receiver  User? @relation("receiver", fields: [receiverName], references: [username], onUpdate: NoAction)
+  receiverName String?
 }
 
-model matchRequests {
-  requestID Int     @id @default(autoincrement())
-  sender    String?
-  receiver  String?
-}
 
-model profiles {
-  profileID Int     @id @default(autoincrement())
-  username  String?
+model Profile {
+  id Int     @id @default(autoincrement())
+  username  String @unique
   name      String?
   age       String?
   bio       String?
   gym       String?
-  users     users?  @relation(fields: [username], references: [username], onUpdate: NoAction)
+  user      User   @relation("userProfile", fields: [username], references: [username], onDelete: Cascade)
 }
 
-model users {
-  userID       Int        @id @default(autoincrement())
-  username     String?    @unique
-  useremail    String?    @unique
-  passwordhash String?
-  cookies      cookies[]
-  profiles     profiles[]
+model User {
+  id                    Int           @id @default(autoincrement())
+  username              String       @unique
+  useremail             String?       @unique
+  passwordhash          String?
+  cookieVal             String?
+  //userCookies           Cookie? @relation("userCookies")
+  profile               Profile? @relation("userProfile")
+  asFriend1             FriendPair[] @relation("friend1")
+  asFriend2             FriendPair[] @relation("friend2")
+  asSender              MatchRequest[] @relation("sender")
+  asReceiver            MatchRequest[] @relation("receiver")
 }

@@ -10,6 +10,8 @@ import { ProfileInfo } from './libs/ProfileInfo';
 import { exit } from 'process';
 import bodyparser from 'body-parser';
 const formdecoder = bodyparser.urlencoded({extended:false});
+const {PrismaClient} = require('@prisma/client');
+import { AuthTable } from "./libs/AuthTable";
 
 // Defines Operation Mode and Sets Mode Based on Command Line Arguments
 const MODES = {
@@ -43,7 +45,27 @@ configjson["jsxpath"] = path.join(__dirname, "build/jsx");
 configjson["imagepath"] = path.join(__dirname, configjson["imagepath"]);
 const DBFILE : string = configjson["dbfile"];
 
-// Defines Shared Constant Library Objects
+
+// Prisma testing
+
+const prisma = new PrismaClient()
+
+const authTab = new AuthTable(prisma);
+authTab.insertUserPassword("blockboy", "blockboy@gmail.com", "block123").then ((inserted) => {
+    console.log("inserted? " + inserted)
+    authTab.isLoginCorrect("blockboy", "block123").then ((loginCorrect) => {
+        console.log("is login correct? " + loginCorrect)
+        authTab.addCookieToUser("blockboy").then ((myCookie) => {
+            console.log("my cookie: " + myCookie)
+        })
+
+    })
+})
+
+// Defines Global Constant Library Objects
+
+const server : Express = express();
+server.use(cookieParser());
 const auth = new Auth(DBFILE);
 const prof = new ProfileInfo(DBFILE);
 const matchreq = new MatchRequests(DBFILE);
@@ -73,6 +95,8 @@ ImageRoutes.configureRouter(server, "/profimage", auth, prof, configjson);
 // Main Function that Runs when Program Starts. This Function is responsible for creating library instances and Starting the Server
 async function main() {
     // Waits until DB is ready with Proper Libraries Configured before starting server
+    
+    
     await auth.dbready;
     await prof.dbready;
     await matchreq.dbready;
