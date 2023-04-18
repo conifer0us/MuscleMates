@@ -52,7 +52,7 @@ export class AuthTable{
         }
     }
 
-    // Checks if a Login Attemtp is Authorized From Username (or Email) and Password
+    // Checks if a Login Attempt is Authorized From Username (or Email) and Password
     // Returns true if login is correct
     // Returns false if the username & password combo doesn't exist in the db or if it runs into an error
     isLoginCorrect = async(username : string, password : string) : Promise<boolean> => {

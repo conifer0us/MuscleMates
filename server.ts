@@ -12,6 +12,7 @@ import { ProfileInfo } from './libs/ProfileInfo';
 import { config, exit } from 'process';
 const {PrismaClient} = require('@prisma/client');
 import { AuthTable } from "./libs/AuthTable";
+import { ProfileTable } from "./libs/ProfileTable";
 
 // Defines Operation Mode and Sets Mode Based on Command Line Arguments
 const MODES = {
@@ -46,8 +47,26 @@ const DBFILE : string = configjson["dbfile"];
 
 const prisma = new PrismaClient()
 
+const profTab = new ProfileTable(prisma);
+
+profTab.insertProfile("blockboy", "Block Boy", "62", "Why am I so old?", "Drexel Rec Center").then((inserted) => {
+    console.log("inserted? " + inserted)
+    profTab.getName("blockboy").then((theName) => {
+        console.log("name: " + theName)
+        profTab.getProfInfo("blockboy").then((dictionary) => {
+            console.log(dictionary)
+            profTab.insertProfile("john123", "john smith", "12", "I am 12 years old.", "Drexel Rec Center").then((inserted)=>{
+                profTab.getAllUsers([]).then((theUsers) => {
+                    console.log(theUsers)
+                })
+            })
+        })
+    })
+})
+
+
 const authTab = new AuthTable(prisma);
-authTab.insertUserPassword("blockboy", "blockboy@gmail.com", "block123").then ((inserted) => {
+/*authTab.insertUserPassword("blockboy", "blockboy@gmail.com", "block123").then ((inserted) => {
     console.log("inserted? " + inserted)
     authTab.isLoginCorrect("blockboy", "block123").then ((loginCorrect) => {
         console.log("is login correct? " + loginCorrect)
@@ -56,7 +75,7 @@ authTab.insertUserPassword("blockboy", "blockboy@gmail.com", "block123").then ((
         })
 
     })
-})
+})*/
 
 // Defines Global Constant Library Objects
 
