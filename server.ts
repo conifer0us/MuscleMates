@@ -10,6 +10,8 @@ import { Friends } from "./libs/Friends";
 import { MatchRequests } from './libs/MatchRequests';
 import { ProfileInfo } from './libs/ProfileInfo';
 import { config, exit } from 'process';
+const {PrismaClient} = require('@prisma/client');
+import { AuthTable } from "./libs/AuthTable";
 
 // Defines Operation Mode and Sets Mode Based on Command Line Arguments
 const MODES = {
@@ -39,7 +41,25 @@ const scriptpath = path.join(__dirname, configjson["scriptpath"]);
 const port = configjson["port"];
 const DBFILE : string = configjson["dbfile"];
 
+
+// Prisma testing
+
+const prisma = new PrismaClient()
+
+const authTab = new AuthTable(prisma);
+authTab.insertUserPassword("blockboy", "blockboy@gmail.com", "block123").then ((inserted) => {
+    console.log("inserted? " + inserted)
+    authTab.isLoginCorrect("blockboy", "block123").then ((loginCorrect) => {
+        console.log("is login correct? " + loginCorrect)
+        authTab.addCookieToUser("blockboy").then ((myCookie) => {
+            console.log("my cookie: " + myCookie)
+        })
+
+    })
+})
+
 // Defines Global Constant Library Objects
+
 const server : Express = express();
 server.use(cookieParser());
 const auth = new Auth(DBFILE);
@@ -276,6 +296,8 @@ server.get("/profile", (req, res) => {
 // Main Function that Runs when Program Starts. This Function is responsible for creating library instances and Starting the Server
 async function main() {
     // Waits until DB is ready with Proper Libraries Configured before starting server
+    
+    
     await auth.dbready;
     console.log("Auth DB Opened with Proper Tables.");
     await prof.dbready;
