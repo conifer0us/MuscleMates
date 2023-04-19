@@ -5,6 +5,7 @@ import { ProfileInfo } from '../libs/ProfileInfo';
 import { Express, Router } from 'express';
 import path from 'path';
 import fs from 'fs';
+import { UploadedFile } from 'express-fileupload';
 
 export class ImageRoutes {
     static configureRouter(server: Express, resname: string, auth: Auth, prof: ProfileInfo, configjson: JSON) {
@@ -13,7 +14,7 @@ export class ImageRoutes {
 
         router.post('/upload', (req, res) => {
             auth.checkReqCookie(req).then((uname: string) => {
-                const profimage = req.files["profimage"];
+                const profimage : UploadedFile = <UploadedFile>req.files["profimage"];
 
                 // If no image submitted, exit
                 if (!profimage || !uname) return res.sendStatus(400);
