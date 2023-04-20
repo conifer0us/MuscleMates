@@ -13,6 +13,7 @@ const formdecoder = bodyparser.urlencoded({extended:false});
 const {PrismaClient} = require('@prisma/client');
 import { AuthTable } from "./libs/AuthTable";
 import { ProfileTable } from "./libs/ProfileTable";
+import { MatchTable } from "./libs/MatchTable";
 
 // Defines Operation Mode and Sets Mode Based on Command Line Arguments
 const MODES = {
@@ -50,6 +51,14 @@ const DBFILE : string = configjson["dbfile"];
 // Prisma testing
 
 const prisma = new PrismaClient()
+/*
+const matchTab = new MatchTable(prisma)
+matchTab.matchExists("blockboy", "john123").then((submitted) =>{
+    matchTab.matchExists("blockboy", "john123").then((submitted) =>{
+        matchTab.matchExists("johnsmith", "blockboy")
+    })
+})*/
+
 
 const profTab = new ProfileTable(prisma);
 
@@ -60,8 +69,8 @@ profTab.insertProfile("blockboy", "Block Boy", "62", "Why am I so old?", "Drexel
         profTab.getProfInfo("blockboy").then((dictionary) => {
             console.log(dictionary)
             profTab.insertProfile("john123", "john smith", "12", "I am 12 years old.", "Drexel Rec Center").then((inserted)=>{
-                profTab.getAllUsers([]).then((theUsers) => {
-                    console.log(theUsers)
+                profTab.profileExists("john123").then((exists) => {
+                    console.log("john123 exists? " + exists)
                 })
             })
         })

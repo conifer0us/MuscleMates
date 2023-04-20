@@ -14,21 +14,28 @@ datasource db {
 //  user      User   @relation("userCookies", fields: [username], references: [username])
 //}
 
-model FriendPair {
-  id Int    @id @default(autoincrement())
-  friend1   User? @relation("friend1", fields: [name1], references: [username], onUpdate: NoAction)
-  name1 String?
-  friend2      User? @relation("friend2", fields: [name2], references: [username], onUpdate: NoAction)
-  name2 String?
-}
+//model FriendPair {
+//  id Int    @id @default(autoincrement())
+//  friend1   User? @relation("friend1", fields: [name1], references: [username], onUpdate: NoAction)
+//  name1 String?
+//  friend2      User? @relation("friend2", fields: [name2], references: [username], onUpdate: NoAction)
+//  name2 String?
+//}
 
+model Friends{
+  id      Int  @id @default(autoincrement())
+  friend       User @relation("friend", fields: [friendName], references: [username])
+  friendName   String
+  friendAdded   User @relation("friendAdded", fields: [friendAddedName], references: [username])
+  friendAddedName String
+}
 
 model MatchRequest {
   id Int    @id @default(autoincrement())
-  sender    User? @relation("sender", fields: [senderName], references: [username], onUpdate: NoAction)    //(fields: [senderID], references[id], onUpdate: NoAction)
-  senderName  String?
-  receiver  User? @relation("receiver", fields: [receiverName], references: [username], onUpdate: NoAction)
-  receiverName String?
+  sender    User @relation("sender", fields: [senderName], references: [username], onUpdate: NoAction)  
+  senderName  String 
+  receiver  User @relation("receiver", fields: [receiverName], references: [username], onUpdate: NoAction)
+  receiverName String
 }
 
 
@@ -48,10 +55,19 @@ model User {
   useremail             String?       @unique
   passwordhash          String?
   cookieVal             String?
-  //userCookies           Cookie? @relation("userCookies")
   profile               Profile? @relation("userProfile")
-  asFriend1             FriendPair[] @relation("friend1")
-  asFriend2             FriendPair[] @relation("friend2")
-  asSender              MatchRequest[] @relation("sender")
-  asReceiver            MatchRequest[] @relation("receiver")
+  friends               Friends[] @relation("friend")
+  friendsAdded          Friends[] @relation("friendAdded")            
+  //userCookies           Cookie? @relation("userCookies")
+  //friends               User[] @relation("friends")
+  //asFriend                User? @relation("friends", fields: [username], references: [username])
+  //friendName            String?
+  //asSender              User? @relation("requestsSent",fields: [username], references: [username])
+  requestsSent          MatchRequest[] @relation("sender")
+  //asReceiver            User? @relation("requestsReceived",fields: [username], references: [username])
+  requestsReceived        MatchRequest[] @relation("receiver")
+  //asFriend1             FriendPair[] @relation("friend1")
+  //asFriend2             FriendPair[] @relation("friend2")
+  //asSender              MatchRequest[] @relation("sender")
+  //asReceiver            MatchRequest[] @relation("receiver")
 }

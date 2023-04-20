@@ -11,12 +11,12 @@ export class ProfileTable{
         this.prisma = prisma
     }
 
-    /*
+    
     //Determines if a profile with a given username already exists in the database
     //Resolves to true if the profile exists and false if it doesn't
     profileExists = async(username : string) : Promise<boolean> => {
         try {
-            const profInDB = await this.prisma.$exists.Profile({
+            const profInDB = await this.prisma.$exists.profile({
                 username: username,
             })
             return profInDB
@@ -28,7 +28,7 @@ export class ProfileTable{
             }
         }
     }
-    */
+    
 
     //inserts a user profile including username, name, age, bio, and gym
     //if the username exists in the database already, the function updates the name, age, bio, and gym for this profile
