@@ -103,6 +103,8 @@ h4 {
     position: absolute;
     width: 850px;
     height: 38px;
+    left: 379px;
+    top: 484px;
 
     font-family: 'Big Shoulders Display';
     font-style: normal;
@@ -155,7 +157,7 @@ h4 {
     background-color: #DDDDE7;
 }
 
-button {
+.button {
     position: absolute;
     width: 70px;
     height: 40px;
@@ -178,7 +180,7 @@ button {
     color: #000000;
 }
 
-button:hover {
+.button:hover {
     cursor: pointer;
     color: #EE8434;
     background-color: #0C1421;

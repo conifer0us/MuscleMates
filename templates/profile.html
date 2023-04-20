@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
-    <link rel="stylesheet" type="text/css" href="styles/test.css">
+    <link rel="stylesheet" type="text/css" href="styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="styles/profilepage.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -23,43 +24,41 @@
             <a href="matchrequests" class="nav-bar-item smooth-text">Requests</a>
             <a href="profile" class="nav-bar-item smooth-text">Profile</a>
         </div>
-    </div>
+      </div>
+
     <div class="body-of-page">
+      <div style="width:95%; display:flex; flex-direction:row; justify-content: flex-end; gap: 50px;"> 
+        <h1 class="settings-div">Settings</h1>
+          <a href="mydetails.html" class="settings-div under-link">My details</a>
+          <a href="plan.html" class="settings-div under-link">Plan</a>
+      </div>
+
+      <div class="decorativerectangle"></div>
+      <div class="maincircle"></div>
+
         <div>
             <h1 style="font-size: 40px;">Profile</h1>
+            <h1 style="font-size: 20px;"> Update your profile picture and personal detail</h1>>
+            <a class="button button:hover">Save</a>
+            <div class = "rectanglemain">
+              <h2 class="user"></h2>
+                <input placeholder="Full Name" type="submit" name="fullname" class="smooth-background">
+                <input placeholder="Age" type="submit" name="age" class="smooth-background">
+                <input placeholder="Pronouns" type="submit" name="pronouns" class="smooth-background">
+          
+              <h2 class="rectanglebio">Bio</h2>
+                <h3>A short introduction of yourself</h3>
+                  <a class="bio"></a>
+                    <input type="text" name="bio" class="smooth-background">
+      
+              <h2 class="rectanglephoto">Upload photo</h2>
+                <h3>This photo will be displayed on your profile</h3>
+                  <a class="circle"></a>
+                  <a class="button button:hover">Upload</a>
+                  <a class="button button:hover">Delete</a>
+          </div>
         </div>
     </div>
-    <div class="decorativerectangle"></div>
-    <div class="maincircle"></div>
-    
-    <div>
-      <a class="button button:hover">Save</a>
-    </div>
 
-    <div style="width:95%; display:flex; flex-direction:row; justify-content: flex-end; gap: 50px;"> 
-      <h1 class="settings-div">Settings</h1>
-        <a href="mydetails.html" class="settings-div under-link">My details</a>
-        <a href="plan.html" class="settings-div under-link">Plan</a>
-    </div>
-
-    <div class="rectanglemain">
-      <h2 class="user"></h2>
-        <input placeholder="Full Name" type="text" name="fullname" class="smooth-background">
-        <input placeholder="Age" type="text" name="age" class="smooth-background">
-        <input placeholder="Pronouns" type="text" name="pronouns" class="smooth-background">
-    
-
-      
-      <h2 class="rectanglebio">Bio</h2>
-        <h3>A short introduction of yourself</h3>
-          <a class="bio"></a>
-            <input type="text" name="bio" class="smooth-background">
-
-      <h2 class="rectanglephoto">Upload photo</h2>
-        <h3>This photo will be displayed on your profile</h3>
-          <a class="circle"></a>
-           <h4>Upload</h4>
-           <h4>Delete</h4>
-    </div>
 </body>
 </html>
