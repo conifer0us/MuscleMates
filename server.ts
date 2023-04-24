@@ -52,6 +52,7 @@ const DBFILE : string = configjson["dbfile"];
 const prisma = new PrismaClient()
 
 // Defines Global Constant Library Objects
+
 const server : Express = express();
 server.use(cookieParser());
 const auth = new Auth(prisma);
