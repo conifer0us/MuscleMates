@@ -9,7 +9,7 @@ datasource db {
 
 model Cookie {
   id  Int     @id @default(autoincrement())
-  username    String @unique
+  username    String 
   cookieval   String @unique
   user        User   @relation("cookies", fields: [username], references: [username])
 }

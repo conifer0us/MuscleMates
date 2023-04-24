@@ -21,7 +21,6 @@ export class Auth {
         return crypto.randomBytes(256).toString('hex');
     }
 
-
     // Places a username, email, and hashed (obfuscated) password into the Auth DB
     // If username already exists in the db, updates the user's email & password. Otherwise, it creates a user with the specified info
     // Resolves to True if User Inserted Without Problem; Resolves to false otherwise
@@ -81,14 +80,12 @@ export class Auth {
     addCookieToUser = async (username : string) : Promise<string> => {
         try{
             const cookie: string = this.getCookieVal();
-            await this.prisma['cookie'].update({
-                where: {
+            await this.prisma['cookie'].create({
+                data: {
                     username: username,
-                },
-                data:{
-                    cookieval: cookie,
-                },
-            })
+                    cookieval: cookie
+                }
+            });
             return cookie;
         } catch (error) {
             if (error) {
