@@ -4,6 +4,10 @@
 # Ignore Build Directory for Transpiled JS
 /build 
 
+# Ignore SASS generated CSS Maps
+/styles/*.css.map
+/styles/test.css
+
 # Temporary Server Files
 auth.db
 main.db
