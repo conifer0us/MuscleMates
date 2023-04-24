@@ -11,8 +11,6 @@ import { exit } from 'process';
 import bodyparser from 'body-parser';
 const formdecoder = bodyparser.urlencoded({extended:false});
 import {PrismaClient} from "@prisma/client";
-import { ProfileTable } from "./libs/ProfileTable";
-import { MatchTable } from "./libs/MatchTable";
 
 // Defines Operation Mode and Sets Mode Based on Command Line Arguments
 const MODES = {
@@ -44,15 +42,12 @@ configjson["stylepath"] = path.join(__dirname, configjson["stylepath"]);
 configjson["scriptpath"] = path.join(__dirname, configjson["scriptpath"]);
 configjson["jsxpath"] = path.join(__dirname, "build/jsx");
 configjson["imagepath"] = path.join(__dirname, configjson["imagepath"]);
-const DBFILE : string = configjson["dbfile"];
+const DBFILE = "main.db";
 
-
-// Prisma testing
-
+//Prisma Config
 const prisma = new PrismaClient()
 
 // Defines Global Constant Library Objects
-
 const server : Express = express();
 server.use(cookieParser());
 const auth = new Auth(prisma);
