@@ -51,7 +51,7 @@ const prisma = new PrismaClient()
 const server : Express = express();
 server.use(cookieParser());
 const auth = new Auth(prisma);
-const prof = new ProfileInfo(DBFILE);
+const prof = new ProfileInfo(prisma);
 const matchreq = new MatchRequests(DBFILE);
 const friends = new Friends(DBFILE);
 
@@ -80,7 +80,6 @@ async function main() {
     // Waits until DB is ready with Proper Libraries Configured before starting server
     
     console.log("Auth DB Opened with Proper Tables.");
-    await prof.dbready;
     await matchreq.dbready;
     await friends.dbready;
     console.log("Successfully configured application database.");
