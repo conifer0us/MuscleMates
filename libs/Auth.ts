@@ -1,86 +1,14 @@
 // Class for Handling Authentication with Username and Password and Cookies
-import { Database } from "sqlite3";
 import * as crypto from 'crypto';
 import {Request} from 'express';
+import { PrismaClient } from '@prisma/client';
 
 export class Auth {
+
     AUTH_COOKIE_NAME = "AUTH";
-    dbready : Promise<boolean>;
-    db : Database;
 
-    constructor(dbfile : string) {
-
-        // Sets the dbready attribute to an Asynchronous Promise that Will Resolve with True when DB is created with Proper Tables
-        this.dbready = new Promise((resolve, reject) => {
-            // Creates Auth DB if it doesn't exist with table for usernames and passwords as well as cookies
-            this.db = new Database(dbfile, (err) => {
-                if (err) {
-                    console.log("Error Creating Auth Database.");
-                    reject(err);
-                } 
-
-                // Creates a Users table for storing username, email, and password hash
-                // Also Creates a Cookies table for storing User Cookies
-                this.db.exec(
-                    `CREATE TABLE IF NOT EXISTS users (userID INTEGER PRIMARY KEY AUTOINCREMENT, username text, useremail text, passwordhash text);
-                        CREATE TABLE IF NOT EXISTS cookies (cookieID INTEGER PRIMARY KEY AUTOINCREMENT, username text references users(username) on delete set null, cookieval text) `,
-                    (err) => {
-                        if (err) {
-                            console.log("Error Creating Tables in Auth Database");
-                            reject(err);
-                        } else {
-                            resolve(true);
-                        }
-                    }
-                );
-            });
-        });
-    }
-
-    // Places a username, email, and hashed (obfuscated) password into the Auth DB
-    // Returns a Promise Object that resolves to False if the Username or Email Already Exists; Resolves to True if User Inserted Without Problem
-    insertUserPassword(username : string, email : string, password : string) : Promise<boolean> {
-        return new Promise( (resolve, reject) => {
-            this.db.all(`SELECT username FROM users WHERE username = ? OR useremail = ?`
-            , [username, email]
-            , (err, rows) => {
-                if (err) {
-                    reject(err);
-                }
-                else if (rows.length != 0) {
-                    resolve(false);
-                }
-                else {
-                    // Prepares An Insertion Statement for the Users DB and Executes it with Argument Data
-                    const stmt = this.db.prepare(`INSERT INTO users (username, useremail, passwordhash) values (?,?,?)`);
-                    stmt.run(username, email, this.getDataHash(password));
-                    stmt.finalize();
-                    resolve(true);
-                }
-            });
-        });
-    }
-
-    // Checks if a Login Attemtp is Authorized From Username (or Email) and Password
-    isLoginCorrect(username : string, password : string) : Promise<boolean> {
-        const passhash = this.getDataHash(password) 
-        // Returns an Asynchronous Promise Object that Will Resolve True when 
-        return new Promise((resolve, reject) => {
-            // Check if Username and Password Hash Combination Exists in DB; Returns true if so
-            this.db.all(`SELECT username FROM users WHERE (username = ? AND passwordhash = ?) OR (useremail = ? AND passwordhash = ?)`
-            , [username, passhash, username, passhash]  
-            , (err, rows) => {
-                if (err) {
-                    reject(err);
-                }
-                else if (rows.length != 0) {
-                    resolve(true);
-                } else {
-                    // If Neither Combination Exists in the DB, return False
-                    resolve(false);
-                }
-            }); 
-        }); 
+    constructor(private prisma: PrismaClient){
+        this.prisma = prisma;
     }
 
     // Gets the Hashed (Obfuscated) Version of Text Data
@@ -88,64 +16,119 @@ export class Auth {
         return crypto.createHash('sha256').update(textdata).digest('hex');
     }
 
-    // Inserts a New Random Cookie Value into the Cookies Table for a Certain User
-    // Returns a Promise Object that evaluates to the cookievalue if a cookie was properly set; resolves to an empty string otherwise
-    addCookieToUser(userid : string) : Promise<string> {
-        return new Promise((resolve, reject) => {
-            this.db.all<{username: string}>(`SELECT username FROM users WHERE username = ? OR useremail = ?`
-            , [userid, userid]
-            , (err, rows) => {
-                if (err) {
-                    reject(err);
-                }
-                else if (rows.length == 0) {
-                    resolve("");
-                }
-                else {
-                    const uname = rows[0].username;
-                    const cookie = this.getCookieVal();
-                    // Prepares An Insertion Statement for the Cookies DB with cookie value and username
-                    const stmt = this.db.prepare(`INSERT INTO cookies (username, cookieval) values (?,?)`);
-                    stmt.run(uname, cookie);
-                    stmt.finalize();
-                    resolve(cookie);
-                }
-            });
-        });
-    }
-
-    // Checks A Request Object for A Valid Auth Cookie
-    // Returns a Promise Object that Evaluates to the Username whose cookie it is if the cookie is valid; resolves to an empty string if cookie is invalid
-    checkReqCookie(request : Request ) : Promise<string> {
-        return new Promise((resolve, reject) => {
-            if (!request.cookies || !(this.AUTH_COOKIE_NAME in request.cookies)) {
-                resolve("");
-            }
-
-            const cookieval = request.cookies[this.AUTH_COOKIE_NAME];
-
-            // If no cookieval is supplied, resolve with an empty string
-            if (!cookieval) {
-                resolve("");
-            }
-
-            // Checks Database for Cookie Otherwise
-            this.db.all<{username : string}>(`SELECT username FROM cookies WHERE cookieval = ?`
-            , [cookieval]
-            , (err, rows) => {
-                if (err) {
-                    reject(err);
-                } else if (rows.length == 0) {
-                    resolve("");
-                } else {
-                    resolve(rows[0].username);
-                }
-            });
-        });
-    } 
-
     // Gets a new Cookie Value (64 random characters)
     getCookieVal() : string {
         return crypto.randomBytes(256).toString('hex');
     }
-}
+
+
+    // Places a username, email, and hashed (obfuscated) password into the Auth DB
+    // If username already exists in the db, updates the user's email & password. Otherwise, it creates a user with the specified info
+    // Resolves to True if User Inserted Without Problem; Resolves to false otherwise
+    insertUserPassword = async(username : string, email : string, password : string): Promise<boolean> => {       
+        try {
+            await this.prisma['user'].upsert({
+                where: {
+                    username: username,
+                },
+                update: {
+                    passwordhash: this.getDataHash(password),
+                    useremail: email,
+                },
+                create: {
+                    username: username,
+                    useremail: email,
+                    passwordhash: this.getDataHash(password),
+                },
+            })
+            return true;
+        } catch (error) {
+            if (error) {
+                console.log(error.message)
+                return false;
+            }
+        }
+    }
+
+    // Checks if a Login Attempt is Authorized From Username (or Email) and Password
+    // Returns true if login is correct
+    // Returns false if the username & password combo doesn't exist in the db or if it runs into an error
+    isLoginCorrect = async(username : string, password : string) : Promise<boolean> => {
+        try {
+            const passhash: string = this.getDataHash(password);
+            const userQueried = await this.prisma['user'].findUnique({
+                where: {
+                    username: username,
+                },
+                select: {
+                    passwordhash: true,
+                }
+            })
+            const correctPasshash = userQueried.passwordhash;
+            return passhash == correctPasshash;
+
+        } catch (error) {
+            if (error) {
+                console.log(error.message);
+                return false;
+            }
+        }     
+    }
+
+
+    // Inserts a New Random Cookie Value into the Cookies Table for a Certain User
+    // Returns a Promise Object that evaluates to the cookievalue if a cookie was properly set; resolves to an empty string otherwise
+    addCookieToUser = async (username : string) : Promise<string> => {
+        try{
+            const cookie: string = this.getCookieVal();
+            await this.prisma['cookie'].update({
+                where: {
+                    username: username,
+                },
+                data:{
+                    cookieval: cookie,
+                },
+            })
+            return cookie;
+        } catch (error) {
+            if (error) {
+                console.log(error.message)
+                return "";
+            }
+        }
+    }
+
+    // Checks A Request Object for A Valid Auth Cookie
+    // Resolves to the Username whose cookie it is if the cookie is valid; resolves to an empty string if cookie is invalid
+    checkReqCookie = async(request : Request ) : Promise<string> => {
+        try{
+            
+            if (!request.cookies || !(this.AUTH_COOKIE_NAME in request.cookies)) {
+                return "";
+            }
+
+            const cookieval : string= request.cookies[this.AUTH_COOKIE_NAME];
+
+            // If no cookieval is supplied, resolve with an empty string
+            if (!cookieval) {
+                return "";
+            }
+            
+            // Checks Database for Cookie Otherwise
+            const CookieObj = await this.prisma['cookie'].findUnique({
+                where: {
+                    cookieval: cookieval,
+                },
+            });
+
+            const cookieUsername = CookieObj.username
+            return cookieUsername
+
+        } catch (error) {
+            if (error) {
+                console.log(error.message)
+                return "";
+            }
+        }
+    }
+}  

@@ -10,8 +10,7 @@ import { ProfileInfo } from './libs/ProfileInfo';
 import { exit } from 'process';
 import bodyparser from 'body-parser';
 const formdecoder = bodyparser.urlencoded({extended:false});
-const {PrismaClient} = require('@prisma/client');
-import { AuthTable } from "./libs/AuthTable";
+import {PrismaClient} from "@prisma/client";
 import { ProfileTable } from "./libs/ProfileTable";
 import { MatchTable } from "./libs/MatchTable";
 
@@ -51,56 +50,16 @@ const DBFILE : string = configjson["dbfile"];
 // Prisma testing
 
 const prisma = new PrismaClient()
-/*
-const matchTab = new MatchTable(prisma)
-matchTab.matchExists("blockboy", "john123").then((submitted) =>{
-    matchTab.matchExists("blockboy", "john123").then((submitted) =>{
-        matchTab.matchExists("johnsmith", "blockboy")
-    })
-})*/
-
-
-const profTab = new ProfileTable(prisma);
-
-profTab.insertProfile("blockboy", "Block Boy", "62", "Why am I so old?", "Drexel Rec Center").then((inserted) => {
-    console.log("inserted? " + inserted)
-    profTab.getName("blockboy").then((theName) => {
-        console.log("name: " + theName)
-        profTab.getProfInfo("blockboy").then((dictionary) => {
-            console.log(dictionary)
-            profTab.insertProfile("john123", "john smith", "12", "I am 12 years old.", "Drexel Rec Center").then((inserted)=>{
-                profTab.profileExists("john123").then((exists) => {
-                    console.log("john123 exists? " + exists)
-                })
-            })
-        })
-    })
-})
-
-
-const authTab = new AuthTable(prisma);
-/*authTab.insertUserPassword("blockboy", "blockboy@gmail.com", "block123").then ((inserted) => {
-    console.log("inserted? " + inserted)
-    authTab.isLoginCorrect("blockboy", "block123").then ((loginCorrect) => {
-        console.log("is login correct? " + loginCorrect)
-        authTab.addCookieToUser("blockboy").then ((myCookie) => {
-            console.log("my cookie: " + myCookie)
-        })
-
-    })
-})*/
 
 // Defines Global Constant Library Objects
-
 const server : Express = express();
 server.use(cookieParser());
-const auth = new Auth(DBFILE);
+const auth = new Auth(prisma);
 const prof = new ProfileInfo(DBFILE);
 const matchreq = new MatchRequests(DBFILE);
 const friends = new Friends(DBFILE);
 
 // Defines and Configures Express Server with a Cookie Parser and File Upload Parsing
-const server : Express = express();
 server.use(cookieParser());
 server.use(fileupload({
     limits: {
@@ -124,8 +83,7 @@ ImageRoutes.configureRouter(server, "/profimage", auth, prof, configjson);
 async function main() {
     // Waits until DB is ready with Proper Libraries Configured before starting server
     
-    
-    await auth.dbready;
+    console.log("Auth DB Opened with Proper Tables.");
     await prof.dbready;
     await matchreq.dbready;
     await friends.dbready;
