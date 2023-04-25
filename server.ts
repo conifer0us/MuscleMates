@@ -4,12 +4,13 @@ import fileupload from 'express-fileupload';
 import path from 'path';
 import cookieParser from 'cookie-parser'
 import { Auth } from "./libs/Auth";
-import { Friends } from "./libs/Friends";
+import { FriendsInfo } from "./libs/Friends";
 import { MatchRequests } from './libs/MatchRequests';
 import { ProfileInfo } from './libs/ProfileInfo';
 import { exit } from 'process';
 import bodyparser from 'body-parser';
 const formdecoder = bodyparser.urlencoded({extended:false});
+import {PrismaClient} from "@prisma/client";
 
 // Defines Operation Mode and Sets Mode Based on Command Line Arguments
 const MODES = {
@@ -41,16 +42,19 @@ configjson["stylepath"] = path.join(__dirname, configjson["stylepath"]);
 configjson["scriptpath"] = path.join(__dirname, configjson["scriptpath"]);
 configjson["jsxpath"] = path.join(__dirname, "build/jsx");
 configjson["imagepath"] = path.join(__dirname, configjson["imagepath"]);
-const DBFILE : string = configjson["dbfile"];
 
-// Defines Shared Constant Library Objects
-const auth = new Auth(DBFILE);
-const prof = new ProfileInfo(DBFILE);
-const matchreq = new MatchRequests(DBFILE);
-const friends = new Friends(DBFILE);
+//Prisma Config
+const prisma = new PrismaClient()
+
+// Defines Global Constant Library Objects
+const server : Express = express();
+server.use(cookieParser());
+const auth = new Auth(prisma);
+const prof = new ProfileInfo(prisma);
+const matchreq = new MatchRequests(prisma);
+const friends = new FriendsInfo(prisma);
 
 // Defines and Configures Express Server with a Cookie Parser and File Upload Parsing
-const server : Express = express();
 server.use(cookieParser());
 server.use(fileupload({
     limits: {
@@ -72,13 +76,6 @@ ImageRoutes.configureRouter(server, "/profimage", auth, prof, configjson);
 
 // Main Function that Runs when Program Starts. This Function is responsible for creating library instances and Starting the Server
 async function main() {
-    // Waits until DB is ready with Proper Libraries Configured before starting server
-    await auth.dbready;
-    await prof.dbready;
-    await matchreq.dbready;
-    await friends.dbready;
-    console.log("Successfully configured application database.");
-
     // Runs Test Function if "test" option specified on Command Line after server.js
     if (mode == MODES.test) {test();}
 
