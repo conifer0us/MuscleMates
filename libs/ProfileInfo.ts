@@ -2,8 +2,9 @@
 import { PrismaClient } from '@prisma/client';
 
 export class ProfileInfo {
+    prisma : PrismaClient
 
-    constructor(private prisma: PrismaClient){
+    constructor(prisma: PrismaClient){
         this.prisma = prisma;
     }
 
@@ -145,17 +146,12 @@ export class ProfileInfo {
     //Resolves to Dictionary Representation of Profile Information
     getProfInfo = async(username : string) : Promise<{}> =>{
         try{
-            /*const profExists = await this.profileExists(username)
-            if (!profExists){
-                return {}
-            } else {*/
             const prof = await this.prisma['profile'].findUnique({
                 where:{
                     username: username,
                 }
-            })
+            });
             return {"name": prof.name, "age": prof.age, "bio": prof.bio, "gym": prof.gym}
-            //}
         } catch (error) {
             if (error) {
                 console.log(error.message)

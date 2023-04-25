@@ -4,12 +4,12 @@
 // Import Necessary Libraries
 import { Router, Express } from 'express';
 import { Auth } from "../libs/Auth";
-import { Friends } from "../libs/Friends";
+import { FriendsInfo } from "../libs/Friends";
 import { MatchRequests } from '../libs/MatchRequests';
 import { ProfileInfo } from '../libs/ProfileInfo';
 
 export class SubmitRoutes {
-    static configureRouter(server : Express, resname : string, auth : Auth, prof : ProfileInfo, matchreqs : MatchRequests, friends : Friends) {
+    static configureRouter(server : Express, resname : string, auth : Auth, prof : ProfileInfo, matchreqs : MatchRequests, friends : FriendsInfo) {
         let router = Router(); 
         
         // Allow Users to Submit Profile Information

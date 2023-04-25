@@ -6,8 +6,9 @@ import { PrismaClient } from '@prisma/client';
 export class Auth {
 
     AUTH_COOKIE_NAME = "AUTH";
+    prisma : PrismaClient
 
-    constructor(private prisma: PrismaClient){
+    constructor(prisma: PrismaClient){
         this.prisma = prisma;
     }
 
