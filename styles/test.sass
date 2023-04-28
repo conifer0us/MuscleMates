@@ -58,6 +58,13 @@ h3
 p
     @include stdfont(300, 24px)
 
+ul
+    padding: 0
+    list-style-type: none
+
+li
+    margin: 10px 0
+
 input
     background-color: $light-navy-blue
     @include transition(background-color)
@@ -168,7 +175,7 @@ button
     @include transition(color)
 
 .nav-bar-container
-    position: relative
+    height: 90px
 
 .nav-bar
     position: relative
@@ -200,8 +207,8 @@ button
 .body-of-page
     position: absolute
     left: 3.5%
-    top: 70px
-    height: 90%
+    top: 100px
+    height: 80%
     width: 90%
 
 #body-of-page-recs
@@ -218,6 +225,8 @@ button
     @include stdfont(800, 120px)
 
 .recommendation-container
+    position: relative
+    width: 95%
     border-radius: 10px
     border-bottom-style: outset
     border-right-style: outset
@@ -345,3 +354,6 @@ button
     color: $dark-blue
 
     font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 200, 'opsz' 48
+
+.logotext
+    font-size: 40px

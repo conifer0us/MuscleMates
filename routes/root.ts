@@ -15,8 +15,7 @@ export class RootRoutes {
         // Send Index File for Homepage Requests
         server.get("/", (req, res) => {
             res.status(200);
-            //res.sendFile(path.join(templatepath, "index.html"));
-            res.sendFile(path.join(templatepath, "homepagereact.html"));
+            res.sendFile(path.join(templatepath, "index.html"));
         });
 
         // Send Index File for Direct Index Requests
@@ -97,7 +96,7 @@ export class RootRoutes {
                 // If Cookie is Invalid, return login html page
                 else {
                     res.status(200);
-                    res.sendFile(path.join(templatepath, "login.html"));
+                    res.sendFile(path.join(templatepath, "reactindex.html"));
                 }
             });
         });
@@ -138,7 +137,7 @@ export class RootRoutes {
                 // If the Cookie User is Set to Valid Value, Render Home Page for User and Return Page Data
                 if (cookieuser) {
                     res.status(200);
-                    res.sendFile(path.join(templatepath, "homepage.html"));
+                    res.sendFile(path.join(templatepath, "reactindex.html"));
                 }
 
                 // Redirects the User Back to the Login Page if Cookie Not Valid
@@ -156,7 +155,7 @@ export class RootRoutes {
                 }
                 else {
                     res.status(200);
-                    res.sendFile(path.join(templatepath, "signup.html"));
+                    res.sendFile(path.join(templatepath, "reactindex.html"));
                 }
             });
         });
@@ -205,7 +204,7 @@ export class RootRoutes {
             auth.checkReqCookie(req).then((cookieuser) => {
                 if (cookieuser) {
                     res.status(200);
-                    res.sendFile(path.join(templatepath, "recommendations.html"));
+                    res.sendFile(path.join(templatepath, "reactindex.html"));
                 }
                 else {
                     res.redirect("/login.html");
@@ -218,7 +217,7 @@ export class RootRoutes {
             auth.checkReqCookie(req).then((cookieuser) => {
                 if (cookieuser) {
                     res.status(200);
-                    res.sendFile(path.join(templatepath, "friends.html"));
+                    res.sendFile(path.join(templatepath, "reactindex.html"));
                 }
                 else {
                     res.redirect("/login.html");
@@ -231,7 +230,7 @@ export class RootRoutes {
             auth.checkReqCookie(req).then((cookieuser) => {
                 if (cookieuser) {
                     res.status(200);
-                    res.sendFile(path.join(templatepath, "matchrequests.html"));
+                    res.sendFile(path.join(templatepath, "reactindex.html"));
                 }
                 else {
                     res.redirect("/login.html");
