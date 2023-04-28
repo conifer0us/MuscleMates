@@ -78,6 +78,40 @@ h4 {
     color: #BFBFC0;
 }
 
+h5 {
+    position: absolute;
+    width: 113px;
+    height: 57px;
+    left: calc(50% - 113px/2 - 158.5px);
+    top: calc(50% - 57px/2 - 250.5px);
+
+    font-family: 'Big Shoulders Display';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 48px;
+    line-height: 57px;
+    text-align: center;
+
+    color: #CCC9DC;
+}
+
+h6 {
+    position: absolute;
+    width: 349px;
+    height: 23px;
+    left: 494px;
+    top: 300px;
+
+    font-family: 'Big Shoulders Display';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+
+    color: #7E7E82;
+}
+
 .under-link {
     color:rgb(126, 126, 130);
 }
