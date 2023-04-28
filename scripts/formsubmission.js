@@ -12,7 +12,7 @@ function getFormDataByID(formid) {
 // Shows Alert with errorstr if login denied
 function sendFormData(formdata, url, errorstr) {
     // Turn Form Data into a URLSearchParams Object to Allow Normal Attribute Reference in Node
-    submitparams = new URLSearchParams();
+    let submitparams = new URLSearchParams();
     for (const [formkey, formval] of formdata.entries()) {
         submitparams.append(formkey, formval);
     }
@@ -43,12 +43,12 @@ function ShowError(errorstr) {
 
 // Form Submission Function for Login Page
 // Calls SendFormData for id "loginform", post page "/login.html", and error string "Login Failed"
-function SubmitLoginForm() {
+export const SubmitLoginForm = function SubmitLoginForm() {
     sendFormData(getFormDataByID("loginform"), "/login.html", "Login Failed");
 }
 
 // Form Submission Function for Signup Page
-function SubmitSignupForm() {
+export const SubmitSignupForm = function SubmitSignupForm() {
     const SignupFormData = getFormDataByID("signupform");
     
     // Get Individual Elements of Form to Validate
