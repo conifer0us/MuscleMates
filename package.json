@@ -15,7 +15,8 @@
   "scripts": {
     "start": "tsc && babel scripts --out-dir build/jsx && browserify build/jsx/App.js > build/jsx/bundle.js && sass styles/test.sass styles/test.css && node ./build/server.js",
     "lint": "eslint . --ext .ts",
-    "test": "tsc && babel scripts --out-dir build/jsx && node ./build/server.js test"
+    "test": "tsc && babel scripts --out-dir build/jsx && node ./build/server.js test",
+    "reset-prisma": "prisma db push && prisma generate"
   },
   "name": "ci-project",
   "version": "1.0.0",
