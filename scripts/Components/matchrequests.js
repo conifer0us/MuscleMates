@@ -181,9 +181,12 @@ export function MatchRequestsPage() {
   return (
       <>
         <NavBar />
-        <div id="reqs-received-body" className='tab'>
-          <h1>Requests Received</h1>
-          <ul>{receivedRequests}</ul>
+        <div id="reqs-received-body">
+            <div className='recs-title-link-div'>
+                <h1 className='tab'>Requests Received</h1>
+                <h2><a href="recommendations" className="orange-link">Back to Recommendations</a></h2>
+            </div>
+          <ul className='tab'>{receivedRequests}</ul>
         </div>
         <div id="reqs-sent-body" className='tab'>
           <h1>Requests Sent</h1>
