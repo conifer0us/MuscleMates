@@ -97,7 +97,10 @@ export function RecommendationsPage() {
     return (
       <>
         <NavBar />
-        <h1 className='tab'>Recommendations</h1>
+        <div className='recs-title-link-div'>
+          <h1 className='tab'>Recommendations</h1>
+          <h2><a href="matchrequests" className="orange-link">Manage Requests</a></h2>
+        </div>
         <div className='tab'>
           <ul>{recsinfo}</ul>
         </div>

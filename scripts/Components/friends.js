@@ -49,60 +49,47 @@ function FriendDiv(username, fullname, gym, age, bio) {
 }
 
 export function FriendsPage() {
-    let friendslist = []
-    let friendsinfolist = []
-  
-    const [friendsinfo, setFriendsInfo] = useState([])
-  
-    useEffect(() => {
-      getFriendsUsername();
-    }, [])
-  
-    function getFriendsUsername() {
-      fetch("/api/friends")
-      .then((response) => {
-          response.json().then((JSONData) => {
-            let nfriends = JSONData["friends"].length
-            if (nfriends == 0) {
-              setFriendsInfo(<h3 className='tab'>You currently don't have any friends</h3>)
-            }
-            for(let i=0;i<JSONData["friends"].length;i++) {
-              friendslist.push(JSONData["friends"][i])
-              getJSONData(JSONData["friends"][i])
-            }
-          })
-      })
-    }
-  
-    function getJSONData(username, sent) {
-      fetch(`/api/profile/${username}`)
-      .then((response) => {
-          response.json().then((JSONData) => {
-              friendsinfolist.push({username: username, name: JSONData["name"], gym: JSONData["gym"], age: JSONData["age"], bio: JSONData["bio"]});
-              setFriendsInfo(friendsinfolist.map((friend) => <li key={`${friend.username}-friend`}>{FriendDiv(friend.username, friend.name,  friend.gym, friend.age, friend.bio)}</li>))
-          });
-      })
-    }
-  
-    if (friendsinfo == []) {
-      return (
-        <>
-          <div class="body-of-page">
-            <div id="friends-page-container">
-                <h1 style="font-size: 40px;">Friends</h1>
-            </div>
-            <h3>No friends yet</h3>
-          </div>
-        </>
-      )
-    }
-  
-    return (
-    <>
-      <NavBar />
-      <div className='tab'>
-        <h1>Friends</h1>
-        <ul>{friendsinfo}</ul>
-      </div>
-    </>)
+  let friendslist = []
+  let friendsinfolist = []
+
+  const [friendsinfo, setFriendsInfo] = useState([])
+
+  useEffect(() => {
+    getFriendsUsername();
+  }, [])
+
+  function getFriendsUsername() {
+    fetch("/api/friends")
+    .then((response) => {
+        response.json().then((JSONData) => {
+          let nfriends = JSONData["friends"].length
+          if (nfriends == 0) {
+            setFriendsInfo(<h3>You currently don't have any friends</h3>)
+          }
+          for(let i=0;i<JSONData["friends"].length;i++) {
+            friendslist.push(JSONData["friends"][i])
+            getJSONData(JSONData["friends"][i])
+          }
+        })
+    })
+  }
+
+  function getJSONData(username) {
+    fetch(`/api/profile/${username}`)
+    .then((response) => {
+        response.json().then((JSONData) => {
+            friendsinfolist.push({username: username, name: JSONData["name"], gym: JSONData["gym"], age: JSONData["age"], bio: JSONData["bio"]});
+            setFriendsInfo(friendsinfolist.map((friend) => <li key={`${friend.username}-friend`}>{FriendDiv(friend.username, friend.name,  friend.gym, friend.age, friend.bio)}</li>))
+        });
+    })
+  }
+
+  return (
+  <>
+    <NavBar />
+    <div className='tab'>
+      <h1>Friends</h1>
+      <ul>{friendsinfo}</ul>
+    </div>
+  </>)
 }
