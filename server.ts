@@ -31,6 +31,11 @@ configjson["imagepath"] = path.join(__dirname, configjson["imagepath"]);
 // Defines Global Constant Library Objects
 const server : Express = express();
 
+let auth : Auth
+let prof : ProfileInfo
+let matchreq : MatchRequests
+let friends : FriendsInfo
+
 // Defines and Configures Express Server with a Cookie Parser and File Upload Parsing
 server.use(cookieParser());
 server.use(fileupload({
@@ -59,22 +64,13 @@ async function main() {
     //Prisma Config
     const prisma = new PrismaClient()
     
-    const auth = new Auth(prisma);
-    const prof = new ProfileInfo(prisma);
-    const matchreq = new MatchRequests(prisma);
-    const friends = new FriendsInfo(prisma);
+    auth = new Auth(prisma);
+    prof = new ProfileInfo(prisma);
+    matchreq = new MatchRequests(prisma);
+    friends = new FriendsInfo(prisma);
 
     // Runs a Set of Statements to Prepare Database in Case of Testing Mode
-    if (args[2] == "test") {
-        auth.insertUserPassword("block", "block@block.com", "chain");
-        prof.insertProfile("block", "Block Boy", "18", "I like breaking", "Block Boxing and More");
-    
-        auth.insertUserPassword("john123", "john@gmail.com", "john123");
-        prof.insertProfile("john123", "John Smith", "20", "I'm just a regular John.", "Block Boxing and More");
-    
-        auth.insertUserPassword("martha5", "martha@outlook.com", "marthaiscool");
-        prof.insertProfile("martha5", "Martha Jones", "40", "I like rock climbing and biking.", "Block Boxing and More");    
-    } 
+    if (args[2] == "test") {await test();} 
 
     // Brings in Externally Defined Routes for Posting Information to the Server
     SubmitRoutes.configureRouter(server, '/submit', auth, prof, matchreq, friends);
@@ -85,6 +81,20 @@ async function main() {
     // Starts Server on Port Specified
     server.listen(configjson["port"]);
     console.log("Listening on port 80.");
+}
+
+async function test() {
+    await auth.insertUserPassword("block", "block@block.com", "chain");
+    await prof.insertProfile("block", "Block Boy", "18", "I like breaking", "Block Boxing and More");
+    
+    await auth.insertUserPassword("john123", "john@gmail.com", "john123");
+    await prof.insertProfile("john123", "John Smith", "20", "I'm just a regular John.", "Block Boxing and More");
+    
+    await auth.insertUserPassword("martha5", "martha@outlook.com", "marthaiscool");
+    await prof.insertProfile("martha5", "Martha Jones", "40", "I like rock climbing and biking.", "Block Boxing and More");  
+    
+    await auth.insertUserPassword("martha9", "Martha Jane", "martha9iscool");
+    await prof.insertProfile("martha9", "Evil Martha", "25", "I love TikTok.", "Block Boxing and More");
 }
 
 // Starts Main Function

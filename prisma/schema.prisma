@@ -38,6 +38,7 @@ model MatchRequest {
   senderName    String 
   receiver      User @relation("receiver", fields: [receiverName], references: [username], onUpdate: NoAction)
   receiverName String
+  @@unique([senderName, receiverName])
 }
 
 model Profile {

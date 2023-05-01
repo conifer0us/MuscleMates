@@ -16,36 +16,28 @@ export class SubmitRoutes {
         // Should Include Form Data with name, age, bio, gym form data set
         router.post("/profile", (req, res) => {
             auth.checkReqCookie(req).then((username) => {
-                // If cookie does not resolve to logged in user, status 400 and send response
-                if (!username) {
+                // If name, age, bio, or gym not set, status 400 and send response
+                if (!username || !req.body.name || !req.body.age || !req.body.bio || !req.body.gym) {
                     res.status(400);
                     res.send();
-                } else {
-                    // If name, age, bio, or gym not set, status 400 and send response
-                    if (!req.body.name || !req.body.age || !req.body.bio || !req.body.gym) {
-                        res.status(400);
-                        res.send();
-                    }
-
-                    else {
-                        const name = req.body.name;
-                        const age = req.body.age;
-                        const agenum = parseInt(age);
-                        const bio = req.body.bio;
-                        const gym = req.body.gym;
-
-                        // If Age is not an int between 0 and 100, status 400 and send response
-                        if (0 > agenum || agenum > 100) {
-                            res.status(400);
-                            res.send();
-                        }
-
-                        // Otherwise, set profile information in the database
-                        else {
-                            prof.insertProfile(username, name, age, bio, gym)
-                        }
-                    }
+                    return;
                 }
+
+                const name = req.body.name;
+                const age = req.body.age;
+                const agenum = parseInt(age);
+                const bio = req.body.bio;
+                const gym = req.body.gym;
+
+                // If Age is not an int between 0 and 100, status 400 and send response
+                if (0 > agenum || agenum > 100) {
+                    res.status(400);
+                    res.send();
+                    return;
+                }
+
+                // Otherwise, set profile information in the database
+                prof.insertProfile(username, name, age, bio, gym)
             });
         });
 
@@ -61,20 +53,21 @@ export class SubmitRoutes {
                 if (!receiver || !sender) {
                     res.status(400);
                     res.send();
-                } else {
-                    matchreqs.matchExists(sender, receiver).then((matchexists) => {
-                        if (matchexists) {
-                            matchreqs.deleteRequest(sender, receiver);
-                            friends.addFriends(sender, receiver);
-                            res.status(200);
-                            res.send();
-                        }
-                        else {
-                            res.status(400);
-                            res.send();
-                        }
-                    });
-                }
+                    return;
+                } 
+
+                matchreqs.matchExists(sender, receiver).then((matchexists) => {
+                    if (matchexists) {
+                        matchreqs.deleteRequest(sender, receiver);
+                        friends.addFriends(sender, receiver);
+                        res.status(200);
+                        res.send();
+                    }
+                    else {
+                        res.status(400);
+                        res.send();
+                    }
+                });
             });
         });
 
@@ -90,22 +83,24 @@ export class SubmitRoutes {
                 if (!receiver || !sender) {
                     res.status(400);
                     res.send();
-                } else {
-                    matchreqs.matchExists(sender, receiver).then((matchexists) => {
-                        if (matchexists) {
-                            matchreqs.deleteRequest(sender, receiver);
-                            res.status(200);
-                            res.send();
-                        }
-                        else {
-                            res.status(400);
-                            res.send();
-                        }
-                    });
-                }
+                    return;
+                } 
+                    
+                matchreqs.matchExists(sender, receiver).then((matchexists) => {
+                    if (matchexists) {
+                        matchreqs.deleteRequest(sender, receiver);
+                        res.status(200);
+                        res.send();
+                    }
+                    else {
+                        res.status(400);
+                        res.send();
+                    }
+                });
             });
         });
 
+        // Sends a friend request from one user to another if they are not already friends and neither has received a request from the other already
         router.post("/sendreq/:username", (req, res) => {
             auth.checkReqCookie(req).then((uname) => {
                 const sender = uname;
@@ -116,37 +111,19 @@ export class SubmitRoutes {
                     res.status(400);
                     res.send();
                 } else {
-                    // Checks if Request has already been Sent One Way
-                    matchreqs.matchExists(sender, receiver).then((matchexists) => {
-                        if (!matchexists) {
-
-                            // Checks if Match has been Inserted Other Way
-                            matchreqs.matchExists(receiver, sender).then((othermatchexists) => {
-                                if (!othermatchexists) {
-
-                                    // Checks if Users are Already Friends
-                                    friends.areFriends(sender, receiver).then((arefriends) => {
-                                        // If Users Aren't Friends and No Requests Have been Sent Previously, Submit Request and send 200
-                                        if (!arefriends) {
-                                            matchreqs.submitRequest(sender, receiver);
-                                            res.status(200);
-                                            res.send();
-                                        }
-                                        else {
-                                            res.status(400);
-                                            res.send();
-                                        }
-                                    })
-                                } else {
-                                    res.status(400);
-                                    res.send();
-                                }
-                            });
-                        } else {
+                    // Checks if Request has already been Sent between Two Users
+                    matchreqs.matchExists(sender, receiver).then(async (illegalreq) : Promise<boolean> => {
+                        return illegalreq ? true : (await friends.areFriends(sender, receiver)); 
+                    }).then((illegalreq) => {
+                        if (illegalreq) {
                             res.status(400);
                             res.send();
+                        } else {
+                            matchreqs.submitRequest(sender, receiver);
+                            res.status(200);
+                            res.send();
                         }
-                    })
+                    });
                 }
             });
         });

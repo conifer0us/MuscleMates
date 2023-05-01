@@ -96,7 +96,7 @@ export class FriendsInfo {
     // Returns a Promise Object that Resolves to True if Users are Friends or False if Users are not Friends
     areFriends = async (username1 : string, username2 : string) : Promise<boolean> => {
         try {
-            const frendata = this.prisma['friends'].findFirst({
+            const frendata = await this.prisma['friends'].findFirst({
                 where: {
                     "OR": [
                         {
