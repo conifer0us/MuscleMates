@@ -11,30 +11,37 @@ export class MatchRequests{
     //Tests if a match between 2 users already exists in the database
     //Returns a promise that resolves to true if the match exists in the database or false if otherwise
     matchExists = async(sender : string, receiver : string) : Promise<boolean> => {
-        const matchdata = this.prisma['matchRequest'].findFirst({
-            where: {
-                "OR" : [
-                    {"AND": [
-                        {senderName: {equals: receiver}},
-                        {receiverName: {equals: sender}},
-                    ]},
-                    {"AND": [
-                        {senderName: {equals: sender}},
-                        {receiverName: {equals: receiver}},
-                    ]}
-                ],
-            }
-        });
+        try {
+            const matchdata = await this.prisma['matchRequest'].findFirst({
+                where: {
+                    "OR": [
+                        {
+                            "AND": [
+                                { senderName: { equals: receiver } },
+                                { receiverName: { equals: sender } },
+                            ]
+                        },
+                        {
+                            "AND": [
+                                { senderName: { equals: sender } },
+                                { receiverName: { equals: receiver } },
+                            ]
+                        }
+                    ],
+                }
+            });
 
-        if (matchdata) {
-            return true;
-        } return false;
+            if (matchdata) {
+                return true;
+            } return false;
+        }
+        catch (e) { console.log(e.message); return false;}
     }
 
     //Inserts a match request into the table if there isn't already a request between the two users
     //Returns a promise that resolves to false if the match already exists and resolves to true if it inserts a request
     submitRequest = async(sender : string, receiver : string) : Promise<boolean> => {
-        const alreadyexists = this.matchExists(sender, receiver);
+        const alreadyexists = await this.matchExists(sender, receiver);
 
         if (alreadyexists) {
             return false;
@@ -56,10 +63,10 @@ export class MatchRequests{
                     receiver: {
                         connectOrCreate : {
                             where : {
-                                username: sender
+                                username: receiver
                             },
                             create : {
-                                username: sender
+                                username: receiver
                             }
                         }
                     }

@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:../main.db"
+  url      = "file:../build/active.db"
 }
 
 model Cookie {
@@ -20,6 +20,16 @@ model Friends{
   friendName      String
   friendAdded     User @relation("friendAdded", fields: [friendAddedName], references: [username])
   friendAddedName String
+  messages        Messages[] @relation("group")
+  @@unique([friendAddedName, friendName])
+}
+
+model Messages {
+  id              Int @id @default(autoincrement())
+  group           Friends @relation("group", fields: [user1, user2], references: [friendName, friendAddedName])
+  user1           String
+  user2           String
+  timesent        DateTime
 }
 
 model MatchRequest {
@@ -28,6 +38,7 @@ model MatchRequest {
   senderName    String 
   receiver      User @relation("receiver", fields: [receiverName], references: [username], onUpdate: NoAction)
   receiverName String
+  @@unique([senderName, receiverName])
 }
 
 model Profile {

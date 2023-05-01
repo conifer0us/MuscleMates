@@ -79,45 +79,27 @@ export class APIRoutes {
         // {
         //   "matchrecs": ["matchrec1", "matchrec2", ...]   
         // }
-        router.get("/matchrecs", (req, res) => {
-            auth.checkReqCookie(req).then((uname) => {
-                // If User not Logged In,
-                if (!uname) {
-                    res.status(400);
-                    res.send();
-                }
+        router.get("/matchrecs", async (req, res) => {
+            const uname = await auth.checkReqCookie(req); 
 
-                // If User Logged In, Send Match Recommendation List
-                else {
-                    prof.profileExists(uname).then((profexists) => {
-                        if (!profexists) {
-                            res.status(400);
-                            res.send();
-                        } else {
-                            let exclude = [uname];
+            // If User not Logged In or does not have a profile set up yet, send 400 status.
+            if (!(uname) || !(await prof.profileExists(uname))) {
+                res.status(400);
+                res.send();
+                return;
+            }
 
-                            // Gets the Friend List From the User to Exclude them From Match Recommendations
-                            friends.friendList(uname).then((friendlist) => {
-                                exclude = exclude.concat(friendlist);
-
-                                // Gets Current Received Requests to Exclude them From Match Recommendations
-                                matchrequests.requestsReceived(uname).then((receivedreqs) => {
-                                    exclude = exclude.concat(receivedreqs);
-
-                                    // Gets Current Received Requests to Exclude them From Match Recommendations
-                                    matchrequests.requestsSent(uname).then((sentreqs) => {
-                                        exclude = exclude.concat(sentreqs);
-                                        prof.getAllUsers(exclude).then((reclist) => {
-                                            res.status(200);
-                                            res.json({ "matchrecs": reclist });
-                                        });
-                                    });
-                                });
-                            });
-                        }
-                    })
-                }
-            });
+            // Gets the Friend List From the User to Exclude them From Match Recommendations
+            friends.friendList(uname).then((excludelist) => {
+                return [uname].concat(excludelist);
+            }).then(async (excludelist) => {
+                return excludelist.concat(await matchrequests.requestsReceived(uname));
+            }).then(async (excludelist) => {
+                return await (prof.getAllUsers(excludelist.concat(await matchrequests.requestsSent(uname))));
+            }).then((reclist) => {
+                res.status(200);
+                res.json({"matchrecs": reclist});
+            });  
         });
 
         // Returns JSON Data with a List of the User's Received Match Requests
