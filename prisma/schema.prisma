@@ -55,12 +55,23 @@ model Profile {
   user        User   @relation("userProfile", fields: [username], references: [username], onDelete: Cascade)
 }
 
+model Preferences {
+  id              Int @id @default(autoincrement())
+  username        String @unique
+  schedule        String?
+  workoutTypes    String?
+  filterByGender  Boolean?
+  filterByGym     Boolean?
+  user            User @relation("userPreferences", fields: [username], references: [username], onDelete: Cascade)
+}
+
 model User {
   id                      Int           @id @default(autoincrement())
   username                String       @unique
   useremail               String?       @unique
   passwordhash            String?
   profile                 Profile? @relation("userProfile")
+  preferences             Preferences? @relation("userPreferences")
   friends                 Friends[] @relation("friend")
   friendsAdded            Friends[] @relation("friendAdded")            
   cookies                 Cookie[] @relation("cookies")
