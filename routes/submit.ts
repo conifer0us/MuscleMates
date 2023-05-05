@@ -44,8 +44,8 @@ export class SubmitRoutes {
         // Endpoint that Allows Users to Accept Friend Requets from Other Users
         // No Data Must Be Supplied, but User Must have a Valid Cookie
         // A Request Must have been Sent from the given username to the user making the request
-        router.post("/acceptreq/:username", (req, res) => {
-            auth.checkReqCookie(req).then((uname) => {
+        router.post("/acceptreq/:username", async (req, res) => {
+            auth.checkReqCookie(req).then(async (uname) => {
                 const receiver = uname;
                 const sender = req.params["username"];
 
@@ -56,9 +56,9 @@ export class SubmitRoutes {
                     return;
                 } 
 
-                matchreqs.matchExists(sender, receiver).then((matchexists) => {
+                matchreqs.matchExists(sender, receiver).then(async (matchexists) => {
                     if (matchexists) {
-                        matchreqs.deleteRequest(sender, receiver);
+                        await matchreqs.deleteRequest(sender, receiver);
                         friends.addFriends(sender, receiver);
                         res.status(200);
                         res.send();
