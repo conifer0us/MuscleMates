@@ -12,50 +12,36 @@
     <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="nav-bar">
-        <div class="logo">
-            <h1><a href="/" style="text-decoration: none;" class="white-link">GYMDER</a></h1>
-        </div>
-        <div class="links-to-pages">
-            <a href="home" class="nav-bar-item smooth-text">Home</a>
-            <a href="recommendations" class="nav-bar-item smooth-text">Recommendations</a>
-            <a href="friends" class="nav-bar-item smooth-text">Friends</a>
-            <a href="matchrequests" class="nav-bar-item smooth-text">Requests</a>
-            <a href="profile" class="nav-bar-item smooth-text">Profile</a>
-        </div>
-      </div>
-        
-      <div class="settings-div setting:hover">
-        <h1>Settings</h1>
-        <a href="mydetails.html" class="settings-div under-link">My details</a>
-        <a href="plan.html" class="settings-div under-link">Plan</a>
-      </div>
+  <div class="settings-div">
+    <h1>Settings</h1>
+      <a href="mydetails.html" class = "mydetails-link">My details</a>
+      <a href="plan.html" class = "plan-link">Plan</a>
+  </div>
 
-      <div class="decorativerectangle"></div>
-      <div class="maincircle"></div>
-      <h5>Profile</h5>
-      <h6> Update your profile picture and personal detail</h6>>
-      <a class="button button:hover">Save</a>
+  <div class="decorativerectangle"></div>
+  <div class="maincircle" name = "photomain"></div>
+  <h5>Profile</h5>
+  <h6>Update your profile picture and personal detail</h6>
+  <a class = "button button:hover">Save</a>
           
-      <div class = "rectanglemain">
-        <h2 class="user"></h2>
-          <input placeholder="Full Name" type="submit" name="fullname" class="smooth-background">
-          <input placeholder="Age" type="submit" name="age" class="smooth-background">
-          <input placeholder="Pronouns" type="submit" name="pronouns" class="smooth-background">
-          
-        <h2 class="rectanglebio">Bio</h2>
-          <h3>A short introduction of yourself</h3>
-          <a class="bio"></a>
-            <input type="text" name="bio" class="smooth-background">
-      
-        <h2 class="rectanglephoto">Upload photo</h2>
-          <h3>This photo will be displayed on your profile</h3>
-                <a class="circle"></a>
-                <a class="button button:hover">Upload</a>
-                <a class="button button:hover">Delete</a>
-          </div>
-        </div>
-    </div>
+  <div class = "rectanglemain">
+      <input placeholder="Full Name" type="text" name="fullname" class="fullname-input">
+      <input placeholder="Age" type="text" name="age" class="age-input">
+      <input placeholder="Pronouns" type="text" name="pronouns" class="pronoun-input">
+
+      <div class = "rectanglebio"></div>
+      <h2 class = "bio-header">Bio</h2>
+      <h3 class = "bio-des">A short introduction of yourself</h3>
+      <input placeholder= "Your introduction" type="text" name="bio" class="bio-input">
+
+      <div class ="rectanglephoto"></div>
+      <h2 class = "uploadphoto-header">Upload photo</h2>
+      <h3 class = "uploadphotodes">This photo will be displayed on your profile</h3>
+      <a class = "button1 button12:hover">Upload</a>
+      <a class = "button2 button12:hover">Delete</a>
+      <a class = "circle" name = "photoupload"></a>
+
+  </div>
 
 </body>
 </html>
