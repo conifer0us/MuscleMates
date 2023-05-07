@@ -9,7 +9,9 @@ export class DBLinker {
         switch (platform()) {
             case "win32":
                 const filecreated = await this.createFileIfNotExists(dbname);
-                try {await fs.rmSync("./build/active.db");} 
+                try {
+                    fs.rmSync("./build/active.db");
+                } 
                 catch (e) {
                     console.log("Unable to Change Database Link; DB File in Use. Will continue using current database.");
                     return;
