@@ -1,3 +1,6 @@
+# Ignore Prisma Data
+/prisma/migrations/
+
 # Ignore Environment Configuration File
 .env
 

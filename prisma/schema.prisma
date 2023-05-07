@@ -20,16 +20,20 @@ model Friends{
   friendName      String
   friendAdded     User @relation("friendAdded", fields: [friendAddedName], references: [username])
   friendAddedName String
-  messages        Messages[] @relation("group")
+  messages        Messages[] @relation("friendset")
   @@unique([friendAddedName, friendName])
 }
 
 model Messages {
   id              Int @id @default(autoincrement())
-  group           Friends @relation("group", fields: [user1, user2], references: [friendName, friendAddedName])
-  user1           String
-  user2           String
-  timesent        DateTime
+  friendset       Friends @relation("friendset", fields: [friendid], references: [id], onDelete: Cascade)
+  friendid        Int
+  sender          User @relation("sender", fields: [senderName], references: [username])
+  senderName      String
+  receiver        User @relation("receiver", fields: [receiverName], references: [username])
+  receiverName    String
+  timesent        DateTime @default(now())
+  data            String
 }
 
 model MatchRequest {
@@ -62,4 +66,6 @@ model User {
   cookies                 Cookie[] @relation("cookies")
   requestsSent            MatchRequest[] @relation("sender")
   requestsReceived        MatchRequest[] @relation("receiver")
+  messagesSent            Messages[] @relation("sender")
+  messagesReceived        Messages[] @relation("receiver")
 }

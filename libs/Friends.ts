@@ -1,5 +1,5 @@
 // Defines a Friends Class that Stores Information about the Users that are Friends (one has accepted another's request)
-import { PrismaClient, Friends} from "@prisma/client";
+import { PrismaClient, Friends } from "@prisma/client";
 
 export class FriendsInfo {
     prisma: PrismaClient
@@ -95,8 +95,13 @@ export class FriendsInfo {
 
     // Returns a Promise Object that Resolves to True if Users are Friends or False if Users are not Friends
     areFriends = async (username1 : string, username2 : string) : Promise<boolean> => {
+        return Boolean<Friends>(await this.getFriends(username1, username2));
+    }
+
+    // Returns a Promise that Resolves to a Friends Object between two users
+    getFriends = async (username1 : string, username2 : string, message_num : number = 0) : Promise<Friends> => {
         try {
-            const frendata = await this.prisma['friends'].findFirst({
+            return await this.prisma['friends'].findFirst({
                 where: {
                     "OR": [
                         {
@@ -112,15 +117,23 @@ export class FriendsInfo {
                             ]
                         }
                     ],
-                }
-            });
+                },
 
-            if (frendata) {
-                return true;
-            } return false;
-        } catch (e) {
-            console.log(e.message);
-            return false;
+                include: {
+                    messages: {
+                        orderBy: {id: 'asc'}, 
+                        take: message_num,
+                        select: {
+                            senderName: true,
+                            receiverName: true,
+                            timesent: true, 
+                            data: true
+                        }
+                    }
+                }, 
+            });
+        } catch(e) {
+            return null;
         }
     }
 }

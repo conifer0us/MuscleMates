@@ -23,7 +23,6 @@ export class ProfileInfo {
 
         } catch (error) {
             if (error){
-                console.log(error.message)
                 return false;
             }
         }
@@ -83,7 +82,6 @@ export class ProfileInfo {
             return prof.name;
         } catch (error) {
             if (error) {
-                console.log(error.message)
                 return "";
             }
         }
@@ -101,7 +99,6 @@ export class ProfileInfo {
             return prof.age;
         } catch (error) {
             if (error) {
-                console.log(error.message)
                 return ""
             }
         }
@@ -119,7 +116,6 @@ export class ProfileInfo {
             return prof.bio
         } catch (error) {
             if (error) {
-                console.log(error.message)
                 return ""
             }
         }
@@ -137,7 +133,6 @@ export class ProfileInfo {
             return prof.gym
         } catch (error) {
             if (error) {
-                console.log(error.message)
                 return ""
             }
         }
@@ -154,7 +149,6 @@ export class ProfileInfo {
             return {"name": prof.name, "age": prof.age, "bio": prof.bio, "gym": prof.gym}
         } catch (error) {
             if (error) {
-                console.log(error.message)
                 return {}
             }
         }
@@ -174,7 +168,6 @@ export class ProfileInfo {
             return profList;
         }   catch (error) {
             if (error) {
-                console.log(error.message);
                 return [];
             }
         }
