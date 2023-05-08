@@ -69,7 +69,6 @@ export class Auth {
 
         } catch (error) {
             if (error) {
-                console.log(error.message);
                 return false;
             }
         }     
@@ -124,7 +123,6 @@ export class Auth {
 
         } catch (error) {
             if (error) {
-                console.log(error.message)
                 return "";
             }
         }

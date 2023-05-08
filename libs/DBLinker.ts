@@ -9,8 +9,14 @@ export class DBLinker {
         switch (platform()) {
             case "win32":
                 const filecreated = await this.createFileIfNotExists(dbname);
-                try {await fs.rmSync("./build/active.db");} catch {}; 
-                await execSync(`mklink /H "./build/active.db" "${dbname}"`); 
+                try {
+                    fs.rmSync("./build/active.db");
+                } 
+                catch (e) {
+                    console.log("Unable to Change Database Link; DB File in Use. Will continue using current database.");
+                    return;
+                };
+                await execSync(`mklink /H "./build/active.db" "${dbname}"`);
                 if (filecreated) {
                     await execSync(`npm run reset-prisma`);
                     console.log("New DB Created. Prisma reset.");

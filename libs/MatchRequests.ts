@@ -35,7 +35,7 @@ export class MatchRequests{
                 return true;
             } return false;
         }
-        catch (e) { console.log(e.message); return false;}
+        catch (e) {return false;}
     }
 
     //Inserts a match request into the table if there isn't already a request between the two users
@@ -92,7 +92,6 @@ export class MatchRequests{
 
             return userlist.map<string>((mrq: MatchRequest) => { return mrq.receiverName });
         } catch(e) {
-            console.log(e.message);
             return [];
         }
     }
@@ -110,7 +109,6 @@ export class MatchRequests{
 
             return userlist.map<string>((mrq: MatchRequest) => { return mrq.senderName });
         } catch(e) {
-            console.log(e.message);
             return [];
         }
     }
@@ -130,7 +128,6 @@ export class MatchRequests{
             return true;
         }
         catch(e) {
-            console.log(e.message);
             return false;
         }
     }
