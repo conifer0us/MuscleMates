@@ -6,6 +6,7 @@ $medium-blue: #1B2A41
 $dark-blue: #0C1421
 $shadow-black: #050a11
 $contrast-orange: #EE8434
+$friends-blue: #2d78ba
 
 $font-stack: 'Big Shoulders Display', cursive
 
@@ -249,11 +250,15 @@ button
 .friend
     height: 150px
     width: 100%
-    background-color: $light-navy-blue
+    background-color: $friends-blue
     border-radius: 10px
 
     display: flex
     align-items: center
+
+    &:hover
+        cursor: pointer
+        background-color: color.scale($friends-blue, $lightness: -15%)
 
 .recs-title-link-div
     @include flex(row, space-between, center)

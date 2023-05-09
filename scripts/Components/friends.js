@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 function FriendDiv(username, fullname, gym, age, bio) {
     return (
       <div className="recommendation-container" username={username}>
-        <div className="friend">
+        <a className="friend" href={"messages"} style={{textDecoration: 'none'}}>
             <div className="rec-info-container">
                 <div className="rec-profile-pic"></div>
                 <div className="rec-info">
@@ -43,7 +43,8 @@ function FriendDiv(username, fullname, gym, age, bio) {
                       </div>
                   </div>
               </div>
-          </div>
+              <span className="arrow-send material-symbols-outlined">send</span>
+          </a>
       </div>
     )
 }
