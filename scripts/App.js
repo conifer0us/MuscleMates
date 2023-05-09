@@ -8,6 +8,7 @@ import { RecommendationsPage } from './Components/recommendations';
 import { FriendsPage } from './Components/friends';
 import { MatchRequestsPage } from './Components/matchrequests';
 import { MyApp } from './Components/test';
+import { MessagePage } from './Components/messages';
 
 let path = window.location.pathname
 
@@ -40,6 +41,10 @@ if (path == "/friends") {
 
 if (path == "/index.html") {
     appRoot.render(<Index />)
+}
+
+if (path == "/messages") {
+    appRoot.render(<MessagePage />)
 }
 
 // React Testing Homepage

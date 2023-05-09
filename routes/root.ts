@@ -250,6 +250,19 @@ export class RootRoutes {
                 }
             });
         });
+
+        // Send MessagePage File for MessagePage Requests
+        server.get("/messages", (req, res) => {
+            auth.checkReqCookie(req).then((cookieuser) => {
+                if (cookieuser) {
+                    res.status(200);
+                    res.sendFile(path.join(templatepath, "reactindex.html"));
+                }
+                else {
+                    res.redirect("/login.html");
+                }
+            });
+        });
     
         server.use(resname, router);
     }
