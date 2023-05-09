@@ -8,6 +8,17 @@ export class Preferences {
         this.prisma = prisma
     }
 
+    getPrisma = async () : Promise<PrismaClient> => {
+        try {
+            return this.prisma
+        } catch(error) {
+            if (error) {
+                console.log(error)
+                return null
+            }
+        }
+    }
+
     //retrieves schedule from the database for a given username
     //Resolves to the schedule string if it is found or an empty string if it isn't
     getSchedule = async(username : string) : Promise<string> => {
@@ -28,18 +39,18 @@ export class Preferences {
 
     //retrieves preferred workout types from the database for a given username
     //Resolves to a list of preferred workout types if it is found or an empty list if it isn't
-    getWorkoutTypes = async(username : string) : Promise<BigInt> => {
+    getWorkoutTypes = async(username : string) : Promise<string> => {
         try{
             const pref = await this.prisma['preferences'].findUnique({
                 where:{
                     username: username,
                 }
             })
-            return BigInt(pref.workoutTypes);
+            return pref.workoutTypes;
         } catch (error) {
             if (error) {
                 console.log(error.message)
-                return BigInt(0);
+                return '';
             }
         }
     }
@@ -53,7 +64,7 @@ export class Preferences {
                     username: username,
                 }
             })
-            return pref.getFilterByGender;
+            return pref.filterByGender;
         } catch (error) {
             if (error) {
                 console.log(error.message)
@@ -71,7 +82,7 @@ export class Preferences {
                     username: username,
                 }
             })
-            return pref.getFilterByGym;
+            return pref.filterByGym;
         } catch (error) {
             if (error) {
                 console.log(error.message);
@@ -80,8 +91,9 @@ export class Preferences {
         }
     }
 
-
-    insertPreferences = async(username: string, schedule: string, workoutTypes: string[], filterByGender: boolean, filterByGym: boolean) : Promise<boolean> => {
+    // inserts a user's recommendation preferences into the database
+    // resolves to true if successful; resolves to false if an error is encountered
+    insertPreferences = async(username: string, schedule: string, workoutTypes: string, filterByGender: boolean, filterByGym: boolean) : Promise<boolean> => {
         try {
                 await this.prisma['preferences'].upsert({
                     where: {
