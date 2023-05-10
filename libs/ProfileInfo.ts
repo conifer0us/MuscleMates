@@ -32,7 +32,8 @@ export class ProfileInfo {
     //inserts a user profile including username, name, age, bio, and gym
     //if the username exists in the database already, the function updates the name, age, bio, and gym for this profile
     //if the username doesn't exist already, the function inserts a new profile with the username and other info
-    insertProfile = async(username : string, newName : string, newAge : string, newBio : string, newGym : string) : Promise<boolean> => {
+    //updated to include gender and pronouns
+    insertProfile = async(username : string, newName : string, newAge : string, newBio : string, newGym : string, newGender : string = '', newPronouns : string = '') : Promise<boolean> => {
         try{
             await this.prisma['profile'].upsert({
                 where: {
@@ -43,12 +44,16 @@ export class ProfileInfo {
                     age: newAge,
                     bio: newBio,
                     gym: newGym,
+                    gender: newGender,
+                    pronouns: newPronouns,
                 },
                 create: {
                     name: newName,
                     age: newAge,
                     bio: newBio,
                     gym: newGym,
+                    gender: newGender,
+                    pronouns: newPronouns,
                     user: {
                         connectOrCreate: {
                             where: {
@@ -138,6 +143,42 @@ export class ProfileInfo {
         }
     }
 
+    //retrieves gender from the database for a given username
+    //Resolves to the gender if it is found or an empty string if it isn't
+    getGender = async(username : string) : Promise<string> => {
+        try{
+            const prof = await this.prisma['profile'].findUnique({
+                where:{
+                    username: username,
+                }
+            })
+            return prof.gender
+        } catch (error) {
+            if (error) {
+                console.log(error.message)
+                return ""
+            }
+        }
+    }
+
+    //retrieves pronouns from the database for a given username
+    //Resolves to the pronouns if it is found or an empty string if it isn't
+    getPronouns = async(username : string) : Promise<string> => {
+        try{
+            const prof = await this.prisma['profile'].findUnique({
+                where:{
+                    username: username,
+                }
+            })
+            return prof.pronouns
+        } catch (error) {
+            if (error) {
+                console.log(error.message)
+                return ""
+            }
+        }
+    }
+
     //Resolves to Dictionary Representation of Profile Information
     getProfInfo = async(username : string) : Promise<{}> =>{
         try{
@@ -146,7 +187,7 @@ export class ProfileInfo {
                     username: username,
                 }
             });
-            return {"name": prof.name, "age": prof.age, "bio": prof.bio, "gym": prof.gym}
+            return {"name": prof.name, "age": prof.age, "bio": prof.bio, "gym": prof.gym, "gender": prof.gender, "pronouns": prof.pronouns}
         } catch (error) {
             if (error) {
                 return {}

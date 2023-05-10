@@ -8,17 +8,17 @@ datasource db {
 }
 
 model Cookie {
-  id  Int     @id @default(autoincrement())
-  username    String 
-  cookieval   String @unique
-  user        User   @relation("cookies", fields: [username], references: [username])
+  id        Int    @id @default(autoincrement())
+  username  String
+  cookieval String @unique
+  user      User   @relation("cookies", fields: [username], references: [username])
 }
 
-model Friends{
-  id              Int  @id @default(autoincrement())
-  friend          User @relation("friend", fields: [friendName], references: [username])
+model Friends {
+  id              Int    @id @default(autoincrement())
+  friend          User   @relation("friend", fields: [friendName], references: [username])
   friendName      String
-  friendAdded     User @relation("friendAdded", fields: [friendAddedName], references: [username])
+  friendAdded     User   @relation("friendAdded", fields: [friendAddedName], references: [username])
   friendAddedName String
   messages        Messages[] @relation("friendset")
   @@unique([friendAddedName, friendName])
@@ -37,32 +37,34 @@ model Messages {
 }
 
 model MatchRequest {
-  id Int        @id @default(autoincrement())
-  sender        User @relation("sender", fields: [senderName], references: [username], onUpdate: NoAction)  
-  senderName    String 
-  receiver      User @relation("receiver", fields: [receiverName], references: [username], onUpdate: NoAction)
+  id           Int    @id @default(autoincrement())
+  sender       User   @relation("sender", fields: [senderName], references: [username], onUpdate: NoAction)
+  senderName   String
+  receiver     User   @relation("receiver", fields: [receiverName], references: [username], onUpdate: NoAction)
   receiverName String
   @@unique([senderName, receiverName])
 }
 
 model Profile {
-  id Int      @id @default(autoincrement())
-  username    String @unique
-  name        String?
-  age         String?
-  bio         String?
-  gym         String?
-  user        User   @relation("userProfile", fields: [username], references: [username], onDelete: Cascade)
+  id       Int     @id @default(autoincrement())
+  username String  @unique
+  name     String?
+  age      String?
+  bio      String?
+  gym      String?
+  gender   String?
+  pronouns String?
+  user     User    @relation("userProfile", fields: [username], references: [username], onDelete: Cascade)
 }
 
 model Preferences {
-  id              Int @id @default(autoincrement())
-  username        String @unique
-  schedule        String?
-  workoutTypes    String?
-  filterByGender  Boolean?
-  filterByGym     Boolean?
-  user            User @relation("userPreferences", fields: [username], references: [username], onDelete: Cascade)
+  id             Int      @id @default(autoincrement())
+  username       String   @unique
+  schedule       String?
+  workoutTypes   String?
+  filterByGender Boolean?
+  filterByGym    Boolean?
+  user           User     @relation("userPreferences", fields: [username], references: [username], onDelete: Cascade)
 }
 
 model User {
