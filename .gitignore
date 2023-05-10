@@ -1,6 +1,9 @@
 # Ignore Prisma Data
 /prisma/migrations/
 
+# Ignore VSCode
+./vscode
+
 # Ignore Environment Configuration File
 .env
 
