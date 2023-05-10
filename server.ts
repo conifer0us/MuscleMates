@@ -11,7 +11,9 @@ import { exit } from 'process';
 import bodyparser from 'body-parser';
 const formdecoder = bodyparser.urlencoded({extended:false});
 import {PrismaClient} from "@prisma/client";
-import { DBLinker } from './libs/DBLinker';
+import {Preferences} from "./libs/Preferences"
+import {RecHandler} from "./libs/RecHandler"
+import {DBLinker} from './libs/DBLinker';
 import {SubmitRoutes} from './routes/submit';
 import {APIRoutes} from './routes/api';
 import {RootRoutes} from './routes/root';
@@ -35,6 +37,8 @@ let auth : Auth
 let prof : ProfileInfo
 let matchreq : MatchRequests
 let friends : FriendsInfo
+let preferences : Preferences
+let rechandler : RecHandler
 
 // Defines and Configures Express Server with a Cookie Parser and File Upload Parsing
 server.use(cookieParser());
@@ -68,6 +72,8 @@ async function main() {
     prof = new ProfileInfo(prisma);
     matchreq = new MatchRequests(prisma);
     friends = new FriendsInfo(prisma);
+    preferences = new Preferences(prisma);
+    rechandler = new RecHandler(prof, preferences, friends, 20);
 
     // Runs a Set of Statements to Prepare Database in Case of Testing Mode
     if (args[2] == "test") {await test();} 
