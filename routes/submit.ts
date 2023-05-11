@@ -7,17 +7,38 @@ import { Auth } from "../libs/Auth";
 import { FriendsInfo } from "../libs/Friends";
 import { MatchRequests } from '../libs/MatchRequests';
 import { ProfileInfo } from '../libs/ProfileInfo';
+import { MessageInfo } from '../libs/Messages';
 
 export class SubmitRoutes {
-    static configureRouter(server : Express, resname : string, auth : Auth, prof : ProfileInfo, matchreqs : MatchRequests, friends : FriendsInfo) {
+    static configureRouter(server : Express, resname : string, auth : Auth, prof : ProfileInfo, matchreqs : MatchRequests, 
+        friends : FriendsInfo, messages: MessageInfo, formdecoder) {
         let router = Router(); 
         
+        // Allow Users to Submit a Message to Another User
+        // Should Include Form Data with user, message set
+        router.post("/message/:user", formdecoder, async (req, res) => {
+            const user = req.params['user'];
+            auth.checkReqCookie(req).then(async (username) => {
+                // Checks if Cookie is Invalid, No User or Message Set, or Users are Not Friends
+                if (!username || !req.body || !user || !req.body.message || !(await friends.areFriends(username, req.body.user))) {
+                    res.status(400);
+                    res.send();
+                    return;
+                }
+
+                messages.insertMessage(username, user, req.body.message);
+                res.status(200);
+                res.send();
+                return;
+            })
+        });
+
         // Allow Users to Submit Profile Information
         // Should Include Form Data with name, age, bio, gym form data set
         router.post("/profile", (req, res) => {
             auth.checkReqCookie(req).then((username) => {
                 // If name, age, bio, or gym not set, status 400 and send response
-                if (!username || !req.body.name || !req.body.age || !req.body.bio || !req.body.gym) {
+                if (!username || !req.body || !req.body.name || !req.body.age || !req.body.bio || !req.body.gym) {
                     res.status(400);
                     res.send();
                     return;

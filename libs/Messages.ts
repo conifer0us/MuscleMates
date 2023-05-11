@@ -17,16 +17,20 @@ export class MessageInfo {
 
     // Inserts a Message Between Two Users into the Database
     async insertMessage(sender: string, receiver: string, messagestring: string): Promise<boolean> {
-        const frenobj: Friends = await this.friends.getFriends(sender, receiver);
+        const frenobj: FriendsWithMessages = <FriendsWithMessages> await this.friends.getFriends(sender, receiver, 1);
+
+        const nextMessageID :number = (frenobj.messages[0] ? frenobj.messages[0].conversationid + 1 : 0);
 
         if (!frenobj) return false;
 
-        try {
-            this.prisma['messages'].create(
+        try {            
+            await this.prisma['messages'].create(
                 {
                     data: {
                         friendset: {
-                            connect: frenobj
+                            connect: {
+                                id: frenobj.id
+                            },
                         },
                         sender: {
                             connect: {
@@ -38,10 +42,13 @@ export class MessageInfo {
                                 username: receiver, 
                             }
                         }, 
+                        conversationid: nextMessageID,
                         data: messagestring,
                     }
                 }
             );
+
+            return true;
         } catch (e) {
             console.log(e.message);
             return false;
@@ -49,8 +56,8 @@ export class MessageInfo {
     }
 
     // Gets a Set of a certain number of Messages Between Two Users as a List of Messages Object
-    async getMessages(sender : string, receiver: string, num : number): Promise<Messages[]> {
-        const frenobjWithMessages : FriendsWithMessages = <FriendsWithMessages>(await this.friends.getFriends(sender, receiver, num));
+    async getMessages(sender : string, receiver: string, num : number, startindex = -1): Promise<Messages[]> {
+        const frenobjWithMessages : FriendsWithMessages = <FriendsWithMessages>(await this.friends.getFriends(sender, receiver, num, startindex));
 
         // If Users are not Friends, return an empty list of messages
         if (!frenobjWithMessages) return []; 

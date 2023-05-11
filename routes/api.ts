@@ -7,15 +7,61 @@ import { Auth } from "../libs/Auth";
 import { FriendsInfo } from "../libs/Friends";
 import { MatchRequests } from '../libs/MatchRequests';
 import { ProfileInfo } from '../libs/ProfileInfo';
+import { MessageInfo } from '../libs/Messages';
+import { Messages } from '@prisma/client';
 
 export class APIRoutes {
-    static configureRouter(server: Express, resname: string, auth: Auth, prof: ProfileInfo, matchrequests: MatchRequests, friends: FriendsInfo) {
+    static configureRouter(server: Express, resname: string, auth: Auth, prof: ProfileInfo, 
+        matchrequests: MatchRequests, friends: FriendsInfo, messages: MessageInfo, formdecoder) {
         let router = Router();
         // Sends Basic API Welcome Message with 200 Status Code For Simple /api request
         router.get("/", (req, res) => {
             res.status(200);
             res.setHeader('Content-Type', 'application/json');
             res.json({ "msg": "Welcome to the Public API!" });
+        });
+
+        // Sends A Set of Messages Between Two Users With a Specified Length From a Start Index
+        // Authenticated Endpoint: User must be logged in and friends with the other specified user
+        // Returns JSON Data in the Following Format:
+        /*{
+            "messages": [ 
+                1: {
+                    "sender" : uname,
+                    "receiver": uname,
+                    "timesent": timestring,
+                    "data": messagedata
+                }
+                2: ...
+            ]
+          } */
+        // Expects form elements: num, startindex (-1 to start at the end)
+        router.post("/message/:username", formdecoder, async (req, res) => {
+            const otheruser = req.params["username"];
+            auth.checkReqCookie(req).then(async (user) => {
+                if (!user || !req.body || !req.body.num || !req.body.startindex || !otheruser || !(await friends.areFriends(user, otheruser))) {
+                    console.log(`${user} ${req.body.num} ${otheruser}`);
+                    res.status(400).json(null);
+                    return;   
+                }
+                try {
+                    let returnmessages = {};
+                    let messageset = await messages.getMessages(user, otheruser, parseInt(req.body.num), parseInt(req.body.startindex));
+                    messageset.forEach((message : Messages) => {
+                        returnmessages[message.conversationid] = {
+                            "sender": message.senderName, 
+                            "receiver": message.receiverName,
+                            "date": message.timesent.toUTCString(), 
+                            "data": message.data,
+                        };
+                    });
+
+                    res.status(200).json(returnmessages);
+                    return; 
+                } catch(e) {
+                    res.status(400).json(null);
+                }
+            });
         });
 
         // Returns Profile Information In JSON Format for a Supplied Username

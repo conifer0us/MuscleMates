@@ -28,6 +28,7 @@ model Messages {
   id              Int @id @default(autoincrement())
   friendset       Friends @relation("friendset", fields: [friendid], references: [id], onDelete: Cascade)
   friendid        Int
+  conversationid  Int
   sender          User @relation("sender", fields: [senderName], references: [username])
   senderName      String
   receiver        User @relation("receiver", fields: [receiverName], references: [username])
