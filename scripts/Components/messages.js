@@ -22,7 +22,7 @@ export function MessagePage() {
     function sendMessage() {
         console.log(`Posting New Message: ${currentMessageData}`)
         setMessagesData(currentMessageData)
-        fetch("message-endpoint", {method: "POST", message: currentMessageData})
+        fetch(`/submit${window.location.pathname}`, {method: "POST", body: new FormData(document.getElementById("messagesubmit"))})
         .then((res) => {
             res.json().then(JSONData => {
                 setMessagesData(JSONData)
@@ -47,8 +47,8 @@ export function MessagePage() {
                 <div id="messages-container">
                     {/* <SeeMessagesData /> */}
                 </div>
-                <form onSubmit={sendMessage}>
-                    <input placeholder="Type Message" value={currentMessageData} onChange={changeWordData}></input>
+                <form id="messagesubmit" onSubmit={sendMessage}>
+                    <input name="message" placeholder="Type Message" value={currentMessageData} onChange={changeWordData}></input>
                     <button type="submit">Send Message</button>
                 </form>
             </div>

@@ -99,7 +99,7 @@ export class FriendsInfo {
     }
 
     // Returns a Promise that Resolves to a Friends Object between two users
-    getFriends = async (username1 : string, username2 : string, message_num : number = 0) : Promise<Friends> => {
+    getFriends = async (username1 : string, username2 : string, message_num : number = 0, startindex : number = -1) : Promise<Friends> => {
         try {
             return await this.prisma['friends'].findFirst({
                 where: {
@@ -121,18 +121,25 @@ export class FriendsInfo {
 
                 include: {
                     messages: {
-                        orderBy: {id: 'asc'}, 
+                        orderBy: {conversationid: 'desc'}, 
+                        where : {
+                            conversationid : ((startindex < 0) ? 
+                            {gte: 0} : 
+                            {lte: startindex}),
+                        }, 
                         take: message_num,
                         select: {
                             senderName: true,
                             receiverName: true,
                             timesent: true, 
-                            data: true
+                            data: true, 
+                            conversationid: true
                         }
                     }
                 }, 
             });
         } catch(e) {
+            console.log(e);
             return null;
         }
     }

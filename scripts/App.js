@@ -43,7 +43,7 @@ if (path == "/index.html") {
     appRoot.render(<Index />)
 }
 
-if (path == "/messages") {
+if (path == "/messages/*/") {
     appRoot.render(<MessagePage />)
 }
 
