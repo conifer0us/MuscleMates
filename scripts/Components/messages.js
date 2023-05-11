@@ -43,7 +43,7 @@ export function MessagePage() {
     return (
         <>
             <div className="tab">
-                <h2><a className="orange-link" href="friends">Back to Friends Page</a></h2>
+                <h2><a className="orange-link" href="/friends">Back to Friends Page</a></h2>
                 <div id="messages-container">
                     {/* <SeeMessagesData /> */}
                 </div>

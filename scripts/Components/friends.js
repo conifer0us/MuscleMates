@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 function FriendDiv(username, fullname, gym, age, bio) {
     return (
       <div className="recommendation-container" username={username}>
-        <a className="friend" href={`messages/${username}/`} style={{textDecoration: 'none'}}>
+        <a className="friend" href={`/messages/${username}/`} style={{textDecoration: 'none'}}>
             <div className="rec-info-container">
                 <div className="rec-profile-pic"></div>
                 <div className="rec-info">
