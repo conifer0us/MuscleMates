@@ -36,17 +36,16 @@ export class APIRoutes {
             ]
           } */
         // Expects form elements: num, startindex (-1 to start at the end)
-        router.post("/message/:username", formdecoder, async (req, res) => {
+        router.get("/message/:username/*", async (req, res) => {
             const otheruser = req.params["username"];
             auth.checkReqCookie(req).then(async (user) => {
-                if (!user || !req.body || !req.body.num || !req.body.startindex || !otheruser || !(await friends.areFriends(user, otheruser))) {
-                    console.log(`${user} ${req.body.num} ${otheruser}`);
+                if (!user || !req.query || !req.query.num || !req.query.startindex || !otheruser || !(await friends.areFriends(user, otheruser))) {
                     res.status(400).json(null);
                     return;   
                 }
                 try {
                     let returnmessages = {};
-                    let messageset = await messages.getMessages(user, otheruser, parseInt(req.body.num), parseInt(req.body.startindex));
+                    let messageset = await messages.getMessages(user, otheruser, parseInt(<string>req.query.num), parseInt(<string>req.query.startindex));
                     messageset.forEach((message : Messages) => {
                         returnmessages[message.conversationid] = {
                             "sender": message.senderName, 
