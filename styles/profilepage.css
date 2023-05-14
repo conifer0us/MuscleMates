@@ -52,8 +52,8 @@ h5 {
     position: absolute;
     width: 113px;
     height: 57px;
-    left: 500px;
-    top: 150px;
+    left: 26%;
+    top: 17%;
 
     font-family: 'Big Shoulders Display';
     font-style: normal;
@@ -69,8 +69,8 @@ h6 {
     position: absolute;
     width: 349px;
     height: 23px;
-    left: 485px;
-    top: 250px;
+    left: 25.3%;
+    top: 27%;
 
     font-family: 'Big Shoulders Display';
     font-style: normal;
@@ -86,8 +86,8 @@ h6 {
     position: absolute;
     width: 1000px;
     height: 160px;
-    left: 300px;
-    top: 65px;
+    left: 23%;
+    top: 7%;
 
     background: radial-gradient(50% 50% at 50% 50%, rgba(248, 107, 0, 0) 54.11%, rgba(101, 51, 13, 0.2) 100%), #FD984B;
     background-blend-mode: overlay, normal;
@@ -98,8 +98,8 @@ h6 {
     position: absolute;
     width: 55px;
     height: 40px;
-    left: 1230px;
-    top: 245px;
+    left: 71%;
+    top: 26%;
     border-style: hidden;
     border-radius: 10px;
 
@@ -114,6 +114,11 @@ h6 {
     text-align: center;
     display: flex;
 
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+
     color: #000000;
 }
 
@@ -127,8 +132,8 @@ h6 {
     position: absolute;
     width: 1000px;
     height: 580px;
-    left: 300px;
-    top: 373px;
+    left: 23%;
+    top: 37%;
 
     background: #1B2A41;
     border-radius: 40px;
@@ -221,7 +226,7 @@ h6 {
 .button1 {
 
     position: absolute;
-    width: 50px;
+    width: 48px;
     height: 25px;
     left: 600px;
     top: 430px;
@@ -239,8 +244,19 @@ h6 {
     padding-left: 10px;
     align-items: center;
 
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+
     color: #000000;
 
+}
+
+.button1:hover {
+    cursor: pointer;
+    color: #f09753;
+    background-color: #101d30;
 }
 
 .button2 {
@@ -264,32 +280,26 @@ h6 {
     align-items: center;
     padding-left: 12px;
 
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+
     color: #000000;
 }
 
-.button12:hover {
+.button2:hover {
     cursor: pointer;
     color: #f09753;
     background-color: #101d30;
-}
-
-.maincircle {
-    position: absolute;
-    width: 170px;
-    height: 170px;
-    left: 320px;
-    top: 181px;
-    border-radius: 100%;
-
-    background-color: #DDDDE7;
 }
 
 .settings-div {
     position: absolute;
     width: 140px;
     height: 160px;
-    top: 86px;
-    left: 80px;
+    top: 9%;
+    left: 5%;
     background-color: #1B2A41;
     display: flex;
 }
