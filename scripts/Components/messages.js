@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 export function MessagePage() {
 
     const [messagesData, setMessagesData] = useState([])
-    const [currentMessageData, setCurrentMessageData] = useState("")
+
+    let currentMessageData = ""
 
     let displayedmessageslist = []
 
@@ -13,7 +14,7 @@ export function MessagePage() {
 
     useEffect(() => {
         fetchOwnUsername()
-        window.addEventListener('load', () => setInterval(fetchOwnUsername, 1000))
+        window.addEventListener('load', () => setInterval(fetchPeriodic, 500))
     }, [])
 
     function fetchOwnUsername(origin = 'initial') {
@@ -36,9 +37,7 @@ export function MessagePage() {
 
 
     function fetchAllMessages(num) {
-        console.log(ownUsername, "is messaging: ", userMessaged)
         console.log("Fetching Messages:")
-
         fetch(`/api/message/${userMessaged}/?num=${num}&startindex=-1`)
         .then((res) => {
             res.json().then((JSONData) => {
@@ -55,16 +54,32 @@ export function MessagePage() {
         })
     }
 
+    function fetchPeriodic() {
+        fetch(`/api/message/${userMessaged}/?num=1&startindex=-1`)
+        .then((res) => {
+            res.json().then((JSONData) => {
+                for (const key in JSONData) {
+                    console.log(JSONData[key].data,"         ",displayedmessageslist[0][1])
+                    if (JSONData[key].data != displayedmessageslist[0][1]) {
+                        fetchAllMessages(1)
+                    }
+                }
+            })
+        })
+    }
+
     function sendMessage() {
         setMessagesData(messagesData.concat([currentMessageData]))
         fetch(`/submit/message/${userMessaged}`, {method: "POST", body: new FormData(document.getElementById("messagesubmit"))})
         console.log("Submitted message: ", currentMessageData)
-        setCurrentMessageData("")
+        currentMessageData = ""
+        document.getElementById("message-input").value = ""
         fetchOwnUsername('message-sent')
     }
 
     function changeWordData(e) {
-        setCurrentMessageData(e.target.value)
+        //setCurrentMessageData(e.target.value)
+        currentMessageData = e.target.value
     }
 
     function SeeMessagesData() {
@@ -92,7 +107,7 @@ export function MessagePage() {
     return (
         <>
             <div className="tab">
-                <h2><a className="orange-link" href="/friends">Back to Friends Page</a>                <button onClick={loadMoreMessages}>See more</button></h2>
+                <h2 id="top-container-messages"><a className="orange-link" href="/friends">Back to Friends Page</a><button id="show-more-messages" onClick={loadMoreMessages}>See more</button></h2>
                 <div id="messages-container">
                     <SeeMessagesData />
                 </div>
@@ -100,7 +115,7 @@ export function MessagePage() {
                     e.preventDefault();
                     sendMessage();
                     }}>
-                    <input id="message-input" name="message" placeholder="Type Message" value={currentMessageData} onChange={changeWordData}></input>
+                    <input id="message-input" name="message" placeholder="Type Message" onChange={changeWordData}></input>
                     <button type="submit">Send Message</button>
                 </form>
             </div>

@@ -368,6 +368,15 @@ button
 .logotext
     font-size: 40px
 
+#top-container-messages
+    @include flex(row, flex-start)
+    flex-wrap: nowrap
+    gap: 68%
+
+#show-more-messages
+    position: relative
+    place-self: end
+
 #messagesubmit
     position: fixed
     bottom: 3%
@@ -377,7 +386,7 @@ button
 
 #messages-list
     position: fixed
-    height: 68vh
+    height: 71vh
     width: 90vw
     display: flex
     flex-direction: column-reverse
