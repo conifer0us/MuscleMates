@@ -43,7 +43,7 @@ function FriendDiv(username, fullname, gym, age, bio) {
                       </div>
                   </div>
               </div>
-              <span className="arrow-send material-symbols-outlined">send</span>
+              <span className="arrow-send material-symbols-outlined">forum</span>
           </a>
       </div>
     )
