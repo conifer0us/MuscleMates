@@ -195,6 +195,20 @@ export class APIRoutes {
             });
         });
 
+        router.get("/myusername", (req, res) => {
+            auth.checkReqCookie(req).then((uname) => {
+                // If User is Not Logged In, status 400 and send
+                if (!uname) {
+                    res.status(400);
+                    res.send();
+                }
+                // If User Logged In, Send The Requests They've Sent
+                else {
+                    res.json(uname)
+                }
+            });
+        });
+
         server.use(resname, router);
     }
 }

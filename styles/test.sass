@@ -367,3 +367,59 @@ button
 
 .logotext
     font-size: 40px
+
+#top-container-messages
+    @include flex(row, flex-start)
+    flex-wrap: nowrap
+    gap: 68%
+
+#show-more-messages
+    position: relative
+    place-self: end
+
+#messagesubmit
+    position: fixed
+    bottom: 3%
+    width: 90%
+    @include flex(row)
+    flex-wrap: nowrap
+
+#messages-list
+    position: fixed
+    height: 71vh
+    width: 90vw
+    display: flex
+    flex-direction: column-reverse
+    gap: 0.5%
+    overflow: scroll
+    scroll-behavior: smooth
+
+    &::-webkit-scrollbar
+        display: none
+
+.sent-message
+    @include stdfont(500, 24px)
+    @include flex(row, center)
+    position: relative
+    width: fit-content
+    max-width: 75%
+    place-self: end
+    padding: 0.3% 2%
+    border-radius: 10px
+    background-color: $friends-blue
+
+.received-message
+    @include stdfont(500, 24px)
+    @include flex(row, center)
+    position: relative
+    width: fit-content
+    max-width: 75%
+    padding: 0.5% 2%
+    border-radius: 10px
+    background-color: $light-navy-blue
+
+    &::after
+        bottom: -0.1rem
+        content: ""
+        height: 1rem
+        position: absolute
