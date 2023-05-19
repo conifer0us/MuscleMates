@@ -91,11 +91,11 @@ async function main() {
         await auth.insertUserPassword("martha9", "Martha Jane", "martha9iscool");
         await prof.insertProfile("martha9", "Evil Martha", "25", "I love TikTok.", "Block Boxing and More");
 
-        await friends.addFriends("martha5", "martha9"); 
-        await messages.insertMessage("martha9", "martha5", "Go suck a rock");
+        let friendsinserted : boolean = await friends.addFriends("martha5", "martha9"); 
+        if (friendsinserted) {await messages.insertMessage("martha9", "martha5", "Want to go to the gym?");}
         
-        await friends.addFriends("martha5", "john123");
-        await messages.insertMessage("martha5", "john123", "I am once again asking you to workout with me.");
+        friendsinserted = await friends.addFriends("martha5", "john123");
+        if (friendsinserted) {await messages.insertMessage("martha5", "john123", "Want to work out at 5 tomorrow?");}
     } 
 
     // Load Externally Defined Express Routes

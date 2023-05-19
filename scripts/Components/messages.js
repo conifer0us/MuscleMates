@@ -1,80 +1,66 @@
 import { useState, useEffect } from "react";
 
+let ownUsername = "";
+
 export function MessagePage() {
 
-    const [messagesData, setMessagesData] = useState([])
+    let [messagesData, setMessagesData] = useState([['','','']]);
+    const [dumbthing, setDumbthing] = useState(0)
 
-    let currentMessageData = ""
+    let displayedmessageslist = [];
 
-    let displayedmessageslist = []
+    let currentMessageData = "";
 
-    let ownUsername = "";
-
-    let userMessaged = window.location.pathname.split("/")[2]
+    let userMessaged = window.location.pathname.split("/")[2];
 
     useEffect(() => {
-        fetchOwnUsername()
-        window.addEventListener('load', () => setInterval(fetchPeriodic, 500))
+        startMessageLoader();
+        setInterval(fetchPeriodic, 500);
     }, [])
 
-    function fetchOwnUsername(origin = 'initial') {
-        fetch("/api/myusername")
-        .then((res) => {
-            res.text().then((textdata) => {
-                ownUsername = textdata.replaceAll('"','')
-                if (origin == 'message-sent') {
-                    fetchAllMessages(messagesData.length + 1)
-                }
-                else if (origin == 'see-more-button') {
-                    fetchAllMessages(messagesData.length + 10)
-                }
-                else {
-                    fetchAllMessages(10)
-                }
-            })
-        })
+    async function startMessageLoader() {
+        const res = await fetch("/api/myusername");
+        ownUsername = (await res.text()).replaceAll('"','');
+        console.log(`🍓🍓Hi ${ownUsername}!🍓🍓`)
+        fetchAllMessages(25);
     }
 
-
     function fetchAllMessages(num) {
-        console.log("Fetching Messages:")
         fetch(`/api/message/${userMessaged}/?num=${num}&startindex=-1`)
         .then((res) => {
             res.json().then((JSONData) => {
                 for (const key in JSONData) {
                     if (JSONData[key].sender == ownUsername) {
-                        displayedmessageslist.unshift([ownUsername, JSONData[key].data])
+                        displayedmessageslist.unshift([ownUsername, JSONData[key].data, key]);
                     }
                     else {
-                        displayedmessageslist.unshift([userMessaged, JSONData[key].data])
+                        displayedmessageslist.unshift([userMessaged, JSONData[key].data, key]);
                     }
-                    setMessagesData(displayedmessageslist)
+                    setMessagesData(displayedmessageslist);
                 }
+                //setDumbthing((prevstate) => prevstate + 1);
             })
         })
     }
 
-    function fetchPeriodic() {
-        fetch(`/api/message/${userMessaged}/?num=1&startindex=-1`)
-        .then((res) => {
-            res.json().then((JSONData) => {
-                for (const key in JSONData) {
-                    console.log(JSONData[key].data,"         ",displayedmessageslist[0][1])
-                    if (JSONData[key].data != displayedmessageslist[0][1]) {
-                        fetchAllMessages(1)
-                    }
-                }
-            })
-        })
+    async function fetchPeriodic() {
+        let res = await fetch(`/api/message/${userMessaged}/?num=1&startindex=-1`);
+        let JSONData = await res.json();
+        for (const key in JSONData) {
+            if (key != displayedmessageslist[0][2]) {
+                displayedmessageslist.unshift([JSONData[key].sender, JSONData[key].data, key]);
+                setMessagesData(displayedmessageslist);
+                setDumbthing((prevstate) => prevstate + 1);
+            }
+        }
     }
 
     function sendMessage() {
         setMessagesData(messagesData.concat([currentMessageData]))
         fetch(`/submit/message/${userMessaged}`, {method: "POST", body: new FormData(document.getElementById("messagesubmit"))})
-        console.log("Submitted message: ", currentMessageData)
         currentMessageData = ""
         document.getElementById("message-input").value = ""
-        fetchOwnUsername('message-sent')
+        fetchAllMessages(messagesData.length + 1);
     }
 
     function changeWordData(e) {
@@ -90,10 +76,10 @@ export function MessagePage() {
             return (
                 <ul id="messages-list">{messagesData.map((message) => {
                     if (message[0] == userMessaged) {
-                        return <li className="received-message"><div>{message[1]}</div></li>
+                        return <li className="received-message" id={message[2]} key={message[2]}><div>{message[1]}</div></li>
                     }
                     else {
-                        return <li className="sent-message"><div>{message[1]}</div></li>
+                        return <li className="sent-message" id={message[2]} key={message[2]}><div>{message[1]}</div></li>
                     }
                 })}</ul>
             )
@@ -101,7 +87,7 @@ export function MessagePage() {
     }
 
     function loadMoreMessages() {
-        fetchOwnUsername('see-more-button')
+        fetchAllMessages(messagesData.length + 10);
     }
 
     return (
@@ -115,7 +101,7 @@ export function MessagePage() {
                     e.preventDefault();
                     sendMessage();
                     }}>
-                    <input id="message-input" name="message" placeholder="Type Message" onChange={changeWordData}></input>
+                    <input id="message-input" name="message" placeholder="Type Message" autoComplete="off" onChange={changeWordData}></input>
                     <button type="submit">Send Message</button>
                 </form>
             </div>
