@@ -2,14 +2,17 @@
 import * as crypto from 'crypto';
 import {Request} from 'express';
 import { PrismaClient } from '@prisma/client';
+import { Preferences } from './PreferenceInfo';
 
 export class Auth {
 
     AUTH_COOKIE_NAME = "AUTH";
     prisma : PrismaClient
+    preferences : Preferences
 
-    constructor(prisma: PrismaClient){
+    constructor(prisma: PrismaClient, preferences : Preferences){
         this.prisma = prisma;
+        this.preferences = preferences; 
     }
 
     // Gets the Hashed (Obfuscated) Version of Text Data
@@ -40,7 +43,10 @@ export class Auth {
                     useremail: email,
                     passwordhash: this.getDataHash(password),
                 },
-            })
+            });
+
+            await this.preferences.insertPreferences(username, "0000000", "00000000000000000000", false, false);
+
             return true;
         } catch (error) {
             if (error) {

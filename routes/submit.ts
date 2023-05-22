@@ -8,10 +8,11 @@ import { FriendsInfo } from "../libs/Friends";
 import { MatchRequests } from '../libs/MatchRequests';
 import { ProfileInfo } from '../libs/ProfileInfo';
 import { MessageInfo } from '../libs/Messages';
+import { Preferences } from '../libs/PreferenceInfo';
 
 export class SubmitRoutes {
     static configureRouter(server : Express, resname : string, auth : Auth, prof : ProfileInfo, matchreqs : MatchRequests, 
-        friends : FriendsInfo, messages: MessageInfo, formdecoder) {
+        friends : FriendsInfo, messages: MessageInfo, preferences : Preferences, formdecoder) {
         let router = Router(); 
         
         // Allow Users to Submit a Message to Another User
@@ -61,6 +62,32 @@ export class SubmitRoutes {
                 prof.insertProfile(username, name, age, bio, gym)
             });
         });
+
+        // Allow Users to Submit Preferences Information
+        // Should Include Form Data with 'schedule' set to a string of 7 0s and 1s
+        // Should Include Form Data with 'workout' data set to a string of 0s and 1s for all workout types
+        // Should Include Form Data with 'filterByGym' and 'filterByGender' (string with 0 or 1)
+        router.post("/preferences", (req, res) => {
+            auth.checkReqCookie(req).then((username) => {
+                // If name, age, bio, or gym not set, status 400 and send response
+                if (!username || !req.body || !req.body.schedule || !req.body.workout || !req.body.filterByGym || !req.body.filterByGender) {
+                    res.status(400);
+                    res.send();
+                    return;
+                }
+
+                const tfregex = /^[01]{1}$/;
+
+                // Checks for Properly Formatted Preference Data
+                if (!/^[01]{7}$/.test(req.body.schedule) || !/^[01]*$/.test(req.body.workout) || !tfregex.test(req.body.filterByGender) || !tfregex.test(req.body.filterByGym)) {
+                    res.status(400);
+                    res.send();
+                    return;
+                }
+
+                preferences.insertPreferences(username, req.body.schedule, req.body.workout, req.body.filterByGender == '1', req.body.filterByGender == '1');
+            });
+        });        
 
         // Endpoint that Allows Users to Accept Friend Requets from Other Users
         // No Data Must Be Supplied, but User Must have a Valid Cookie

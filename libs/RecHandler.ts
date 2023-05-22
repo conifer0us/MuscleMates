@@ -1,6 +1,6 @@
 // class for determining what profiles to recommend to a user based on their profile and preferences
 import { ProfileInfo } from './ProfileInfo';
-import { Preferences } from './Preferences';
+import { Preferences } from './PreferenceInfo';
 import { FriendsInfo } from './Friends'
 
 export class RecHandler {
