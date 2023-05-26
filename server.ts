@@ -75,7 +75,7 @@ async function main() {
     const matchreq = new MatchRequests(prisma);
     const friends = new FriendsInfo(prisma);
     const messages = new MessageInfo(prisma, friends);
-    const rechandler = new RecHandler(prof, preferences, friends, 20);
+    const rechandler = new RecHandler(prof, preferences, friends, matchreq, 20);
 
     // Runs a Set of Statements to Prepare Database in Case of Testing Mode
     if (args[2] == "test") {
@@ -100,7 +100,7 @@ async function main() {
 
     // Load Externally Defined Express Routes
     SubmitRoutes.configureRouter(server, '/submit', auth, prof, matchreq, friends, messages, preferences, formdecoder);
-    APIRoutes.configureRouter(server, '/api', auth, prof, matchreq, friends, messages, preferences, formdecoder);
+    APIRoutes.configureRouter(server, '/api', auth, prof, matchreq, friends, messages, preferences, rechandler, formdecoder);
     RootRoutes.configureRouter(server, '/', auth, configjson, formdecoder);
     ImageRoutes.configureRouter(server, "/profimage", auth, prof, configjson);
 
