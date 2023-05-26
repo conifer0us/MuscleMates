@@ -10,10 +10,11 @@ import { ProfileInfo } from '../libs/ProfileInfo';
 import { MessageInfo } from '../libs/Messages';
 import { Messages } from '@prisma/client';
 import { Preferences } from '../libs/PreferenceInfo';
+import {RecHandler} from '../libs/RecHandler'
 
 export class APIRoutes {
     static configureRouter(server: Express, resname: string, auth: Auth, prof: ProfileInfo, 
-        matchrequests: MatchRequests, friends: FriendsInfo, messages: MessageInfo, preferences : Preferences, formdecoder) {
+        matchrequests: MatchRequests, friends: FriendsInfo, messages: MessageInfo, preferences : Preferences, recHandler : RecHandler, formdecoder) {
         let router = Router();
         // Sends Basic API Welcome Message with 200 Status Code For Simple /api request
         router.get("/", (req, res) => {
@@ -140,17 +141,13 @@ export class APIRoutes {
                 return;
             }
 
-            // Gets the Friend List From the User to Exclude them From Match Recommendations
-            friends.friendList(uname).then((excludelist) => {
-                return [uname].concat(excludelist);
-            }).then(async (excludelist) => {
-                return excludelist.concat(await matchrequests.requestsReceived(uname));
-            }).then(async (excludelist) => {
-                return await (prof.getAllUsers(excludelist.concat(await matchrequests.requestsSent(uname))));
-            }).then((reclist) => {
+            // Gets the recommendations from the RecHandler library
+            
+            recHandler.getRecommendations(uname).then((reclist) => {
                 res.status(200);
                 res.json({"matchrecs": reclist});
-            });  
+            })
+            
         });
 
         // Returns JSON Data with a List of the User's Received Match Requests

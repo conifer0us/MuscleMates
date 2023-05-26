@@ -1,22 +1,25 @@
 // class for determining what profiles to recommend to a user based on their profile and preferences
 import { ProfileInfo } from './ProfileInfo';
 import { Preferences } from './PreferenceInfo';
-import { FriendsInfo } from './Friends'
+import { FriendsInfo } from './Friends';
+import {MatchRequests} from './MatchRequests';
 
 export class RecHandler {
 
     profileInfo : ProfileInfo
     preferences : Preferences
-    friendsInfo: FriendsInfo 
+    friendsInfo: FriendsInfo
+    matchRequests : MatchRequests 
     numWorkoutTypes : number 
     ageWeight : number
     scheduleWeight : number
     workoutWeight : number
 
-    constructor(profileInfo: ProfileInfo, preferences : Preferences, friendsInfo : FriendsInfo, numWorkoutTypes : number, ageWeight : number = 1/3, scheduleWeight : number = 1/3, workoutWeight : number = 1/3 ) {
+    constructor(profileInfo: ProfileInfo, preferences : Preferences, friendsInfo : FriendsInfo, matchRequests : MatchRequests, numWorkoutTypes : number, ageWeight : number = 1/3, scheduleWeight : number = 1/3, workoutWeight : number = 1/3 ) {
         this.profileInfo = profileInfo
         this.preferences = preferences
         this.friendsInfo = friendsInfo
+        this.matchRequests = matchRequests
         this.numWorkoutTypes = numWorkoutTypes
         //weights should add up to 1
         this.ageWeight = ageWeight
@@ -33,7 +36,7 @@ export class RecHandler {
             let ageDiff = Math.abs(user1Age - user2Age);
             //ageScore determined by sigmoid curve based on absolute value of difference between the 2 user's ages
             //The closer the 2 ages are, the higher the ageScore will be
-            let ageScore = 1 / (1 + Math.pow(Math.E, -ageDiff));
+            let ageScore = -1 / (1 + Math.exp(3 - ageDiff / 2)) + 1;
             return ageScore
         } catch (error) {
             if (error) {
@@ -49,16 +52,16 @@ export class RecHandler {
         try {
             let user1Schedule = await this.preferences.getSchedule(username1);
             let user2Schedule = await this.preferences.getSchedule(username2);
-            var countSame = 0
+            var sharedDays = 0
             //assumes schedules are represented as a series of 1s and 0s in a string
             //only days that both users indicate as workout days will contribute
             for (let i = 0; i < user1Schedule.length ; i++) {
                 if (user1Schedule.charAt(i) == '1' && user2Schedule.charAt(i) == '1') {
-                    countSame++
+                    sharedDays++
                 }   
             }
             //score is determined by days in common / total days of the week
-            let scheduleScore = countSame / 7 
+            let scheduleScore = sharedDays / 7 
         } catch (error) {
             if (error) {
                 console.log(error.message)
@@ -82,10 +85,11 @@ export class RecHandler {
                 }   
             }
             let x = workoutsShared/this.numWorkoutTypes
-            //arbitrary a value for use in the Bézier curve
+            //arbitrary adjustable factor for use in the Bézier curve
             let a = 0.75
             //Bézier curve for workout score - steep increase with the first few types in common, then curve levels off
             let workoutScore = 3 * a * Math.pow((1 - Math.pow(x, 1/3)), 2) * Math.pow(x, 1/3) + 3 * (1 - Math.pow(x, 1/3)) * Math.pow(x, 2/3)
+
             return workoutScore
         } catch (error) {
             if (error) {
@@ -93,7 +97,7 @@ export class RecHandler {
                 return -1;
             }
         }
-    }
+    } 
 
     //calculates the compatibilty score between 2 users based on age, schedule, and preferred workout types
     //score will range from 0 (not compatible) to 1 (perfectly compatible)
@@ -121,7 +125,9 @@ export class RecHandler {
         try { 
             
             var friendList = await this.friendsInfo.friendList(username)
-            var excludeList = await [username].concat(friendList)
+            var reqsSent = await this.matchRequests.requestsSent(username)
+            var reqsReceived = await this.matchRequests.requestsReceived(username)
+            var excludeList = [username].concat(friendList).concat(reqsSent).concat(reqsReceived)
             
             var validUsers = await this.profileInfo.getAllUsers(excludeList)
 
