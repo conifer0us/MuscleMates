@@ -142,7 +142,6 @@ export class APIRoutes {
             }
 
             // Gets the recommendations from the RecHandler library
-            
             recHandler.getRecommendations(uname).then((reclist) => {
                 res.status(200);
                 res.json({"matchrecs": reclist});

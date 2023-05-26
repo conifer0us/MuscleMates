@@ -131,7 +131,7 @@ export class RecHandler {
             
             var validUsers = await this.profileInfo.getAllUsers(excludeList)
 
-            if (this.preferences.getFilterByGender(username)) {
+            if (await this.preferences.getFilterByGender(username)) {
                 for (var i = validUsers.length - 1; i >= 0; i--) {
                     if (this.profileInfo.getGender(username) != this.profileInfo.getGender(validUsers[i])) {
                         validUsers.splice(i,1)
@@ -139,7 +139,7 @@ export class RecHandler {
                 }
             }
 
-            if (this.preferences.getFilterByGym(username)) {
+            if (await this.preferences.getFilterByGym(username)) {
                 for (var i = validUsers.length - 1; i >= 0; i--) {
                     if (this.profileInfo.getGym(username) != this.profileInfo.getGym(validUsers[i])) {
                         validUsers.splice(i,1)
@@ -166,8 +166,8 @@ export class RecHandler {
             var validUsers : string[] = await this.getValidUsers(username)
             var userScoreArray = [] //array in form [[username, compatibility], [username2, compatibility2], etc.]
             for (let otherUser of validUsers) {
-                const compatScore = this.calculateCompatibility(username, otherUser)
-                userScoreArray.push([username, compatScore])
+                const compatScore = await this.calculateCompatibility(username, otherUser)
+                userScoreArray.push([otherUser, compatScore])
             }
             
             //sort users based on compatibility score in descending order
@@ -192,8 +192,7 @@ export class RecHandler {
             }
         } catch(error) {
             if (error) {
-                return []
-                console.log(error.message)
+                return [];
             }
         }
     }
