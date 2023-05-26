@@ -9,10 +9,11 @@ import { MatchRequests } from '../libs/MatchRequests';
 import { ProfileInfo } from '../libs/ProfileInfo';
 import { MessageInfo } from '../libs/Messages';
 import { Messages } from '@prisma/client';
+import { Preferences } from '../libs/PreferenceInfo';
 
 export class APIRoutes {
     static configureRouter(server: Express, resname: string, auth: Auth, prof: ProfileInfo, 
-        matchrequests: MatchRequests, friends: FriendsInfo, messages: MessageInfo, formdecoder) {
+        matchrequests: MatchRequests, friends: FriendsInfo, messages: MessageInfo, preferences : Preferences, formdecoder) {
         let router = Router();
         // Sends Basic API Welcome Message with 200 Status Code For Simple /api request
         router.get("/", (req, res) => {
@@ -70,25 +71,30 @@ export class APIRoutes {
         // "name" : name,
         // "age" : age,
         // "bio" : bio,
-        // "gym" : gym
+        // "gym" : gym,
+        // "schedule" : schedule (string of 0s and 1s),
+        // "workout" : workouts (string of 0s and 1s)
         //}
-        router.get("/profile/:username", (req, res) => {
+        router.get("/profile/:username", async (req, res) => {
             // Gets Username From Request Parameters
             const uname = req.params["username"];
 
             // Gets Profile Information Dictionary From Profile Library for Supplied Username
-            prof.getProfInfo(uname).then((profinfo) => {
-                // If Dictionary has elements, set status to 200 and send profile info as JSON
-                if (Object.keys(profinfo).length) {
-                    res.status(200);
-                    res.json(profinfo);
-                }
+            prof.getProfInfo(uname).then(async (profinfo) => {
+                let sched = await preferences.getSchedule(uname);
+                let workout = await preferences.getWorkoutTypes(uname);
 
-                // Otherwise, Send Empty Response with Status 404
-                else {
+                // Send Empty Response with Status 404 if Data not Found
+                if (!Object.keys(profinfo).length || !sched || !workout) {
                     res.status(404);
                     res.send();
                 }
+
+                // If Dictionary has elements, set status to 200 and send profile info as JSON
+                profinfo["schedule"] = sched;
+                profinfo["workout"] = workout;
+                res.status(200);
+                res.json(profinfo);
             });
         });
 

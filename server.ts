@@ -13,7 +13,7 @@ import { FriendsInfo } from "./libs/Friends";
 import { MatchRequests } from './libs/MatchRequests';
 import { ProfileInfo } from './libs/ProfileInfo';
 import { MessageInfo } from './libs/Messages';
-import {Preferences} from "./libs/Preferences"
+import {Preferences} from "./libs/PreferenceInfo"
 import {RecHandler} from "./libs/RecHandler"
 import {DBLinker} from './libs/DBLinker';
 
@@ -69,12 +69,12 @@ async function main() {
     const prisma = new PrismaClient();
     
     // Import Custom Libraryes that will be used By API Endpoints
-    const auth = new Auth(prisma);
+    const preferences = new Preferences(prisma);
+    const auth = new Auth(prisma, preferences);
     const prof = new ProfileInfo(prisma);
     const matchreq = new MatchRequests(prisma);
     const friends = new FriendsInfo(prisma);
     const messages = new MessageInfo(prisma, friends);
-    const preferences = new Preferences(prisma);
     const rechandler = new RecHandler(prof, preferences, friends, 20);
 
     // Runs a Set of Statements to Prepare Database in Case of Testing Mode
@@ -99,8 +99,8 @@ async function main() {
     } 
 
     // Load Externally Defined Express Routes
-    SubmitRoutes.configureRouter(server, '/submit', auth, prof, matchreq, friends, messages, formdecoder);
-    APIRoutes.configureRouter(server, '/api', auth, prof, matchreq, friends, messages, formdecoder);
+    SubmitRoutes.configureRouter(server, '/submit', auth, prof, matchreq, friends, messages, preferences, formdecoder);
+    APIRoutes.configureRouter(server, '/api', auth, prof, matchreq, friends, messages, preferences, formdecoder);
     RootRoutes.configureRouter(server, '/', auth, configjson, formdecoder);
     ImageRoutes.configureRouter(server, "/profimage", auth, prof, configjson);
 
