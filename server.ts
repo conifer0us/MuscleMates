@@ -75,7 +75,7 @@ async function main() {
     const matchreq = new MatchRequests(prisma);
     const friends = new FriendsInfo(prisma);
     const messages = new MessageInfo(prisma, friends);
-    const rechandler = new RecHandler(prof, preferences, friends, matchreq, 20);
+    const rechandler = new RecHandler(prof, preferences, friends, matchreq, 15);
 
     // Runs a Set of Statements to Prepare Database in Case of Testing Mode
     if (args[2] == "test") {
