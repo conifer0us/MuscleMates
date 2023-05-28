@@ -9,6 +9,7 @@ import { FriendsPage } from './Components/friends';
 import { MatchRequestsPage } from './Components/matchrequests';
 import { MyApp } from './Components/test';
 import { MessagePage } from './Components/messages';
+import { ProfilePage } from './Components/profile';
 
 let path = window.location.pathname
 
@@ -21,6 +22,10 @@ if (path == "/login.html") {
 
 if (path == "/signup.html") {
     appRoot.render(<SignupPage />)
+}
+
+if (path == "/profile") {
+    appRoot.render(<ProfilePage />)
 }
 
 if (path == "/home") {
