@@ -22,7 +22,6 @@ import {APIRoutes} from './routes/api';
 import {RootRoutes} from './routes/root';
 import {ImageRoutes} from './routes/profimage'
 
-
 // Main Function that Runs when Program Starts. This Function is responsible for creating library instances and Starting the Server
 async function main() {
     // Defines Form Decoder for Application

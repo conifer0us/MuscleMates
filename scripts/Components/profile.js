@@ -18,8 +18,8 @@ export function ProfilePage() {
                             <h3 className="profile-h3" id="detailtext"></h3>
                         </div>
                         <div className="savebox">
-                            <button className="button smooth-background" onClick={() => {event.preventDefault(); logout();}}>Log Out</button>
                             <button type='submit' className="button smooth-background">Save</button>
+                            <button className="button smooth-background" onClick={() => {event.preventDefault(); logout();}}>Log Out</button>
                         </div>
                     </div>
                     <div className="userinfo">
