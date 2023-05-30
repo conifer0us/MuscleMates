@@ -138,7 +138,7 @@ export class RecHandler {
 
             if (await this.preferences.getFilterByGender(username)) {
                 for (var i = validUsers.length - 1; i >= 0; i--) {
-                    if (this.profileInfo.getGender(username) != this.profileInfo.getGender(validUsers[i])) {
+                    if (await this.profileInfo.getGender(username) != await this.profileInfo.getGender(validUsers[i])) {
                         validUsers.splice(i,1)
                     }
                 }
@@ -146,7 +146,7 @@ export class RecHandler {
 
             if (await this.preferences.getFilterByGym(username)) {
                 for (var i = validUsers.length - 1; i >= 0; i--) {
-                    if (this.profileInfo.getGym(username) != this.profileInfo.getGym(validUsers[i])) {
+                    if (await this.profileInfo.getGym(username) != await this.profileInfo.getGym(validUsers[i])) {
                         validUsers.splice(i,1)
                     }
                 }

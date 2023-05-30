@@ -1,7 +1,12 @@
 import { BackArrow } from './shared'
-import { getFormDataByID, sendFormData, ShowError, SubmitProfileForm } from '../formsubmission'
+import { importProfileData, SubmitProfileForm, logout} from '../formsubmission'
+import { useEffect } from 'react';
 
 export function ProfilePage() {
+    useEffect(() => {
+        importProfileData();
+    }, [])
+
     return (
         <form id="profileform" className="profile-form" onSubmit={() => {event.preventDefault(); SubmitProfileForm()}}>
             <div className="wholepage">
@@ -10,17 +15,19 @@ export function ProfilePage() {
                     <div className="upperheaders">
                         <div className="headers">
                             <h1 className="profile-h1">Profile</h1>
+                            <h3 className="profile-h3" id="detailtext"></h3>
                         </div>
                         <div className="savebox">
+                            <button className="button smooth-background" onClick={() => {event.preventDefault(); logout();}}>Log Out</button>
                             <button type='submit' className="button smooth-background">Save</button>
                         </div>
                     </div>
                     <div className="userinfo">
                         <div className="input-and-button">
                             <div className="userinputs">
-                                <input placeholder="Full Name" type="text" name="fullname" className="info-input" />
-                                <input placeholder="Age" type="text" name="age" className="info-input" />
-                                <input placeholder="Pronouns" type="text" name="pronouns" className="info-input" />
+                                <input id="name" placeholder="Full Name" type="text" name="name" className="info-input" />
+                                <input id="age" placeholder="Age" type="text" name="age" className="info-input" />
+                                <input id="pronouns" placeholder="Pronouns" type="text" name="pronouns" className="info-input" />
                             </div>
                             <div className="genderbuttons">
                                 <div className="genderbox">
@@ -45,7 +52,7 @@ export function ProfilePage() {
                                     <h5 className="profile-h5">A short introduction of yourself</h5>
                                 </div>
                                 <div className="inputbox">
-                                    <textarea placeholder="Your introduction" type="textarea" name="bio" className="bio-input" rows="4" />
+                                    <textarea id="bio" placeholder="Your introduction" type="textarea" name="bio" className="bio-input" rows="4" />
                                 </div>
                             </div>
                         </div>
@@ -133,14 +140,14 @@ export function ProfilePage() {
                         </div>
                         <div className="rectangle2">
                             <h4 className='profile-h4'>Gym and Filters</h4>
-                            <input id='gym-name' placeholder='Gym name' className='gym-input' />
+                            <input id='gym-name' name="gym" placeholder='Gym name' className='gym-input' />
                             <div className='checkbox-list'>
                                 <div className='checkbox-item-filter'>
-                                    <input type='checkbox' id='gym-filter' className="input-item"></input>
+                                    <input type='checkbox' id='gym-filter' className="input-item" name="filterByGym"></input>
                                     <label htmlFor='gym-filter' className="input-label">Filter Recommendations by Gym</label>
                                 </div>
                                 <div className='checkbox-item-filter'>
-                                    <input type='checkbox' id='gender-filter' className="input-item"></input>
+                                    <input type='checkbox' id='gender-filter' className="input-item" name="filterByGender"></input>
                                     <label htmlFor='gender-filter' className="input-label">Filter Recommendations by Gender</label>
                                 </div>
                             </div>

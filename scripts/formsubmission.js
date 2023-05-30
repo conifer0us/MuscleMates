@@ -1,5 +1,10 @@
 // Contains Scripts to Handle Form Submission Events
 
+const workouttypes = ["weightlifting", "calisthenics", "cycling", "running", "walking", "swimming", 
+                      "rowing", "yoga", "dance", "crossfit", "powerlifting", "squash", "soccer", "basketball", "hiit"];
+
+const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+
 // Returns FormData Element for a Given FormID in the current page 
 function getFormDataByID(formid) {
     let formelement = document.getElementById(formid);
@@ -57,7 +62,6 @@ export const SubmitSignupForm = function SubmitSignupForm() {
     const password = SignupFormData.get("password")
     const repeatpassword = SignupFormData.get("repeatpassword")
 
-    // 
     if (!emaildata || !uname || !password || !repeatpassword) {
         ShowError("Not All Field Values Set");
     } 
@@ -83,3 +87,151 @@ export const SubmitSignupForm = function SubmitSignupForm() {
     }
 }
 
+export const SubmitProfileForm = async () => {
+    let formdata = getFormDataByID("profileform");
+
+    if (!formdata.get("name") || !formdata.get("bio") || !formdata.get("age") || !formdata.get("gender") || !formdata.get("gym")) {
+        ShowError("Please fill out all required information.");
+        return;
+    }
+
+    if (!/^[0-9]{2}$/.test(formdata.get("age"))) {
+        ShowError("Please Enter a Valid Age");
+    }
+
+    if (!formdata.get("pronouns")) {
+        formdata.set("pronouns", "");
+    }
+
+    if (document.getElementById("male").checked) {
+        formdata.set("gender", "male");
+    } else if (document.getElementById("female").checked) {
+        formdata.set("gender", "female");
+    } else {formdata.set("gender", "other")}
+
+    formdata.set("filterByGym", (formdata.get("filterByGym") ? "1" : "0"));
+
+    formdata.set("filterByGender", (formdata.get("filterByGender") ? "1" : "0"));
+
+    let workoutstring = "";
+
+    for (const workout of workouttypes) {
+        if (document.getElementById(workout).checked) {
+            workoutstring += "1";
+        } else {
+            workoutstring += "0";
+        }
+    }
+
+    let schedule = "";
+
+    for (const day of days) {
+        if (document.getElementById(day).checked) {
+            schedule += "1";
+        } else {
+            schedule += "0";
+        }
+    }
+
+    formdata.set("workout", workoutstring);
+    formdata.set("schedule", schedule);
+
+    const profupdate = await fetch("/submit/profile", {
+        method: "POST",
+        body: formdata
+    });
+
+    if (profupdate.status != 200) {
+        ShowError("There was a problem with updating your profile.")
+        return;
+    }
+
+    const prefupdate = await fetch("/submit/preferences", {
+        method: "POST",
+        body: formdata
+    });
+
+    if (prefupdate.status != 200) {
+        ShowError("There was a problem updating your preferences")
+        return;
+    }
+
+    alert("Profile successfully updated.");
+}
+
+export const importProfileData = async () => {
+    const unameres = await fetch("/api/myusername");
+    const username = (await unameres.text()).replaceAll('"','');
+    console.log(`🍓🍓Hi ${username}!🍓🍓`);
+
+    const profres = await fetch(`/api/profile/${username}`);
+    if (profres.status != 200) {
+        console.log("No profile found yet.");
+        document.getElementById("detailtext").innerHTML = "Create a Profile so you can Match and Make Friends!";
+        return; 
+    }
+
+    let profinfo = await profres.json();
+    console.log(profinfo);
+
+    if (profinfo["name"]) {
+        document.getElementById("name").value = profinfo["name"];
+    }
+
+    if (profinfo["age"]) {
+        document.getElementById("age").value = profinfo["age"];
+    }
+
+    if (profinfo["bio"]) {
+        document.getElementById("bio").value = profinfo["bio"];
+    }
+
+    if (profinfo["pronouns"]) {
+        document.getElementById("pronouns").value = profinfo["pronouns"];
+    }
+
+    if (profinfo["gym"]) {
+        document.getElementById("gym-name").value = profinfo["gym"];
+    }
+
+    switch (profinfo["gender"]) {
+        case "male":
+            document.getElementById("male").click();
+            break;
+        case "female":
+            document.getElementById("female").click();
+            break; 
+        case "other":
+            document.getElementById("other").click();
+            break;
+    }
+
+    if (profinfo["gymfilter"]) {
+        document.getElementById("gym-filter").click();
+    }
+
+    if (profinfo["genderfilter"]) {
+        document.getElementById("gender-filter").click();
+    }
+
+    if (profinfo["schedule"].length == days.length) {
+        for (let i = 0; i < days.length; i++) {
+            if (profinfo["schedule"][i] == "1") {
+                document.getElementById(days[i]).click();
+            }
+        }
+    }
+
+    if (profinfo["workout"].length == workouttypes.length) {
+        for (let i = 0; i < workouttypes.length; i++) {
+            if (profinfo["workout"][i] == "1") {
+                document.getElementById(workouttypes[i]).click();
+            }
+        }
+    }
+}
+
+export const logout = () => {
+    document.cookie = "AUTH=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.href = "/";
+}

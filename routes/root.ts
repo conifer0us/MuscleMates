@@ -1,11 +1,12 @@
 // Import Necessary Libraries
 import { Router, Express } from 'express';
 import { Auth } from "../libs/Auth";
+import { ProfileInfo } from '../libs/ProfileInfo';
 import path from 'path';
 import fs from 'fs';
 
 export class RootRoutes {
-    static configureRouter(server: Express, resname: string, auth: Auth, configjson : JSON, formdecoder) {
+    static configureRouter(server: Express, resname: string, auth: Auth, profile: ProfileInfo, configjson : JSON, formdecoder) {
         const templatepath :string = configjson["templatepath"];
         const stylepath :string = configjson["stylepath"];
         const scriptpath :string= configjson["scriptpath"];
@@ -200,9 +201,12 @@ export class RootRoutes {
         });
 
         // Send Recommendations File for Recommendations Requests
-        server.get("/recommendations", (req, res) => {
-            auth.checkReqCookie(req).then((cookieuser) => {
-                if (cookieuser) {
+        server.get("/recommendations", async (req, res) => {
+            auth.checkReqCookie(req).then(async (cookieuser) => {
+                if (! (await profile.profileExists(cookieuser))) {
+                    res.redirect("/profile");
+                }
+                else if (cookieuser) {
                     res.status(200);
                     res.sendFile(path.join(templatepath, "reactindex.html"));
                 }
@@ -213,9 +217,12 @@ export class RootRoutes {
         });
 
         // Send Friends File for Friends Requests
-        server.get("/friends", (req, res) => {
-            auth.checkReqCookie(req).then((cookieuser) => {
-                if (cookieuser) {
+        server.get("/friends", async (req, res) => {
+            auth.checkReqCookie(req).then(async (cookieuser) => {
+                if (! (await profile.profileExists(cookieuser))) {
+                    res.redirect("/profile");
+                }
+                else if (cookieuser) {
                     res.status(200);
                     res.sendFile(path.join(templatepath, "reactindex.html"));
                 }

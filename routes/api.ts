@@ -84,16 +84,21 @@ export class APIRoutes {
             prof.getProfInfo(uname).then(async (profinfo) => {
                 let sched = await preferences.getSchedule(uname);
                 let workout = await preferences.getWorkoutTypes(uname);
+                let genderfilter = await preferences.getFilterByGender(uname);
+                let gymfilter = await preferences.getFilterByGym(uname);
 
                 // Send Empty Response with Status 404 if Data not Found
                 if (!Object.keys(profinfo).length || !sched || !workout) {
                     res.status(404);
                     res.send();
+                    return;
                 }
 
                 // If Dictionary has elements, set status to 200 and send profile info as JSON
                 profinfo["schedule"] = sched;
                 profinfo["workout"] = workout;
+                profinfo["gymfilter"] = gymfilter;
+                profinfo["genderfilter"] = genderfilter;
                 res.status(200);
                 res.json(profinfo);
             });

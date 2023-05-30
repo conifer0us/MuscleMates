@@ -38,7 +38,7 @@ export function MessagePage() {
                     }
                     setMessagesData(displayedmessageslist);
                 }
-                //setDumbthing((prevstate) => prevstate + 1);
+                setDumbthing((prevstate) => prevstate + 1);
             })
         })
     }

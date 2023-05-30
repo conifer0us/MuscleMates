@@ -80,16 +80,16 @@ async function main() {
     // Runs a Set of Statements to Prepare Database in Case of Testing Mode
     if (args[2] == "test") {
         await auth.insertUserPassword("block", "block@block.com", "chain");
-        await prof.insertProfile("block", "Block Boy", "18", "I like breaking", "Block Boxing and More");
+        await prof.insertProfile("block", "Block Boy", "18", "I like breaking", "Block Boxing and More", "male", "he/him");
     
         await auth.insertUserPassword("john123", "john@gmail.com", "john123");
-        await prof.insertProfile("john123", "John Smith", "20", "I'm just a regular John.", "Block Boxing and More");
+        await prof.insertProfile("john123", "John Smith", "20", "I'm just a regular John.", "Block Boxing and More", "other", "they/them");
     
         await auth.insertUserPassword("martha5", "martha@outlook.com", "marthaiscool");
-        await prof.insertProfile("martha5", "Martha Jones", "40", "I like rock climbing and biking.", "Block Boxing and More");  
+        await prof.insertProfile("martha5", "Martha Jones", "40", "I like rock climbing and biking.", "Block Boxing and More", "female", "she/her");  
     
         await auth.insertUserPassword("martha9", "Martha Jane", "martha9iscool");
-        await prof.insertProfile("martha9", "Evil Martha", "25", "I love TikTok.", "Block Boxing and More");
+        await prof.insertProfile("martha9", "Evil Martha", "25", "I love TikTok.", "Block Boxing and More", "female", "she/her");
 
         let friendsinserted : boolean = await friends.addFriends("martha5", "martha9"); 
         if (friendsinserted) {await messages.insertMessage("martha9", "martha5", "Want to go to the gym?");}
@@ -101,7 +101,7 @@ async function main() {
     // Load Externally Defined Express Routes
     SubmitRoutes.configureRouter(server, '/submit', auth, prof, matchreq, friends, messages, preferences, formdecoder);
     APIRoutes.configureRouter(server, '/api', auth, prof, matchreq, friends, messages, preferences, rechandler, formdecoder);
-    RootRoutes.configureRouter(server, '/', auth, configjson, formdecoder);
+    RootRoutes.configureRouter(server, '/', auth, prof, configjson, formdecoder);
     ImageRoutes.configureRouter(server, "/profimage", auth, prof, configjson);
 
     // Starts Server on Port Specified
