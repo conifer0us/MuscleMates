@@ -15,7 +15,6 @@ import { ProfileInfo } from './libs/ProfileInfo';
 import { MessageInfo } from './libs/Messages';
 import {Preferences} from "./libs/PreferenceInfo"
 import {RecHandler} from "./libs/RecHandler"
-import {DBLinker} from './libs/DBLinker';
 
 // Import Express Routes
 import {SubmitRoutes} from './routes/submit';
@@ -56,12 +55,10 @@ async function main() {
     const args: string[] = process.argv;
     if (args[2] == "test") {
         console.log("Starting Server in Test Mode.");
-        await DBLinker.linkDB('./test.db');
     } else if (args[2]) {
         console.log("Unknown Mode. Stopping.");
         exit();
     } else {
-        await DBLinker.linkDB('./main.db');
         console.log("Starting Server in Production Mode.");
     }
 
