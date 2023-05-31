@@ -86,7 +86,7 @@ export function RecommendationsPage() {
             fetch(`/api/profile/${username}`).then((response) => {
               response.json().then((JSONData) => {
                 recsinfolist.push({username: username, name: JSONData["name"], gym: JSONData["gym"], age: JSONData["age"], bio: JSONData["bio"]})
-                setInfoList(recsinfolist.map((rec) => <li key={`${rec.username}-recommendation`}>{RecommendationDiv(rec.username, rec.name, rec.age, rec.gym, rec.bio)}</li>))
+                setInfoList(recsinfolist.map((rec) => <li key={`${rec.username}-recommendation`}>{RecommendationDiv(rec.username, rec.name, rec.gym, rec.age, rec.bio)}</li>))
               })
             })
           }

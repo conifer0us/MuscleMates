@@ -95,6 +95,12 @@ export const SubmitProfileForm = async () => {
         return;
     }
 
+    // Do Not Set Name to Steve Earth or Tammy Pirmann. You have been warned.
+    if (formdata.get("name") == "Steve Earth" || formdata.get("name") == "Tammy Pirmann") {
+        window.location.href = "https://media.tenor.com/GCMl-Z0DIl4AAAAd/bowser-fart.gif";
+        return;
+    }
+
     if (!/^[0-9]{2}$/.test(formdata.get("age"))) {
         ShowError("Please Enter a Valid Age");
     }
