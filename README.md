@@ -2,7 +2,7 @@
 
 ## Setting up:
 
-run the command 'npm update' to install the necessary depedencies
+run the command 'npm update' to install the necessary dependencies
 run the command 'npm run reset-prisma' to set up the database using the Prisma schema
 
 ## Testing & Deploying:
