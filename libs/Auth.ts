@@ -45,7 +45,7 @@ export class Auth {
                 },
             });
 
-            await this.preferences.insertPreferences(username, "0000000", "00000000000000000000", false, false);
+            await this.preferences.insertPreferences(username, "1010101", "110010000000000", false, false);
 
             return true;
         } catch (error) {

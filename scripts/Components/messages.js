@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { BackArrow } from "./shared";
 
 let ownUsername = "";
 
@@ -38,7 +39,7 @@ export function MessagePage() {
                     }
                     setMessagesData(displayedmessageslist);
                 }
-                //setDumbthing((prevstate) => prevstate + 1);
+                setDumbthing((prevstate) => prevstate + 1);
             })
         })
     }
@@ -93,7 +94,9 @@ export function MessagePage() {
     return (
         <>
             <div className="tab">
-                <h2 id="top-container-messages"><a className="orange-link" href="/friends">Back to Friends Page</a><button id="show-more-messages" onClick={loadMoreMessages}>See more</button></h2>
+                <h2 id="top-container-messages">{/*<a className="orange-link" href="/friends">Back to Friends Page</a>*/}
+                <BackArrow />
+                <button id="show-more-messages" onClick={loadMoreMessages}>See more</button></h2>
                 <div id="messages-container">
                     <SeeMessagesData />
                 </div>

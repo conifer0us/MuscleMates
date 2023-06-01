@@ -14,6 +14,9 @@
 /styles/*.css.map
 /styles/test.css
 
+# Ignore Profile Images
+/images
+
 # Temporary Server Files
 auth.db
 main.db

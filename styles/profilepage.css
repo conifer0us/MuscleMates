@@ -68,6 +68,16 @@ body {
     color: #7E7E82;
 }
 
+.profile-h3 {
+    position: relative;
+
+    font-family: 'Big Shoulders Display';
+    font-style: normal;
+    padding-left: 7.5%;
+
+    color: #7E7E82;
+}
+
 .savebox {
     position: relative;
     display: flex;
@@ -75,7 +85,7 @@ body {
     justify-content: center;
 
     height: 100%;
-    width: 20%;
+    width: 150%;
     padding-right: 2.5%;
 }
 
@@ -95,15 +105,33 @@ body {
     border-radius: 40px;
 }
 
+.userimg {
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    top: 50%;
+    position: relative;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    border-radius: inherit;
+}
+
+.profimg {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: inherit;
+}
+
 .input-and-button {
     position: relative;
     display: flex;
     flex-direction: row;
     justify-content: center;
     padding-top: 3%;
-
-    width: 100%;
-    height: 35%;
+    width: 90%;
+    height: 15%;
+    align-items: center;
 }
 
 .userinputs {
@@ -112,17 +140,34 @@ body {
     flex-direction: column;
     justify-content: center;
 
-    width: 70%;
+    width: 65%;
     height: 100%;
     gap: 10%;
 }
 
 .info-input {
     position: relative;
-    width: 95%;
+    width: calc(95% - 10px);
+    margin-left: 2.5%;
     height: 30%;
     
     background-color: #324A5F;
+}
+
+.uploadphoto {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 15%;
+    height: 100%;
+    align-items: center;
+}
+.circle {
+    position: relative;
+    height: 100%;
+    border-radius: 100%;
+    background-color: azure;
+    aspect-ratio: 1;
 }
 
 .genderbuttons {
@@ -295,24 +340,6 @@ body {
     padding-left: 1%;
 }
 
-.uploadphoto {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    width: 30%;
-    height: 100%;
-    align-items: center;
-}
-
-.circle {
-    position: absolute;
-    width: 70px;
-    height: 70px;
-    border-radius: 100%;
-
-    background: #DDDDE7;
-}
-
 .buttonbox {
     position: relative;
     display: flex;
@@ -322,13 +349,10 @@ body {
     align-items: center;
 }
 
-button {
-    width: 50%;
-    height: 40%;
-}
-
 .button {
-    width: 80%;
+    width: 30%;
+    margin-left: 5%; 
+    margin-right: 5%;
 }
 
 .input-item {

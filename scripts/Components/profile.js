@@ -1,7 +1,12 @@
 import { BackArrow } from './shared'
-import { getFormDataByID, sendFormData, ShowError, SubmitProfileForm } from '../formsubmission'
+import { importProfileData, SubmitProfileForm, logout, uploadimg, processimg} from '../formsubmission'
+import { useEffect } from 'react';
 
 export function ProfilePage() {
+    useEffect(() => {
+        importProfileData();
+    }, [])
+
     return (
         <form id="profileform" className="profile-form" onSubmit={() => {event.preventDefault(); SubmitProfileForm()}}>
             <div className="wholepage">
@@ -10,17 +15,25 @@ export function ProfilePage() {
                     <div className="upperheaders">
                         <div className="headers">
                             <h1 className="profile-h1">Profile</h1>
+                            <h3 className="profile-h3" id="detailtext"></h3>
                         </div>
                         <div className="savebox">
                             <button type='submit' className="button smooth-background">Save</button>
+                            <button className="button smooth-background" onClick={() => {event.preventDefault(); logout();}}>Log Out</button>
                         </div>
                     </div>
                     <div className="userinfo">
                         <div className="input-and-button">
+                            <div className="uploadphoto">
+                                <div id="profimagecircle" className="circle" name="photoupload" onClick={uploadimg}>
+                                    <img id="profimage" className='userimg'/>
+                                </div>
+                                <input id="photo-input" type="file" name="profimage" accept="image/png, image/jpeg" onChange={() => {processimg(event)}} style={{display: 'none'}}/>
+                            </div>
                             <div className="userinputs">
-                                <input placeholder="Full Name" type="text" name="fullname" className="info-input" />
-                                <input placeholder="Age" type="text" name="age" className="info-input" />
-                                <input placeholder="Pronouns" type="text" name="pronouns" className="info-input" />
+                                <input id="name" placeholder="Full Name" type="text" name="name" className="info-input" />
+                                <input id="age" placeholder="Age" type="text" name="age" className="info-input" />
+                                <input id="pronouns" placeholder="Pronouns" type="text" name="pronouns" className="info-input" />
                             </div>
                             <div className="genderbuttons">
                                 <div className="genderbox">
@@ -45,24 +58,7 @@ export function ProfilePage() {
                                     <h5 className="profile-h5">A short introduction of yourself</h5>
                                 </div>
                                 <div className="inputbox">
-                                    <textarea placeholder="Your introduction" type="textarea" name="bio" className="bio-input" rows="4" />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="photo">
-                            <div className="rectangle2">
-                                <div className="photodes">
-                                    <h4 className="profile-h4">Upload photo</h4>
-                                    <h5 className="profile-h5">This photo will be displayed on your profile</h5>
-                                </div>
-                                <div className="uploadphoto">
-                                    <div className="circle" name="photoupload"></div>
-                                </div>
-                                <div className="buttonbox">
-                                    <button className="smooth-background">Upload</button>
-                                </div>
-                                <div className="buttonbox">
-                                    <button className="smooth-background">Delete</button>
+                                    <textarea id="bio" placeholder="Your introduction" type="textarea" name="bio" className="bio-input" rows="4" />
                                 </div>
                             </div>
                         </div>
@@ -133,14 +129,14 @@ export function ProfilePage() {
                         </div>
                         <div className="rectangle2">
                             <h4 className='profile-h4'>Gym and Filters</h4>
-                            <input id='gym-name' placeholder='Gym name' className='gym-input' />
+                            <input id='gym-name' name="gym" placeholder='Gym name' className='gym-input' />
                             <div className='checkbox-list'>
                                 <div className='checkbox-item-filter'>
-                                    <input type='checkbox' id='gym-filter' className="input-item"></input>
+                                    <input type='checkbox' id='gym-filter' className="input-item" name="filterByGym"></input>
                                     <label htmlFor='gym-filter' className="input-label">Filter Recommendations by Gym</label>
                                 </div>
                                 <div className='checkbox-item-filter'>
-                                    <input type='checkbox' id='gender-filter' className="input-item"></input>
+                                    <input type='checkbox' id='gender-filter' className="input-item" name="filterByGender"></input>
                                     <label htmlFor='gender-filter' className="input-label">Filter Recommendations by Gender</label>
                                 </div>
                             </div>

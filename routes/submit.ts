@@ -39,7 +39,7 @@ export class SubmitRoutes {
         router.post("/profile", (req, res) => {
             auth.checkReqCookie(req).then((username) => {
                 // If name, age, bio, or gym not set, status 400 and send response
-                if (!username || !req.body || !req.body.name || !req.body.age || !req.body.bio || !req.body.gym) {
+                if (!username || !req.body || !req.body.name || !req.body.age || !req.body.bio || !req.body.gym || !req.body.gender || !req.body.pronouns) {
                     res.status(400);
                     res.send();
                     return;
@@ -52,14 +52,17 @@ export class SubmitRoutes {
                 const gym = req.body.gym;
 
                 // If Age is not an int between 0 and 100, status 400 and send response
-                if (0 > agenum || agenum > 100) {
+                if (0 > agenum || agenum > 100 || ["male", "female", "other"].indexOf(req.body.gender) == -1) {
                     res.status(400);
                     res.send();
                     return;
                 }
 
                 // Otherwise, set profile information in the database
-                prof.insertProfile(username, name, age, bio, gym)
+                prof.insertProfile(username, name, age, bio, gym, req.body.gender, req.body.pronouns);
+                res.status(200);
+                res.send();
+                return;
             });
         });
 
@@ -79,13 +82,15 @@ export class SubmitRoutes {
                 const tfregex = /^[01]{1}$/;
 
                 // Checks for Properly Formatted Preference Data
-                if (!/^[01]{7}$/.test(req.body.schedule) || !/^[01]*$/.test(req.body.workout) || !tfregex.test(req.body.filterByGender) || !tfregex.test(req.body.filterByGym)) {
+                if (!/^[01]{7}$/.test(req.body.schedule) || !/^[01]{15}$/.test(req.body.workout) || !tfregex.test(req.body.filterByGender) || !tfregex.test(req.body.filterByGym)) {
                     res.status(400);
                     res.send();
                     return;
                 }
 
-                preferences.insertPreferences(username, req.body.schedule, req.body.workout, req.body.filterByGender == '1', req.body.filterByGender == '1');
+                preferences.insertPreferences(username, req.body.schedule, req.body.workout, req.body.filterByGender == '1', req.body.filterByGym == '1');
+                res.status(200);
+                res.send();
             });
         });        
 

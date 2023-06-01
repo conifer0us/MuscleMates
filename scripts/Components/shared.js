@@ -23,6 +23,6 @@ export function BackToHomeArrow() {
 
 export function BackArrow() {
   return (
-    <h1><a className="backtohomelogin smooth-text back" href="/friends">⇦</a></h1>
+    <h1><a className="backtohomelogin smooth-text back" onClick={() => {history.back()}} style={{cursor: 'pointer'}}>⇦ Back</a></h1>
   )
 }
