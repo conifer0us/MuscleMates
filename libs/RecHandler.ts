@@ -60,8 +60,13 @@ export class RecHandler {
                     sharedDays++
                 }   
             }
-            //score is determined by days in common / total days of the week
-            let scheduleScore = sharedDays / 7 
+
+            const a = 3.35;
+            const a3 = a ** 3;
+            const a7 = (7/a)**3;
+            let x3 = sharedDays**3;
+            return x3 / (a7 + x3) + 1 / (7 + 7 * a3**3);
+             
         } catch (error) {
             if (error) {
                 console.log(error.message)
@@ -84,7 +89,7 @@ export class RecHandler {
                     workoutsShared++
                 }   
             }
-            let x = workoutsShared/this.numWorkoutTypes
+            let x = workoutsShared/this.numWorkoutTypes;
             //arbitrary adjustable factor for use in the Bézier curve
             let a = 0.75
             //Bézier curve for workout score - steep increase with the first few types in common, then curve levels off
@@ -107,7 +112,7 @@ export class RecHandler {
             let ageScore = await this.calculateAgeScore(username1, username2)
             let scheduleScore = await this.calculateScheduleScore(username1, username2)
             let workoutScore = await this.calculateWorkoutScore(username1, username2)
-            let compatibility = await ageScore * this.ageWeight + scheduleScore * this.scheduleWeight + workoutScore * this.workoutWeight
+            let compatibility = ageScore * this.ageWeight + scheduleScore * this.scheduleWeight + workoutScore * this.workoutWeight
             return compatibility
         } catch (error) {
             if (error) {

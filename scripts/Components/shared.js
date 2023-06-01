@@ -20,3 +20,9 @@ export function BackToHomeArrow() {
     <h1><a className="backtohomelogin smooth-text" href="/index.html">⇦ Back to Home</a></h1>
   )
 }
+
+export function BackArrow() {
+  return (
+    <h1><a className="backtohomelogin smooth-text back" href="/friends">⇦</a></h1>
+  )
+}

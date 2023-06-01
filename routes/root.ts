@@ -243,7 +243,7 @@ export class RootRoutes {
             auth.checkReqCookie(req).then((cookieuser) => {
                 if (cookieuser) {
                     res.status(200);
-                    res.sendFile(path.join(templatepath, "profile.html"));
+                    res.sendFile(path.join(templatepath, "reactindex.html"));
                 }
                 else {
                     res.redirect("/login.html");

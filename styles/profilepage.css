@@ -3,276 +3,380 @@ html, body {
     overflow-x: hidden;
 }
 
-body{
+body {
     background-color: #0C1421;
 }
 
-h1 {
+.wholepage {
     position: absolute;
-    width: 128px;
-    height: 42px;
-    left: 61px;
-    top: 65px;
+    width: 100vw;
+    height: 100vh;
+    top: 2%;
+    display: flex;
+    justify-content: center;
+}
+
+.middlepage {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    width: 70vw;
+    height: 95vh;
+}
+
+.upperheaders {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 50%;
+
+    width: 100%;
+    height: 15%;
+}
+
+.headers {
+    width: 100%;
+}
+
+.profile-h1 {
+    position: relative;
 
     font-family: 'Big Shoulders Display';
     font-style: normal;
-    font-weight: 700;
-    font-size: 36px;
-    line-height: 43px;
-    text-align: center;
+    font-weight: 800;
+    font-size: 48px;
+    line-height: 20px;
+
+    padding-left: 7.5%;
 
     color: #CCC9DC;
 }
 
-h2 {
-    position: absolute;
-    width: 77px;
-    height: 33px;
-    left: 387px;
-    top: 617px;
+.profile-h2 {
+    position: relative;
 
     font-family: 'Big Shoulders Display';
     font-style: normal;
     font-weight: 700;
-    font-size: 22px;
-    line-height: 26px;
-    display: flex;
-    align-items: center;
+    font-size: 135%;
+    line-height: 2px;
 
     color: #7E7E82;
 }
 
-h3 {
-    position: absolute;
-    width: 127px;
-    height: 38px;
-    left: 387px;
-    top: 660px;
-
-    font-family: 'Big Shoulders Display';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 19px;
+.savebox {
+    position: relative;
     display: flex;
     align-items: center;
+    justify-content: center;
 
-    color: #BFBFC0;
+    height: 100%;
+    width: 20%;
+    padding-right: 2.5%;
 }
 
-h4 {
-    position: absolute;
-    width: 35px;
-    height: 19px;
-    left: 811px;
-    top: 783px;
-
-    font-family: 'Big Shoulders Display';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 19px;
+.userinfo {
     display: flex;
+    position: relative;
+    flex-direction: column;
     align-items: center;
+    width: 100%;
+    height: 100%;
 
-    color: #BFBFC0;
-}
+    padding-bottom: 3%;
 
-.under-link {
-    color:rgb(126, 126, 130);
-}
-
-.link:hover {
-    color: rgb(107, 107, 110);
-}
-
-
-.decorativerectangle {
-    position: absolute;
-    width: 1000px;
-    height: 160px;
-    left: 300px;
-    top: 65px;
-
-    background: radial-gradient(50% 50% at 50% 50%, rgba(248, 107, 0, 0) 54.11%, rgba(101, 51, 13, 0.2) 100%), #FD984B;
-    background-blend-mode: overlay, normal;
-    border-radius: 60px 0px;
-}
-
-.user input[type='text'] {
-    position: absolute;
-    width: 850px;
-    height: 38px;
-
-    font-family: 'Big Shoulders Display';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 19px;
-    display: flex;
-    align-items: center;
-    color:white;
-    
-    background-color: #324A5F;
-}
-
-.user input::placeholder {
-    font-family: 'Big Shoulders Display';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 22px;
-    line-height: 26px;
-    display: flex;
-    align-items: center;
-
-    color: #7E7E82;
-}
-
-.bio input[type="text"] {
-    position: absolute;
-    width: 454px;
-    height: 91px;
-    left: 602px;
-    top: 617px;
-
-    border-style: inset;
-    border-top-style: none;
-    border-left-style: none;
-    border-bottom-style: groove;
-    border-right-style: groove;
-
-    font-family: 'Big Shoulders Display';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 19px;
-    display: flex;
-    align-items: center;
-    color: black;
-
-    padding-left: 10px;
-
-    background-color: #DDDDE7;
-}
-
-button {
-    position: absolute;
-    width: 70px;
-    height: 40px;
-    left: 1230px;
-    top: 245px;
-    border-style: hidden;
-    border-radius: 10px;
-
-    background-color: #EE8434;
-
-    font-family: 'Big Shoulders Display';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 24px;
-    line-height: 29px;
-
-    display: flex;
-    align-items: center;
-
-    color: #000000;
-}
-
-button:hover {
-    cursor: pointer;
-    color: #EE8434;
-    background-color: #0C1421;
-}
-
-.rectanglemain {
-    position: absolute;
-    width: 1000px;
-    height: 580px;
-    left: 300px;
-    top: 373px;
+    gap: 3%;
 
     background: #1B2A41;
     border-radius: 40px;
 }
 
+.input-and-button {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 3%;
+
+    width: 100%;
+    height: 35%;
+}
+
+.userinputs {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    justify-content: center;
+
+    width: 70%;
+    height: 100%;
+    gap: 10%;
+}
+
+.info-input {
+    position: relative;
+    width: 95%;
+    height: 30%;
+    
+    background-color: #324A5F;
+}
+
+.genderbuttons {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 20%;
+    height: 100%;
+}
+
+.genderbox {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 5%;
+    border-radius: 8px;
+    padding-left: 5%;
+
+    width: 100%;
+    height: 100%;
+    background: #324A5F;
+}
+
+.gender {
+    position: relative;
+    width: 100%;
+    height: 30%;
+}
+
+.profile-h4 {
+    position: relative;
+    font-family: 'Big Shoulders Display';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 0px;
+    left: 1%;
+    width: 9vw;
+
+    color: #7E7E82;    
+}
+
+.radiobuttons {
+    position: relative;
+
+    top: 5%;
+    width: 100%;
+    height: 70%;
+}
+
+.input-label {
+    position: relative;
+    
+    font-family: 'Big Shoulders Display';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 5px;
+
+    color: #afafb3;
+}
+
+.bio {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
 
 .rectanglebio {
-    position: absolute;
-    width: 850px;
-    height: 125px;
-    left: 379px;
-    top: 605px;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    border-radius: 8px;
+
+    width: 90%;
+    height: 90%;
 
     background: #324A5F;
 }
 
-.rectanglephoto {
-    position: absolute;
-    width: 850px;
-    height: 150px;
-    left: 379px;
-    top: 750px;
+.biodes {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 1%;
+    padding-top: 0.5%;
+    width: 20%;
+}
+
+.profile-h5 {
+    position: relative;
+    font-family: 'Big Shoulders Display';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 0px;
+    left: 1%;
+
+    color: #BFBFC0;
+}
+
+.inputbox {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 100%;
+}
+
+.bio-input {
+    position: relative;
+    width: 92%;
+    height: 75%;
+
+    padding-left: 1%;
+    resize: none;
+
+    border-style: none;
+
+    border-width: 1.5px;
+}
+
+.gym-input {
+    position: relative;
+
+    width: 30%;
+
+    resize: none;
+
+    border-style: none;
+
+    display: flex;
+    align-items: center;
+}
+
+.photo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.rectangle {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    border-radius: 8px;
+    width: 90%;
+    height: 80%;
 
     background: #324A5F;
+}
+
+.photodes {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 30%;
+    height: 100%;
+    padding-left: 1%;
+}
+
+.uploadphoto {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 30%;
+    height: 100%;
+    align-items: center;
 }
 
 .circle {
     position: absolute;
-    width: 110px;
-    height: 110px;
-    left: 602px;
-    top: 767px;
+    width: 70px;
+    height: 70px;
     border-radius: 100%;
 
     background: #DDDDE7;
 }
 
-.maincircle {
-    position: absolute;
-    width: 162px;
-    height: 160px;
-    left: 333px;
-    top: 181px;
-    border-radius: 100%;
-
-    background-color: #DDDDE7;
-}
-
-.settings-div {
+.buttonbox {
     position: relative;
-    width: 140px;
-    height: 180px;
-    top: 86px;
-    left: 55px;
-    background-color: rgb(27, 42, 65);
-
-    font-family: 'Big Shoulders Display';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 24px;
-    line-height: 29px;
-
     display: flex;
+    width: 20%;
+    height: 100%;
+    justify-content: center;
     align-items: center;
-    text-align: center;
-
-    color: #7E7E82;
 }
 
-.settings:hover {
-    color: rgb(27, 42, 65);
+button {
+    width: 50%;
+    height: 40%;
 }
 
-.smooth-background {
-    -webkit-transition: background-color 0.1s ease-out;
-    -moz-transition: background-color 0.1s ease-out;
-    -o-transition: background-color 0.1s ease-out;
-    transition: background-color 0.1s ease-out;
+.button {
+    width: 80%;
 }
 
-.smooth-text {
-    -webkit-transition: color 0.1s ease-out;
-    -moz-transition: color 0.1s ease-out;
-    -o-transition: color 0.1s ease-out;
-    transition: color 0.1s ease-out;
+.input-item {
+    height: auto;
+    width: auto;
+}
+
+.rectangle2 {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5%;
+    border-radius: 8px;
+
+    width: 90%;
+    height: 100%;
+
+    background: #324A5F;
+}
+
+.checkbox-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 5vw;
+}
+
+.checkbox-item-filter {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 16vw;
+}
+
+.checkbox-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 10%;
+}
+
+.checkbox-list-workout {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10%;
+    padding-top: 1%;
+    padding-bottom: 1%;
 }
