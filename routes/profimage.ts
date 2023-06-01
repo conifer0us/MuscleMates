@@ -21,7 +21,7 @@ export class ImageRoutes {
                 if (!profimage || !uname) return res.sendStatus(400);
 
                 // If does not have image mime type prevent from uploading
-                if (/^image/.test(profimage.mimetype)) return res.sendStatus(400);
+                if (!/^image/.test(profimage.mimetype)) return res.sendStatus(400);
 
                 const imagename = `${uname}.png`; 
 

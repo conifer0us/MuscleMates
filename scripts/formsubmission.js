@@ -101,7 +101,7 @@ export const SubmitProfileForm = async () => {
         return;
     }
 
-    // Do Not Set Name to Steve Earth or Tammy Pirmann. You have been warned.
+    // Do Not Set Name to Steve Earth, David Min, or Tammy Pirmann. You have been warned.
     if (formdata.get("name") == "Steve Earth" || formdata.get("name") == "Tammy Pirmann" || formdata.get("name") == "David Min") {
         window.location.href = "https://media.tenor.com/GCMl-Z0DIl4AAAAd/bowser-fart.gif";
         return;
@@ -166,6 +166,18 @@ export const SubmitProfileForm = async () => {
     if (prefupdate.status != 200) {
         ShowError("There was a problem updating your preferences")
         return;
+    }
+
+    if (/^image\//.test(formdata.get("profimage").type)) {
+        const imgupload = await fetch("/profimage/upload", {
+            method: "POST", 
+            body: formdata
+        });
+
+        if (imgupload.status != 200) {
+            ShowError("There was a problem updating your profile image.");
+            return;
+        }
     }
 
     alert("Profile successfully updated.");
@@ -258,6 +270,25 @@ export const importProfileData = async () => {
     profimage = await fetch(`/profimage/default/`);
     imagedata = URL.createObjectURL(await profimage.blob());
     document.getElementById("profimage").setAttribute("src", imagedata);
+}
+
+export const uploadimg = async () => {
+    document.getElementById("photo-input").click();
+}
+
+export const processimg = async (event) => {
+    let fr = new FileReader();
+
+    fr.readAsDataURL(event.target.files[0]);
+
+    fr.onload = () => {
+        let imgdata = fr.result;
+
+        document.getElementById("profimage").setAttribute("src", imgdata);
+        document.getElementById("profimage").style.width = "100%";
+        document.getElementById("profimage").style.width = "100%";
+        document.getElementById("profimagecircle").style.backgroundColor = "transparent";
+    }
 }
 
 export const logout = () => {

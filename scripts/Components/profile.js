@@ -1,5 +1,5 @@
 import { BackArrow } from './shared'
-import { importProfileData, SubmitProfileForm, logout} from '../formsubmission'
+import { importProfileData, SubmitProfileForm, logout, uploadimg, processimg} from '../formsubmission'
 import { useEffect } from 'react';
 
 export function ProfilePage() {
@@ -25,9 +25,10 @@ export function ProfilePage() {
                     <div className="userinfo">
                         <div className="input-and-button">
                             <div className="uploadphoto">
-                                <div id="profimagecircle" className="circle" name="photoupload" onClick={() => {alert("image clicked")}}>
+                                <div id="profimagecircle" className="circle" name="photoupload" onClick={uploadimg}>
                                     <img id="profimage" className='userimg'/>
                                 </div>
+                                <input id="photo-input" type="file" name="profimage" onChange={() => {processimg(event)}} style={{display: 'none'}}/>
                             </div>
                             <div className="userinputs">
                                 <input id="name" placeholder="Full Name" type="text" name="name" className="info-input" />
