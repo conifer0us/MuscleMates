@@ -11,6 +11,7 @@ export class ImageRoutes {
     static configureRouter(server: Express, resname: string, auth: Auth, prof: ProfileInfo, configjson: JSON) {
         let router = Router();
         const imagedir: string = configjson["imagepath"];
+        const templatedir: string = configjson["templatepath"];
 
         router.post('/upload', (req, res) => {
             auth.checkReqCookie(req).then((uname: string) => {
@@ -32,8 +33,7 @@ export class ImageRoutes {
             });
         });
 
-        // Returns CSS files from Style Path
-        server.get("/user/:uname", (req, res) => {
+        router.get("/user/:uname", (req, res) => {
             const imgname = req.params["uname"];
             if (!imgname) {
                 res.status(404);
@@ -51,6 +51,15 @@ export class ImageRoutes {
                 });
             }
         });
+
+        router.get("/default/", (req, res) => {
+                const filepath = path.join(templatedir, `default.jpg`);
+                fs.access(filepath, (err) => {
+                        res.status(200);
+                        res.sendFile(filepath);
+                });
+            }
+        );
 
         server.use(resname, router);
     }

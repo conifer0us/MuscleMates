@@ -24,6 +24,11 @@ export function ProfilePage() {
                     </div>
                     <div className="userinfo">
                         <div className="input-and-button">
+                            <div className="uploadphoto">
+                                <div id="profimagecircle" className="circle" name="photoupload" onClick={() => {alert("image clicked")}}>
+                                    <img id="profimage" className='userimg'/>
+                                </div>
+                            </div>
                             <div className="userinputs">
                                 <input id="name" placeholder="Full Name" type="text" name="name" className="info-input" />
                                 <input id="age" placeholder="Age" type="text" name="age" className="info-input" />
@@ -53,23 +58,6 @@ export function ProfilePage() {
                                 </div>
                                 <div className="inputbox">
                                     <textarea id="bio" placeholder="Your introduction" type="textarea" name="bio" className="bio-input" rows="4" />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="photo">
-                            <div className="rectangle2">
-                                <div className="photodes">
-                                    <h4 className="profile-h4">Upload photo</h4>
-                                    <h5 className="profile-h5">This photo will be displayed on your profile</h5>
-                                </div>
-                                <div className="uploadphoto">
-                                    <div className="circle" name="photoupload"></div>
-                                </div>
-                                <div className="buttonbox">
-                                    <button className="smooth-background">Upload</button>
-                                </div>
-                                <div className="buttonbox">
-                                    <button className="smooth-background">Delete</button>
                                 </div>
                             </div>
                         </div>

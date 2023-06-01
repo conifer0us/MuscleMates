@@ -1,15 +1,21 @@
 // Contains Scripts to Handle Form Submission Events
 
-const workouttypes = ["weightlifting", "calisthenics", "cycling", "running", "walking", "swimming", 
-                      "rowing", "yoga", "dance", "crossfit", "powerlifting", "squash", "soccer", "basketball", "hiit"];
+const workouttypes = ["weightlifting", "calisthenics", "cycling", "running", "walking", "swimming",
+    "rowing", "yoga", "dance", "crossfit", "powerlifting", "squash", "soccer", "basketball", "hiit"];
 
 const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+
+const colors = ["aqua", "aquamarine", "blueviolet", "chartreuse", "coral", "cornflowerblue", "darkcyan", "deeppink", "darkorchid"]
 
 // Returns FormData Element for a Given FormID in the current page 
 function getFormDataByID(formid) {
     let formelement = document.getElementById(formid);
     let formdata = new FormData(formelement);
     return formdata;
+}
+
+function getColorForUsername(uname = "") {
+    return colors[uname.split('').reduce((prevHash, currVal) => (((prevHash << 5) - prevHash) + currVal.charCodeAt(0)) | 0, 0) % colors.length];
 }
 
 // Sends An HTTP Post Request to the supplied URL with the formdata in the form specified by formid
@@ -26,13 +32,13 @@ function sendFormData(formdata, url, errorstr) {
     const xhr = new XMLHttpRequest();
     xhr.open("POST", url);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
 
         // If Server Responds with Confirmation, redirect to Server-Supplied URL
         if (this.readyState == 4 && this.status == 200) {
             location.assign(xhr.responseURL);
-        } 
-        
+        }
+
         // If Error in Login, Alert User with Supplied Error String
         else if (this.readyState == 4 && (this.status < 500 && this.status > 399)) {
             ShowError(errorstr);
@@ -55,7 +61,7 @@ export const SubmitLoginForm = function SubmitLoginForm() {
 // Form Submission Function for Signup Page
 export const SubmitSignupForm = function SubmitSignupForm() {
     const SignupFormData = getFormDataByID("signupform");
-    
+
     // Get Individual Elements of Form to Validate
     const emaildata = SignupFormData.get("email");
     const uname = SignupFormData.get("username");
@@ -64,8 +70,8 @@ export const SubmitSignupForm = function SubmitSignupForm() {
 
     if (!emaildata || !uname || !password || !repeatpassword) {
         ShowError("Not All Field Values Set");
-    } 
-    
+    }
+
     // Validates Email with Regex
     else if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emaildata))) {
         ShowError("Invalid Email Address");
@@ -96,7 +102,7 @@ export const SubmitProfileForm = async () => {
     }
 
     // Do Not Set Name to Steve Earth or Tammy Pirmann. You have been warned.
-    if (formdata.get("name") == "Steve Earth" || formdata.get("name") == "Tammy Pirmann") {
+    if (formdata.get("name") == "Steve Earth" || formdata.get("name") == "Tammy Pirmann" || formdata.get("name") == "David Min") {
         window.location.href = "https://media.tenor.com/GCMl-Z0DIl4AAAAd/bowser-fart.gif";
         return;
     }
@@ -113,7 +119,7 @@ export const SubmitProfileForm = async () => {
         formdata.set("gender", "male");
     } else if (document.getElementById("female").checked) {
         formdata.set("gender", "female");
-    } else {formdata.set("gender", "other")}
+    } else { formdata.set("gender", "other") }
 
     formdata.set("filterByGym", (formdata.get("filterByGym") ? "1" : "0"));
 
@@ -167,14 +173,14 @@ export const SubmitProfileForm = async () => {
 
 export const importProfileData = async () => {
     const unameres = await fetch("/api/myusername");
-    const username = (await unameres.text()).replaceAll('"','');
+    const username = (await unameres.text()).replaceAll('"', '');
     console.log(`🍓🍓Hi ${username}!🍓🍓`);
 
     const profres = await fetch(`/api/profile/${username}`);
     if (profres.status != 200) {
         console.log("No profile found yet.");
         document.getElementById("detailtext").innerHTML = "Create a Profile so you can Match and Make Friends!";
-        return; 
+        return;
     }
 
     let profinfo = await profres.json();
@@ -206,7 +212,7 @@ export const importProfileData = async () => {
             break;
         case "female":
             document.getElementById("female").click();
-            break; 
+            break;
         case "other":
             document.getElementById("other").click();
             break;
@@ -235,6 +241,23 @@ export const importProfileData = async () => {
             }
         }
     }
+
+    let profimage = await fetch(`/profimage/user/${username}`);
+    let imagedata;
+    if (profimage.status == 200) {
+        imagedata = URL.createObjectURL(await profimage.blob());
+
+        document.getElementById("profimage").setAttribute("src", imagedata);
+        document.getElementById("profimage").style.width = "100%";
+        document.getElementById("profimage").style.width = "100%";
+        document.getElementById("profimagecircle").style.backgroundColor = "transparent";
+        return;
+    }
+
+    console.log("No Profile Image Set. Loading Backup.");
+    profimage = await fetch(`/profimage/default/`);
+    imagedata = URL.createObjectURL(await profimage.blob());
+    document.getElementById("profimage").setAttribute("src", imagedata);
 }
 
 export const logout = () => {
