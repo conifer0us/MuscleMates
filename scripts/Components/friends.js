@@ -1,32 +1,47 @@
 import { NavBar } from './shared'
 import { useState, useEffect } from 'react'
+import { loadImageToTag } from '../formsubmission'
 
-function FriendDiv(username, fullname, gym, age, bio) {
+function FriendDiv(props) {
+
+  const {username, fullname, gym, age, bio, pronouns, schedule} = props;
+
+  const [dumbthing2, setdumbthing2] = useState(0);
+
+  useEffect(() => {
+    loadImageToTag(document.getElementById(`img_${username}`), username);
+  }, []);
+
     return (
       <div className="recommendation-container" username={username}>
         <a className="friend" href={`/messages/${username}/`} style={{textDecoration: 'none'}}>
-            <div className="rec-info-container">
-                <div className="rec-profile-pic"></div>
+        <div className="rec-info-container">
+                <div className="rec-profile-pic">
+                  <img className='profimg' id={`img_${username}`}/>
+                </div>
                 <div className="rec-info">
                     <div className="rec-info-parameters">
                         <div className="rec-info-parameters-names">
                             <div className="rec-info-parameters-fullname">
-                                <p className="rec-info-parameters-fullname-text">{fullname}</p>
+                              <p className="rec-info-parameters-fullname-text">{fullname}</p>
+                             </div>
+                            <div className="rec-info-parameters-fullname">
+                                <p className="rec-info-parameters-fullname-text">{`(${pronouns})`}</p>
                             </div>
-                                <div className="rec-info-parameters-username">
-                                    <p className="rec-info-parameters-username-text">{username}</p>
-                                </div>
+                            <div className="rec-info-parameters-username">
+                                <p className="rec-info-parameters-username-text">{username}</p>
                             </div>
+                        </div>
                             <div className="rec-info-parameters-days">
                                 <p className="rec-info-parameters-title">Days: </p>
                                 <div className="rec-info-parameters-seven-days">
-                                    <p className="rec-info-parameters-seven-days-day">M</p>
-                                    <p className="rec-info-parameters-seven-days-day">T</p>
-                                    <p className="rec-info-parameters-seven-days-day">W</p>
-                                    <p className="rec-info-parameters-seven-days-day">T</p>
-                                    <p className="rec-info-parameters-seven-days-day">F</p>
-                                    <p className="rec-info-parameters-seven-days-day">S</p>
-                                    <p className="rec-info-parameters-seven-days-day">S</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[0] == "1") ? "#EE8434" : "#CCC9DC"}}>M</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[1] == "1") ? "#EE8434" : "#CCC9DC"}}>T</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[2] == "1") ? "#EE8434" : "#CCC9DC"}}>W</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[3] == "1") ? "#EE8434" : "#CCC9DC"}}>T</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[4] == "1") ? "#EE8434" : "#CCC9DC"}}>F</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[5] == "1") ? "#EE8434" : "#CCC9DC"}}>S</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[6] == "1") ? "#EE8434" : "#CCC9DC"}}>S</p>
                                 </div>
                             </div>
                             <div className="rec-info-parameters-gym">
@@ -79,8 +94,8 @@ export function FriendsPage() {
     fetch(`/api/profile/${username}`)
     .then((response) => {
         response.json().then((JSONData) => {
-            friendsinfolist.push({username: username, name: JSONData["name"], gym: JSONData["gym"], age: JSONData["age"], bio: JSONData["bio"]});
-            setFriendsInfo(friendsinfolist.map((friend) => <li key={`${friend.username}-friend`}>{FriendDiv(friend.username, friend.name,  friend.gym, friend.age, friend.bio)}</li>))
+            friendsinfolist.push({username: username, name: JSONData["name"], gym: JSONData["gym"], age: JSONData["age"], bio: JSONData["bio"], pronouns: JSONData["pronouns"], schedule: JSONData["schedule"]});
+            setFriendsInfo(friendsinfolist.map((friend) => <li key={`${friend.username}-friend`}><FriendDiv username={friend.username} fullname={friend.name} gym={friend.gym} age={friend.age} bio={friend.bio} pronouns={friend.pronouns} schedule={friend.schedule}/></li>))
         });
     })
   }

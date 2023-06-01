@@ -28,7 +28,7 @@ export function ProfilePage() {
                                 <div id="profimagecircle" className="circle" name="photoupload" onClick={uploadimg}>
                                     <img id="profimage" className='userimg'/>
                                 </div>
-                                <input id="photo-input" type="file" name="profimage" onChange={() => {processimg(event)}} style={{display: 'none'}}/>
+                                <input id="photo-input" type="file" name="profimage" accept="image/png, image/jpeg" onChange={() => {processimg(event)}} style={{display: 'none'}}/>
                             </div>
                             <div className="userinputs">
                                 <input id="name" placeholder="Full Name" type="text" name="name" className="info-input" />

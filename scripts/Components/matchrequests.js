@@ -1,32 +1,47 @@
 import { NavBar } from './shared'
 import { useState, useEffect } from 'react'
+import { loadImageToTag } from '../formsubmission';
 
-function SentRequestDiv(username, fullname, gym, age, bio) {
+function SentRequestDiv(props) {
+
+    const {username, fullname, gym, age, bio, pronouns, schedule} = props;
+
+    const [dumbthing2, setdumbthing2] = useState(0);
+
+    useEffect(() => {
+      loadImageToTag(document.getElementById(`img_${username}`), username);
+    }, []);
+
     return (
-      <div className="recommendation-container" username={username}>
+        <div className="recommendation-container" username={username}>
         <div className="recommendation cancel-request" onClick={() => cancelMatchRequest(username)}>
             <div className="rec-info-container">
-                <div className="rec-profile-pic"></div>
+                <div className="rec-profile-pic">
+                  <img className='profimg' id={`img_${username}`}/>
+                </div>
                 <div className="rec-info">
                     <div className="rec-info-parameters">
                         <div className="rec-info-parameters-names">
                             <div className="rec-info-parameters-fullname">
-                                <p className="rec-info-parameters-fullname-text">{fullname}</p>
+                              <p className="rec-info-parameters-fullname-text">{fullname}</p>
+                             </div>
+                            <div className="rec-info-parameters-fullname">
+                                <p className="rec-info-parameters-fullname-text">{`(${pronouns})`}</p>
                             </div>
-                                <div className="rec-info-parameters-username">
-                                    <p className="rec-info-parameters-username-text">{username}</p>
-                                </div>
+                            <div className="rec-info-parameters-username">
+                                <p className="rec-info-parameters-username-text">{username}</p>
                             </div>
+                        </div>
                             <div className="rec-info-parameters-days">
                                 <p className="rec-info-parameters-title">Days: </p>
                                 <div className="rec-info-parameters-seven-days">
-                                    <p className="rec-info-parameters-seven-days-day">M</p>
-                                    <p className="rec-info-parameters-seven-days-day">T</p>
-                                    <p className="rec-info-parameters-seven-days-day">W</p>
-                                    <p className="rec-info-parameters-seven-days-day">T</p>
-                                    <p className="rec-info-parameters-seven-days-day">F</p>
-                                    <p className="rec-info-parameters-seven-days-day">S</p>
-                                    <p className="rec-info-parameters-seven-days-day">S</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[0] == "1") ? "#EE8434" : "#CCC9DC"}}>M</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[1] == "1") ? "#EE8434" : "#CCC9DC"}}>T</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[2] == "1") ? "#EE8434" : "#CCC9DC"}}>W</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[3] == "1") ? "#EE8434" : "#CCC9DC"}}>T</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[4] == "1") ? "#EE8434" : "#CCC9DC"}}>F</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[5] == "1") ? "#EE8434" : "#CCC9DC"}}>S</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[6] == "1") ? "#EE8434" : "#CCC9DC"}}>S</p>
                                 </div>
                             </div>
                             <div className="rec-info-parameters-gym">
@@ -49,32 +64,46 @@ function SentRequestDiv(username, fullname, gym, age, bio) {
     )
 }
   
-function ReceivedRequestDiv(username, fullname, gym, age, bio) {
+function ReceivedRequestDiv(props) {
+
+    const {username, fullname, gym, age, bio, pronouns, schedule} = props;
+
+    const [dumbthing2, setdumbthing2] = useState(0);
+
+    useEffect(() => {
+      loadImageToTag(document.getElementById(`img_${username}`), username);
+    }, []);
+
     return (
-      <div className="recommendation-container" username={username}>
+        <div className="recommendation-container" username={username}>
         <div className="recommendation accept-request" onClick={() => acceptMatchRequest(username)}>
             <div className="rec-info-container">
-                <div className="rec-profile-pic"></div>
+                <div className="rec-profile-pic">
+                  <img className='profimg' id={`img_${username}`}/>
+                </div>
                 <div className="rec-info">
                     <div className="rec-info-parameters">
                         <div className="rec-info-parameters-names">
                             <div className="rec-info-parameters-fullname">
-                                <p className="rec-info-parameters-fullname-text">{fullname}</p>
+                              <p className="rec-info-parameters-fullname-text">{fullname}</p>
+                             </div>
+                            <div className="rec-info-parameters-fullname">
+                                <p className="rec-info-parameters-fullname-text">{`(${pronouns})`}</p>
                             </div>
-                                <div className="rec-info-parameters-username">
-                                    <p className="rec-info-parameters-username-text">{username}</p>
-                                </div>
+                            <div className="rec-info-parameters-username">
+                                <p className="rec-info-parameters-username-text">{username}</p>
                             </div>
+                        </div>
                             <div className="rec-info-parameters-days">
                                 <p className="rec-info-parameters-title">Days: </p>
                                 <div className="rec-info-parameters-seven-days">
-                                    <p className="rec-info-parameters-seven-days-day">M</p>
-                                    <p className="rec-info-parameters-seven-days-day">T</p>
-                                    <p className="rec-info-parameters-seven-days-day">W</p>
-                                    <p className="rec-info-parameters-seven-days-day">T</p>
-                                    <p className="rec-info-parameters-seven-days-day">F</p>
-                                    <p className="rec-info-parameters-seven-days-day">S</p>
-                                    <p className="rec-info-parameters-seven-days-day">S</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[0] == "1") ? "#EE8434" : "#CCC9DC"}}>M</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[1] == "1") ? "#EE8434" : "#CCC9DC"}}>T</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[2] == "1") ? "#EE8434" : "#CCC9DC"}}>W</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[3] == "1") ? "#EE8434" : "#CCC9DC"}}>T</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[4] == "1") ? "#EE8434" : "#CCC9DC"}}>F</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[5] == "1") ? "#EE8434" : "#CCC9DC"}}>S</p>
+                                    <p className="rec-info-parameters-seven-days-day" style={{color: (schedule[6] == "1") ? "#EE8434" : "#CCC9DC"}}>S</p>
                                 </div>
                             </div>
                             <div className="rec-info-parameters-gym">
@@ -148,8 +177,8 @@ export function MatchRequestsPage() {
                 let username = JSONData["received"][i]
                 fetch(`/api/profile/${username}`).then((response) => {
                   response.json().then((JSONData) => {
-                    receivedRequestsList.push({username: username, name: JSONData["name"], gym: JSONData["gym"], age: JSONData["age"], bio: JSONData["bio"]})
-                    setReceivedRequests(receivedRequestsList.map((rrequest) => <li key={`${username}-rrequest`}>{ReceivedRequestDiv(rrequest.username, rrequest.name, rrequest.gym, rrequest.age, rrequest.bio)}</li>))
+                    receivedRequestsList.push({username: username, name: JSONData["name"], gym: JSONData["gym"], age: JSONData["age"], bio: JSONData["bio"], pronouns: JSONData["pronouns"], schedule: JSONData["schedule"]})
+                    setReceivedRequests(receivedRequestsList.map((rec) => <li key={`${rec.username}-recommendation`}><ReceivedRequestDiv username={rec.username} fullname={rec.name} gym={rec.gym} age={rec.age} bio={rec.bio} pronouns={rec.pronouns} schedule={rec.schedule} /></li>))
                   })
                 })
               }
@@ -169,8 +198,8 @@ export function MatchRequestsPage() {
                 let username = JSONData["send"][i]
                 fetch(`/api/profile/${username}`).then((response) => {
                   response.json().then((JSONData) => {
-                    sentRequestsList.push({username: username, name: JSONData["name"], gym: JSONData["gym"], age: JSONData["age"], bio: JSONData["bio"]})
-                    setSentRequests(sentRequestsList.map((srequest) => <li key={`${username}-srequest`}>{SentRequestDiv(srequest.username, srequest.name, srequest.gym, srequest.age, srequest.bio)}</li>))
+                    sentRequestsList.push({username: username, name: JSONData["name"], gym: JSONData["gym"], age: JSONData["age"], bio: JSONData["bio"], pronouns: JSONData["pronouns"], schedule: JSONData["schedule"]})
+                    setSentRequests(sentRequestsList.map((rec) => <li key={`${rec.username}-recommendation`}><SentRequestDiv username={rec.username} fullname={rec.name} gym={rec.gym} age={rec.age} bio={rec.bio} pronouns={rec.pronouns} schedule={rec.schedule} /></li>))
                   })
                 })
               }

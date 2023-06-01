@@ -15,7 +15,27 @@ function getFormDataByID(formid) {
 }
 
 function getColorForUsername(uname = "") {
-    return colors[uname.split('').reduce((prevHash, currVal) => (((prevHash << 5) - prevHash) + currVal.charCodeAt(0)) | 0, 0) % colors.length];
+    let h = 0;
+    for(let i = 0; i < uname.length; i++)
+        h = Math.imul(31, h) + uname.charCodeAt(i) | 0;
+
+    let hashString = ((h < 0) ? (-1 * h) : h) % colors.length;
+
+    return colors[hashString];
+}
+
+export async function loadImageToTag(imgelem, username) {
+    let profimage = await fetch(`/profimage/user/${username}`);
+    let imagedata;
+    if (profimage.status == 200) {
+        imagedata = URL.createObjectURL(await profimage.blob());
+
+        imgelem.setAttribute("src", imagedata);
+        return;
+    }
+
+    imgelem.style.display = "none";
+    imgelem.parentElement.style.backgroundColor = getColorForUsername(username);
 }
 
 // Sends An HTTP Post Request to the supplied URL with the formdata in the form specified by formid
