@@ -16,13 +16,13 @@ export class RootRoutes {
         // Send Index File for Homepage Requests
         server.get("/", (req, res) => {
             res.status(200);
-            res.sendFile(path.join(templatepath, "index.html"));
+            res.sendFile(path.join(templatepath, "reactindex.html"));
         });
 
         // Send Index File for Direct Index Requests
         server.get("/index.html", (req, res) => {
             res.status(200);
-            res.sendFile(path.join(templatepath, "index.html"));
+            res.sendFile(path.join(templatepath, "reactindex.html"));
         });
 
         // Returns CSS files from Style Path

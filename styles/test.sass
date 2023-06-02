@@ -256,6 +256,7 @@ button
 
 #home-title
     @include stdfont(800, 120px)
+    line-height: 30px
 
 .recommendation-container
     position: relative
@@ -401,9 +402,10 @@ button
     font-size: 40px
 
 #top-container-messages
-    @include flex(row, flex-start)
+    @include flex(row)
+    width: 90vw
     flex-wrap: nowrap
-    gap: 68%
+    justify-content: space-between
 
 #show-more-messages
     position: relative
@@ -412,7 +414,7 @@ button
 #messagesubmit
     position: fixed
     bottom: 3%
-    width: 90%
+    width: 90vw
     @include flex(row)
     flex-wrap: nowrap
 
@@ -457,3 +459,56 @@ button
         content: ""
         height: 1rem
         position: absolute
+
+.homepage-navbar
+    @include flex(row, flex-end, center)
+    padding-right: 5vw
+    gap: 5vw
+
+.nodecorationlink
+    text-decoration: none
+
+.homepage-main-titles
+    @include flex(column, center, center)
+    height: 82vh
+    width: 100vw
+
+.homepage-content-container
+    position: relative
+    @include flex(column, center, center)
+    width: 100vw
+    gap: 5vh
+
+.homepage-content-image-container
+    @include flex(row, center, center)
+    width: 90vw
+    gap: 5vw
+
+.homepage-content-div
+    background-color: $medium-blue
+    border-radius: 20px
+    border-style: solid
+    border-color: $shadow-black
+    border-width: 5px
+    padding-left: 3%
+    padding-right: 3%
+
+    max-width: 55vw
+
+.img-placeholder
+    border-radius: 10px
+    background-color: $light-navy-blue
+    width: 30vw
+    height: 35vh
+
+img
+    border-radius: 10px
+
+#homepage-hr
+    max-width: 50vw
+
+.homepage-footer p
+    padding-left: 25%
+
+#profimagecircle
+    cursor: pointer

@@ -10,6 +10,7 @@ import { MatchRequestsPage } from './Components/matchrequests';
 import { MyApp } from './Components/test';
 import { MessagePage } from './Components/messages';
 import { ProfilePage } from './Components/profile';
+import { TrueHomePage } from './Components/truehomepage';
 
 let path = window.location.pathname
 
@@ -45,14 +46,13 @@ if (path == "/friends") {
 }
 
 if (path == "/index.html") {
-    appRoot.render(<Index />)
+    appRoot.render(<TrueHomePage />)
 }
 
 if (path.match("/messages/*/")) {
     appRoot.render(<MessagePage />)
 }
 
-// React Testing Homepage
-if (path == "/") {
-    appRoot.render(<MyApp />);
+if (path == "/" || path == "") {
+    appRoot.render(<TrueHomePage />);
 }
