@@ -287,7 +287,7 @@ export const importProfileData = async () => {
     }
 
     console.log("No Profile Image Set. Loading Backup.");
-    profimage = await fetch(`/profimage/default/`);
+    profimage = await fetch(`/image/default.jpg`);
     imagedata = URL.createObjectURL(await profimage.blob());
     document.getElementById("profimage").setAttribute("src", imagedata);
 }

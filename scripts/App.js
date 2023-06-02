@@ -1,13 +1,9 @@
 import { createRoot } from 'react-dom/client';
-
-import { BackToHomeArrow, NavBar } from './Components/shared';
 import { LoginPage } from './Components/login';
 import { SignupPage } from './Components/signup';
-import { HomePage } from './Components/homepage';
 import { RecommendationsPage } from './Components/recommendations';
 import { FriendsPage } from './Components/friends';
 import { MatchRequestsPage } from './Components/matchrequests';
-import { MyApp } from './Components/test';
 import { MessagePage } from './Components/messages';
 import { ProfilePage } from './Components/profile';
 import { TrueHomePage } from './Components/truehomepage';
@@ -27,10 +23,6 @@ if (path == "/signup.html") {
 
 if (path == "/profile") {
     appRoot.render(<ProfilePage />)
-}
-
-if (path == "/home") {
-    appRoot.render(<HomePage />)
 }
 
 if (path == "/recommendations") {

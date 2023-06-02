@@ -4,7 +4,6 @@ export function TrueHomePage() {
             <div className="homepage-navbar">
                 <h1><a href="/login.html" className="orange-link smooth-text nodecorationlink">Log In</a></h1>
                 <h1><a href="/signup.html" className="orange-link smooth-text nodecorationlink">Sign Up</a></h1>
-                <h1><a href="/about" className="orange-link smooth-text nodecorationlink">About</a></h1>
             </div>
 
             <div className="centering-div">
@@ -25,13 +24,11 @@ export function TrueHomePage() {
                         <h3>Our recommendation algorithm will present you with the users that you are most compatible with, and you can filter users and modify your preferences at any time.</h3>
                         <h3>Once you have found your dream workout buddy, and friend requests have been sent and accepted, you can get to know each other and arrange your meet-ups through our private messaging feature!</h3>
                     </div>
-                    {/* <img src="/profimages/user/Running"/> */}
-                    <div className="img-placeholder"></div>
+                    <img src="/image/Running.jpg" className="homepageimg"/>
                 </div>
 
                 <div className="homepage-content-image-container">
-                    {/* <img src="/profimages/user/Weightlifting"/> */}
-                    <div className="img-placeholder"></div>
+                    <img src="/image/Weightlifting.jpg" className="homepageimg"/>
                     <div className="homepage-content-div">
                         <h1>Who is Muscle Mates for?</h1>
                         <div>
@@ -57,15 +54,14 @@ export function TrueHomePage() {
                             It's also difficult to branch out and socialize post-covid, so we wanted to create a way to help others find a sense of belonging within a specific community of their choice.
                         </h3>
                     </div>
-                    <div className="img-placeholder"></div>
-                    {/* <img src="/profimages/user/BigGym"/> */}
+                    <img src="/image/BigGym.jpg" className="homepageimg"/>
                 </div>
 
                 <div className="homepage-content-div homepage-footer">
                     <h1>Hope to see you at the gym!</h1>
                     <p>Shoutout to our fellow Drexel students!</p>
                 </div>
-                <hr />
+                <br/>
             </div>
         </div>
     )

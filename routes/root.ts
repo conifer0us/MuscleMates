@@ -85,6 +85,25 @@ export class RootRoutes {
             }
         });
 
+        router.get("/image/:imagename", (req, res) => {
+            const imgname = req.params["imagename"];
+            if (!imgname) {
+                res.status(404);
+                res.send();
+            } 
+            else {
+                const filepath = path.join(templatepath, "images", imgname);
+                fs.access(filepath, (err) => {
+                    if (err) {
+                        res.status(404);
+                        res.send();
+                    } else {
+                        res.status(200);
+                        res.sendFile(filepath);
+                    }
+                });
+            }
+        });
 
         // Send Login File for Login Requests
         server.get("/login.html", (req, res) => {
@@ -137,8 +156,7 @@ export class RootRoutes {
             auth.checkReqCookie(req).then((cookieuser) => {
                 // If the Cookie User is Set to Valid Value, Render Home Page for User and Return Page Data
                 if (cookieuser) {
-                    res.status(200);
-                    res.sendFile(path.join(templatepath, "reactindex.html"));
+                    res.redirect("/recommendations");
                 }
 
                 // Redirects the User Back to the Login Page if Cookie Not Valid

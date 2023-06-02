@@ -98,7 +98,7 @@ async function main() {
     SubmitRoutes.configureRouter(server, '/submit', auth, prof, matchreq, friends, messages, preferences, formdecoder);
     APIRoutes.configureRouter(server, '/api', auth, prof, matchreq, friends, messages, preferences, rechandler, formdecoder);
     RootRoutes.configureRouter(server, '/', auth, prof, configjson, formdecoder);
-    ImageRoutes.configureRouter(server, "/profimage", auth, prof, configjson);
+    ImageRoutes.configureRouter(server, "/profimage", auth, configjson);
 
     // Starts Server on Port Specified
     server.listen(configjson["port"]);
