@@ -19,7 +19,7 @@ To change the tables, modify the models in prisma/schema.prisma.
 Database manipulation is handled by the libraries in the libs folder.
 The main function in server.ts creates library instances and starts the server.
 Modify this function to change the library instances and to manually insert users into the database.
-To change the data in the database manually, simply run
+To view or change the data in the database manually, simply run "npx prisma studio".
 
 ## Dependencies:
 
