@@ -15,7 +15,6 @@ export function ProfilePage() {
                     <div className="upperheaders">
                         <div className="headers">
                             <h1 className="profile-h1">Profile</h1>
-                            <h3 className="profile-h3" id="detailtext"></h3>
                         </div>
                         <div className="savebox">
                             <button type='submit' className="button smooth-background">Save</button>
@@ -38,7 +37,7 @@ export function ProfilePage() {
                             <div className="genderbuttons">
                                 <div className="genderbox">
                                     <div className="gender">
-                                        <h4 className="profile-h4">Gender</h4>
+                                        <h4 className="profile-h4 gender-h4">Gender</h4>
                                     </div>
                                     <div className="radiobuttons">
                                         <input type="radio" name="gender" id="male" className="input-item" />

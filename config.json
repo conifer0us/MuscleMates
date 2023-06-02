@@ -1,6 +1,6 @@
 {
     "dbfile": "main.db",
-    "port": 80,
+    "port": 90,
     "templatepath": "templates",
     "stylepath": "styles",
     "scriptpath": "scripts",

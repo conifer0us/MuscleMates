@@ -112,7 +112,8 @@ export class SubmitRoutes {
                 matchreqs.matchExists(sender, receiver).then(async (matchexists) => {
                     if (matchexists) {
                         await matchreqs.deleteRequest(sender, receiver);
-                        friends.addFriends(sender, receiver);
+                        await friends.addFriends(sender, receiver);
+                        messages.insertMessage(receiver, sender, `Hi ${sender}! I'm ${receiver}! I just accepted your friend request!`);
                         res.status(200);
                         res.send();
                     }

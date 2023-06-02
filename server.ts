@@ -43,12 +43,7 @@ async function main() {
 
     // Defines and Configures Express Server with a Cookie Parser and File Upload Parsing
     server.use(cookieParser());
-    server.use(fileupload({
-        limits: {
-            fileSize: 10000000,
-        },
-        abortOnLimit: true,
-    }));
+    server.use(fileupload());
     
     //Judges Program Mode From Arguments and Sets Up Database Accordingly
     const args: string[] = process.argv;

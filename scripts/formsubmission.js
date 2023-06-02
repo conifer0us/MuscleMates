@@ -208,10 +208,27 @@ export const importProfileData = async () => {
     const username = (await unameres.text()).replaceAll('"', '');
     console.log(`🍓🍓Hi ${username}!🍓🍓`);
 
+    let profimage = await fetch(`/profimage/user/${username}`);
+    let imagedata;
+    if (profimage.status == 200) {
+        imagedata = URL.createObjectURL(await profimage.blob());
+
+        document.getElementById("profimage").setAttribute("src", imagedata);
+        document.getElementById("profimage").style.width = "100%";
+        document.getElementById("profimage").style.width = "100%";
+        document.getElementById("profimagecircle").style.backgroundColor = "transparent";
+    }
+
+    else {
+        console.log("No Profile Image Set. Loading Backup.");
+        profimage = await fetch(`/image/default.jpg`);
+        imagedata = URL.createObjectURL(await profimage.blob());
+        document.getElementById("profimage").setAttribute("src", imagedata);
+    }
+
     const profres = await fetch(`/api/profile/${username}`);
     if (profres.status != 200) {
         console.log("No profile found yet.");
-        document.getElementById("detailtext").innerHTML = "Create a Profile so you can Match and Make Friends!";
         return;
     }
 
@@ -273,23 +290,6 @@ export const importProfileData = async () => {
             }
         }
     }
-
-    let profimage = await fetch(`/profimage/user/${username}`);
-    let imagedata;
-    if (profimage.status == 200) {
-        imagedata = URL.createObjectURL(await profimage.blob());
-
-        document.getElementById("profimage").setAttribute("src", imagedata);
-        document.getElementById("profimage").style.width = "100%";
-        document.getElementById("profimage").style.width = "100%";
-        document.getElementById("profimagecircle").style.backgroundColor = "transparent";
-        return;
-    }
-
-    console.log("No Profile Image Set. Loading Backup.");
-    profimage = await fetch(`/image/default.jpg`);
-    imagedata = URL.createObjectURL(await profimage.blob());
-    document.getElementById("profimage").setAttribute("src", imagedata);
 }
 
 export const uploadimg = async () => {
