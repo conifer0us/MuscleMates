@@ -28,7 +28,7 @@ async function main() {
     const formdecoder = bodyparser.urlencoded({extended:false});
 
     // Adjust Directory to Escape Build
-    __dirname = __dirname + "\\.."
+    __dirname = __dirname + "/.."
 
     // Loads Configuration Options From config.json
     let configjson: JSON = require(path.join(__dirname, "config.json"));
