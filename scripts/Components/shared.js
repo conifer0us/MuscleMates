@@ -3,7 +3,7 @@ export function NavBar() {
       <div className="nav-bar-container">
         <div className="nav-bar">
           <div className="logo">
-              <h1><a href="/" className="white-link logotext">GYMDER</a></h1>
+              <a href="/" className="white-link logocontainer"><img src="/image/favicon.ico" className="navbar-logo" /><h1 className="logotext">Muscle Mates</h1></a>
           </div>
           <div className="links-to-pages">
               <a href="/recommendations" className="nav-bar-item smooth-text">Recommendations</a>
